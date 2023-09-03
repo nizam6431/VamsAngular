@@ -1,0 +1,10 @@
+
+<ng-container *ngIf="showProviderSetup">    
+    <app-configure-grid [dataSource]="dataSource" [totalCount]="totalCount" [type]="type" [columns]="columns" [deviceDetailsFlag]="deviceDetailsFlag" (rowData)="rowData($event)" (detailsEmittor)="getproviderDetails($event)" (modeEmmiter)="changeMode($event)" (searchEmittor)="getSearchtext($event)" (deviceSetupEmmiter)="deviceSetup($event)"  (onDataChange)="providerSetupRequestData($event)"> </app-configure-grid>
+</ng-container>
+<ng-container *ngIf="showDetails">
+    <app-provider-device-details  (back)="back($event)"  [detailsDeta]="detailsDeta" [accessSetupRefresh]="accessSetupRefresh" ></app-provider-device-details>
+</ng-container>
+<ng-container *ngIf="showDeviceSetup">
+    <app-device-setup  (back)="back($event)"[detailsDeta]="detailsDeta" [deviceRefresh]="deviceRefresh"></app-device-setup>
+</ng-container>

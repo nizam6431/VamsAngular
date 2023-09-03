@@ -1,0 +1,76 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="!isEdit && buildingObject">
+    <div class="vams-page-body d-flex flex-column flex-1 scroll-y">
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingName" class="col-sm-3 col-form-label">Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="buildingName" value="{{ buildingObject.data.name }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingStatus" class="col-sm-3 col-form-label">Status</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="buildingStatus" value="{{ buildingObject.data.status }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3" (click)="isEdit = true">
+      {{ "CommonToken.Edit" | translate }}
+    </button>
+        <!-- <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+        {{ "CommonToken.Cancel" | translate }}
+      </button> -->
+    </footer>
+</div>
+
+<form class="vams-form-wrapper" [formGroup]="formBuilding" novalidate *ngIf="isEdit">
+    <div class="vams-page-body flex-1 scroll-y">
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feFirstName" class="col-sm-3 col-form-label">Name <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="feFirstName" formControlName="name" maxlength="50" />
+                        <mat-error class="mat-error" *ngFor="let message of showValidationMessages('name')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6" *ngIf="buildingObject.data">
+                <div class="row mb-3">
+                    <label for="feBuildingStatus" class="col-sm-3 col-form-label">Status <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" readonly class="form-control-plaintext" id="feBuildingStatus" value="{{ buildingObject.data.status }}" />
+                        <!-- <select class="form-control" formControlName="status">
+              <option selected *ngFor="let name of statusList" [value]="name">
+                {{ name }}
+              </option>
+            </select>
+            <mat-error *ngFor="let message of showValidationMessages('status')">
+              {{ message }}
+            </mat-error> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="buildingObject?.data" (click)="onSubmit()">
+      {{ "CommonToken.Save" | translate }}
+    </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="buildingObject?.data" (click)="cancel()">
+      {{ "CommonToken.Cancel" | translate }}
+    </button>
+    </footer>
+</form>

@@ -1,0 +1,13 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+    @extend .host;
+}
+.vams-dialog-fullview{
+width: auto;
+}
+.dialg-popup-content{
+    overflow: scroll;
+    min-height: 150px;
+    max-height: 500px;
+}

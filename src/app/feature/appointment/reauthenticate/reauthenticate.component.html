@@ -1,0 +1,215 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                {{"Reauthenticate.Reauthenticates" |translate|uppercase }}</span>
+        </div>
+    </div>
+
+    <form class="popup-form" novalidate [formGroup]="reAuthenticateForm" novalidate autocomplete="off">
+        <ng-container *ngIf="currentSlide == 1">
+            <div class="popup-content">
+                <div class="card bg-floral-white mx-auto mb-3" *ngIf="visitorAutnticationType=='Both'">
+                    <div class="card-body">
+                        <div class="row mb-3" *ngIf="visitorAutnticationType=='Both'">
+                            <label for="feFirstName" class="col-md-3 col-form-label">
+                                {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" maxlength="150"
+                                    placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}"
+                                    formControlName="email" (keypress)="removeValidator('email')" />
+                                <mat-error *ngFor="let message of showValidationMessages('email')">
+                                    {{ message | titlecase}}
+                                </mat-error>
+                            </div>
+                        </div>
+                        <p class="text-center mb-3" *ngIf="visitorAutnticationType=='Both'">OR</p>
+                        <div class="row" *ngIf="visitorAutnticationType=='Both'">
+                            <label for="feTimeZone" class="col-md-3 col-form-label">
+                                {{ "Schedule.CellNumber" | translate }} <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                    [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                    [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                    [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                    [separateDialCode]="separateDialCode" [preferredCountries]="['us']"
+                                    [selectedCountryISO]="selectedCountry" [phoneValidation]="phoneValidation"
+                                    name="phone" (keypress)="removeValidator('cell')" formControlName="cell"
+                                    (countryChange)="checkNumber($event)" appMobileNumberFormat>
+                                </ngx-intl-tel-input>
+                                <p *ngIf="submitted">
+                                    <mat-error *ngIf="!reAuthenticateForm.value.contactMobile">Enter Cell Number
+                                    </mat-error>
+                                </p>
+                                <mat-error *ngIf="reAuthenticateForm.get('cell').hasError('validatePhoneNumber') && (reAuthenticateForm.get('cell').value!=null)
+                                ">
+                                    {{ "Schedule.CellNumberValid" | translate }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3" *ngIf="visitorAutnticationType=='Email'">
+                    <label for="feFirstName" class="col-md-3 col-form-label">
+                        {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+                    </label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" maxlength="150"
+                            placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="email" />
+                        <mat-error *ngFor="let message of showValidationMessages('email')">
+                            {{ message | titlecase}}
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="row mb-3" *ngIf="visitorAutnticationType=='Cell'">
+                    <label for="feTimeZone" class="col-md-3 col-form-label">
+                        {{ "Schedule.CellNumber" | translate }} <span class="mendatory"
+                            *ngIf="visitorAutnticationType=='Cell'">*</span>
+                    </label>
+                    <div class="col-md-9">
+                        <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                            [enablePlaceholder]="true" [searchCountryFlag]="true"
+                            [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                            [separateDialCode]="separateDialCode" [preferredCountries]="['us']"
+                            [selectedCountryISO]="selectedCountry" [phoneValidation]="phoneValidation" name="phone"
+                            formControlName="cell" (countryChange)="checkNumber($event)" appMobileNumberFormat>
+                        </ngx-intl-tel-input>
+                        <p *ngIf="submitted">
+                            <mat-error *ngIf="!reAuthenticateForm.value.contactMobile">Enter Cell Number</mat-error>
+                        </p>
+                        <mat-error
+                            *ngIf="reAuthenticateForm.get('cell').hasError('validatePhoneNumber') && (reAuthenticateForm.get('cell').value!=null)">
+                            {{ "Schedule.CellNumberValid" | translate }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button (click)="getData()" class="btn btn-sm btn-primary-dark px-3"
+                    [disabled]="reAuthenticateForm.get('cell').invalid && reAuthenticateForm.get('email').invalid">
+                    {{ "CommonToken.Next" | translate }}
+                </button>
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="dialogRef.close()">
+                    {{ "CommonToken.Cancel" | translate }}
+                </button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="currentSlide == 2">
+            <div class="popup-content">
+                <div class="row mb-3">
+                    <label for="photo" class="col-md-4 col-form-label">
+                        {{ "Visitors.photo" | translate }}</label>
+                    <div class="col-md-8">
+                        <div
+                            class="picture picture-lg d-flex align-items-center justify-content-center p-1 overflow-hidden">
+                            <img (error)="handleIamge(selfPhotoUrl,'self')" [src]="selfPhotoUrl">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3" *ngIf="visitorAutnticationType=='Cell'">
+                    <label for="CellNumber" class="col-md-4 col-form-label">
+                        {{ "Reauthenticate.CellNumber" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext px-1" id="CellNumber">{{Reauthenticate?.phone ?
+                            Reauthenticate?.phone :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3" *ngIf="visitorAutnticationType=='Email'">
+                    <label for="EmailId" class="col-md-4 col-form-label">
+                        {{ "Reauthenticate.EmailId" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext px-1" id="EmailId">{{Reauthenticate?.email ?
+                            Reauthenticate?.email :'-'}}</p>
+                    </div>
+                </div>
+                <div class="row mb-3" *ngIf="visitorAutnticationType=='Both'">
+                    <label for="CellNumber" class="col-md-4 col-form-label">
+                        {{ "Reauthenticate.CellNumber" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext px-1" id="CellNumber">{{Reauthenticate?.phone ?
+                            Reauthenticate?.phone :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row mb-3" *ngIf="visitorAutnticationType=='Both'">
+                    <label for="EmailId" class="col-md-4 col-form-label">
+                        {{ "Reauthenticate.EmailId" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext px-1" id="EmailId">{{Reauthenticate?.email ?
+                            Reauthenticate?.email :'-'}}</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="FirstName" class="col-md-4 col-form-label">
+                        {{ "Reauthenticate.FirstName" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext px-1" id="FirstName">{{Reauthenticate?.firstName ?
+                            Reauthenticate?.firstName :'-'}}</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="LastName" class="col-md-4 col-form-label">
+                        {{ "Reauthenticate.LastName" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext px-1" id="LastName">{{Reauthenticate?.lastName ?
+                            Reauthenticate?.lastName:'-'}}</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="Company" class="col-md-4 col-form-label">
+                        {{ "Reauthenticate.Company" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext px-1" id="Company">{{Reauthenticate?.company ?
+                            Reauthenticate?.company:'-'}}</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <div class="d-flex gap-3">
+                            <input id="otpcodeBox1" #otps class="form-control flex-1 text-center" type="number" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                minlength="1" maxlength="1" (keyup)="onKeyUpEventByOtp(0, $event, 4)" />
+                            <input id="otpcodeBox2" #otps class="form-control flex-1 text-center" type="number" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                minlength="1" maxlength="1" (keyup)="onKeyUpEventByOtp(1, $event, 4)" />
+                            <input id="otpcodeBox3" #otps class="form-control flex-1 text-center" type="number" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                minlength="1" maxlength="1" (keyup)="onKeyUpEventByOtp(2, $event, 4)" />
+                            <input id="otpcodeBox4" #otps class="form-control flex-1 text-center" type="number" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                minlength="1" maxlength="1" (keyup)="onKeyUpEventByOtp(3, $event, 4)" />
+                        </div>
+
+                        <p class="fs-sm mb-0" *ngIf="timeLeft==30">
+                            {{'Reauthenticate.ValidationMessage' | translate}}
+                        </p>
+                        <p class="fs-sm mb-0" *ngIf="timeLeft==30">
+                            <span class="align-middle">{{'Reauthenticate.NotReceivedOTP' | translate}}</span>
+                            <button class="btn btn-link fs-sm border-0 p-0 text-decoration-none ms-1"
+                                (click)="resendOTP()">{{'Reauthenticate.ResendOTP' |
+                                translate}}</button>
+                        </p>
+                        <p class="fs-sm mb-0" *ngIf="timeLeft < 30">
+                            <span>{{'Reauthenticate.NotReceivedOTP' | translate}} {{'Reauthenticate.ResendOTP' |
+                                translate}}</span>
+                            <span class="ms-1">(00:{{timeLeft}})</span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button class="btn btn-sm btn-primary-dark px-3" (click)="validateReauthticate()"
+                    [disabled]="hasError">{{'Reauthenticate.Reauthenticates'|translate}}</button>
+                <button class="btn btn-sm btn-white px-3" (click)="back()">{{'CommonToken.Cancel' |
+                    translate}}</button>
+            </div>
+        </ng-container>
+    </form>
+</div>

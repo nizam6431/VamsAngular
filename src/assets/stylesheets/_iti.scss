@@ -1,0 +1,73 @@
+// Telephone Control Group
+.telephone-control-group {
+  .iti {
+    width: 100%;
+  }
+
+  .iti--allow-dropdown .iti__flag-container .iti__selected-flag {
+    background-color: rgba($color: $black, $alpha: 0.05);
+  }
+
+  .iti__selected-flag {
+    font-size: 0.75rem;
+  }
+
+  .iti.separate-dial-code .iti__selected-flag,
+  .iti.separate-dial-code.iti--allow-dropdown.iti-sdc-2 .iti__selected-flag,
+  .iti.separate-dial-code.iti--allow-dropdown.iti-sdc-3 .iti__selected-flag,
+  .iti.separate-dial-code.iti--allow-dropdown.iti-sdc-4 .iti__selected-flag {
+    width: auto !important;
+    border-radius: 0.5rem 0 0 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .intl-tel-input.separate-dial-code .selected-flag,
+  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-2 .selected-flag,
+  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-3 .selected-flag,
+  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-4 .selected-flag {
+    width: auto !important;
+    border-radius: 0.5rem 0 0 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .iti.separate-dial-code input,
+  .iti.separate-dial-code.iti--allow-dropdown.iti-sdc-2 input,
+  .iti.separate-dial-code.iti--allow-dropdown.iti-sdc-3 input,
+  .iti.separate-dial-code.iti--allow-dropdown.iti-sdc-4 input {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem 0.375rem 5.25rem !important;
+  }
+
+  .intl-tel-input.separate-dial-code input,
+  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-2 input,
+  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-3 input,
+  .intl-tel-input.separate-dial-code.allow-dropdown.iti-sdc-4 input {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem 0.375rem 5.25rem !important;
+  }
+
+  .iti input#country-search-box {
+    padding: 0.375rem 0.75rem !important;
+  }
+
+  .intl-tel-input input#country-search-box {
+    padding: 0.375rem 0.75rem !important;
+  }
+
+  .iti__country-list, .country-list {
+    width: 19.25rem;
+    max-height: 9rem;
+    white-space: normal;
+    @include scrollbars();
+  }
+
+  .iti__country-name, .country, .iti__dial-code, .selected-dial-code{
+    font-size: 0.75rem;
+  }
+
+  .iti__divider, .intl-tel-input .country-list .divider {
+    padding: 0;
+    margin: 0;
+    border-color: $border-color;
+  }
+}

@@ -1,0 +1,16 @@
+<div class="d-flex flex-1 align-items-center justify-content-center text-muted" *ngIf="noQuestionsForEnterprise; else QuestionsAvailable">
+  {{'hsq_questions.no_Questions_Message' | translate}}
+</div>
+
+<!-- <ng-template #noQuestionsForLocation>
+  <ng-container *ngIf="noQuestionsForLocation && level2Id; else QuestionsAvailable">
+    There is no questions added for this level. Please add the questions
+  </ng-container>
+</ng-template> -->
+
+<ng-template #QuestionsAvailable>
+  <app-configure-grid [dataSource]="dataSource" [columns]="columns" [type]="type" [resetLocation]="resetLocation"
+    (onLocationChange)="locationChanged($event)" (onDataChange)="hsqQuestionnaireEvent($event)" 
+    (rowData)="rowData($event)" (modeEmmiter)="changeMode($event)" [totalCount]="totalCount" [pageSizeCount]="pageSize">
+  </app-configure-grid>
+</ng-template>

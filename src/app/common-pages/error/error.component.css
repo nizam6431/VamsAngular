@@ -1,0 +1,55 @@
+#notfound {
+    position: relative;
+    height: 100vh;
+}
+
+#notfound .notfound {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
+.notfound {
+    max-width: 710px;
+    width: 100%;
+    padding-left: 190px;
+    line-height: 1.4;
+}
+
+
+.notfound .notfound-404 {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 150px;
+    height: 150px;
+}
+
+
+.notfound .notfound-404 h1 {
+    font-family: passion one,cursive;
+    color: #00b5c3;
+    font-size: 150px;
+    letter-spacing: 15.5px;
+    margin: 0;
+    font-weight: 900;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+
+.notfound h2 {
+    font-family: raleway,sans-serif;
+    color: #292929;
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-top: 0;
+}

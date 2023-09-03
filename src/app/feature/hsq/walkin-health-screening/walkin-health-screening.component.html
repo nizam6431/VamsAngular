@@ -1,0 +1,219 @@
+<div>
+    <div class="row">
+        <form (ngSubmit)="validateDetails()" #form="ngForm" [formGroup]="walkinUserForm" autocomplete="off" novalidate>
+            <div class="col-md-12 mt-20 mb-20">
+                <div class="text-center pb-20"><img height="18px;" width="60px;"
+                        src="{{apiEndPoint}}CompanyData/{{companyId}}/Logo.png"></div>
+                <h4 class="mb-20">{{'WalkinHSQ.HealthScreeningQuestionnaire'| translate}}</h4>
+                <div class="col-md-8 col-md-offset-2 mt-20 " *ngIf="isShowError">
+                    <div class="content-shadow-box">
+                        <h5>{{getWalkinHsqErrorMessage}}</h5>
+                    </div>
+                </div>
+                <div *ngIf="currentScreen==1 && !isShowError" class="content-shadow-box mb-20">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="inner-box-second mb-10">
+                                <div class="appointment-detail-sqrcode-rtl">{{'WalkinHSQ.Company'| translate}}</div>
+                                <div class="appointment-detail-sqrcode-rtl">{{companyName}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="inner-box-second">
+                                <div class="appointment-detail-sqrcode-rtl">{{'WalkinHSQ.Location'| translate}}</div>
+                                <div class="appointment-detail-sqrcode-rtl">{{locationName}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="currentScreen==1 && !isShowError" class="content-shadow-box">
+                    <div class="row">
+
+                        <div class="col-md-4 mb-20">
+                            <div class="mb-10">
+                                <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">
+                                    {{'WalkinHSQ.FirstName'| translate}}
+                                </div>
+                                <div class="input-area">
+                                    <input type="text" style="text-transform: capitalize;" formControlName="firstname"
+                                        name="firstname" maxlength="50" placeholder="{{'WalkinHSQ.FirstNamePlaceholder'| translate}}"
+                                        class="input-style">
+                                    <label class="error-color fontSize-10"
+                                        *ngIf="(firstname?.invalid && form?.submitted && firstname?.errors?.required)||(firstname?.invalid && firstname?.touched && firstname?.errors?.required)">
+                                        {{'WalkinHSQ.FirstNameRequired'| translate}}
+                                    </label>
+                                    <label class="error-color fontSize-10"
+                                        *ngIf="(firstname?.invalid && form?.submitted && firstname?.errors?.maxlength)||(firstname?.invalid && firstname?.touched && firstname?.errors?.maxlength)">
+                                        {{'WalkinHSQ.FirstNameMaxlength'| translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-20">
+                            <div class="mb-10">
+                                <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">
+                                    {{'WalkinHSQ.LastName'| translate}}
+                                </div>
+                                <div class="input-area">
+                                    <input type="text" style="text-transform: capitalize;" formControlName="lastname"
+                                        name="lastname" maxlength="50" placeholder="{{'WalkinHSQ.LastNamePlaceholder'| translate}}"
+                                        class="input-style">
+                                    <label class="error-color fontSize-10"
+                                        *ngIf="(lastname?.invalid && form?.submitted && lastname?.errors?.required)||(lastname?.invalid && lastname?.touched && lastname?.errors?.required)">
+                                        {{'WalkinHSQ.LastNameRequired'| translate}}
+                                    </label>
+
+                                    <label class="error-color fontSize-10"
+                                        *ngIf="(lastname?.invalid && form?.submitted && lastname?.errors?.maxlength)||(lastname?.invalid && lastname?.touched && lastname?.errors?.maxlength)">
+                                        {{'WalkinHSQ.LastNameMaxlength'| translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-20">
+                            <div class="mb-10">
+                                <div class="contact-detail">
+                                    <li>
+                                        <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">
+                                            {{'WalkinHSQ.ISD'| translate}}
+                                        </div>
+                                        <div class="input-area pb-20">
+                                            <ng-select2 *ngIf="isdCodes.length>0" [options]="options"
+                                                formControlName="isdCode" name="isdCode"
+                                                (valueChanged)="isdCodeChange($event)" [data]="isdCodes">
+                                            </ng-select2>
+                                            <label class="error-color fontSize-10"
+                                                *ngIf="(isdCode?.invalid && form?.submitted && isdCode?.errors?.required) 
+                                                || (isdCode?.invalid && isdCode?.touched && isdCode?.errors?.required)">
+                                                {{'WalkinHSQ.ISDRequired'| translate}}
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">
+                                            {{'WalkinHSQ.CellNumber'| translate}}
+                                        </div>
+                                        <div class="input-area pb-20">
+                                            <input type="text" pattern="[0-9]*" inputmode="numeric"
+                                                formControlName="cellnumber" name="cellnumber" mask='(000) 099-999999'
+                                                placeholder="{{'WalkinHSQ.PleaseEnterCellNumber'| translate}}" class="input-style unicode-phone-number">
+                                            <label class="error-color fontSize-10" *ngIf="(cellnumber?.invalid && form?.submitted && cellnumber?.errors?.pattern) 
+                                || (cellnumber?.invalid && cellnumber?.touched && cellnumber?.errors?.pattern)">
+                                                {{'WalkinHSQ.CellNumberValid'| translate}}
+                                            </label>
+                                        </div>
+                                    </li>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="clear: both;"></div>
+                        <div class="col-md-4 mb-20">
+                            <div class="mb-10">
+                                <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{'WalkinHSQ.EmailId'| translate}}
+                                </div>
+                                <div class="input-area">
+                                    <input type="text" formControlName="email" name="email" maxlength="250"
+                                        placeholder="{{'WalkinHSQ.EmailIdPlaceholder'| translate}}" class="input-style">
+                                    <label class="error-color fontSize-10"
+                                        *ngIf="(email?.invalid && form?.submitted && email?.errors?.email)||(email?.invalid && email?.touched && email?.errors?.email)">
+                                        {{'WalkinHSQ.EmailValid'| translate}}
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="text-center">
+                                <label class="text-center error-color fontSize-10"
+                                    *ngIf="(form?.submitted && cellnumber?.errors?.atLeastOne) && (form?.submitted && email?.errors?.atLeastOne)">
+                                    {{'WalkinHSQ.EmailOrCellNumberRequiredMessage'| translate}}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" *ngIf="isHSQAlreadyFilled">
+                            <div class="text-center">
+                                <label class="text-center error-color fontSize-10">
+                                    {{HSQAlreadyFilledErrorMessage}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="text-center">
+                                <button type="submit" class="primary-button mt-20">{{'WalkinHSQ.Next'| translate}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form (ngSubmit)="saveHSQResponse(confirmSubmitAnswers)" #formHSQ="ngForm" [formGroup]="walkinHSQForm"
+            autocomplete="off" novalidate>
+            <div style="clear: both;"></div>
+            <div *ngIf="currentScreen==2 && !isShowError" class="col-md-12 mt-20 mb-20" formArrayName="HSQArray">
+                <div class="content-shadow-box">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="hsq-dox">
+                                <li *ngFor="let hsq of HSQArray.controls; let i=index" formGroupName="{{i}}">
+                                    <p>{{hsq.get('question')!.value}}</p>
+                                    <ul class="question-ans">
+                                        <li>
+                                            <input type="radio" value="Yes" formControlName="HSQValue"
+                                                (change)="onHsQValueChange(hsq.get('vaccineDate'),hsq.get('HSQValue')!.value,hsq.get('isVaccineQuestion')!.value)">
+                                            <label for="html">{{'WalkinHSQ.Yes'| translate}}</label><br>
+                                        </li>
+                                        <li>
+                                            <input type="radio" value="No" formControlName="HSQValue"
+                                                (change)="onHsQValueChange(hsq.get('vaccineDate'),hsq.get('HSQValue')!.value,hsq.get('isVaccineQuestion')!.value)">
+                                            <label for="html">{{'WalkinHSQ.No'| translate}}</label><br>
+                                        </li>
+                                    </ul>
+                                    <label class="error-color fontSize-10" *ngIf="(hsq.get('HSQValue')?.invalid && formHSQ?.submitted && hsq.get('HSQValue')?.errors?.required)
+										||(hsq.get('HSQValue')?.invalid && hsq.get('HSQValue')?.touched && hsq.get('HSQValue')?.errors?.required)">
+                                        {{'WalkinHSQ.SelectAnswer'| translate}}
+                                    </label>
+                                    <div>
+                                        <input type="text" placeholder="{{'WalkinHSQ.VaccineDatePlaceholder'| translate}}" class="input-style"
+                                            theme="dp-material" [dpDayPicker]="datePickerConfig" name="appointmentDate"
+                                            formControlName="vaccineDate"
+                                            *ngIf="hsq.get('isVaccineQuestion')!.value == true && hsq.get('HSQValue')!.value == 'Yes'">
+                                        <label class="error-color fontSize-10"
+                                            *ngIf="(hsq.get('vaccineDate')?.invalid && formHSQ?.submitted && hsq.get('vaccineDate')?.errors?.required)
+                                            ||(hsq.get('vaccineDate')?.invalid && hsq.get('vaccineDate')?.touched && hsq.get('vaccineDate')?.errors?.required)">
+                                            {{'WalkinHSQ.VaccineDateRequired'| translate}}
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12" *ngIf="isHSQAlreadyFilled">
+                        <div class="text-center">
+                            <label class="text-center error-color fontSize-10">
+                                {{HSQAlreadyFilledErrorMessage}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="text-center mb-20" *ngIf="currentScreen==2 && !isShowError">
+                <button type="submit" class="primary-button mt-20" style="font-size: 18px">{{'WalkinHSQ.SubmitAnswers'| translate}}</button>
+            </div>
+        </form>
+    </div>
+</div>
+<ng-template #confirmSubmitAnswers>
+    <div class="popup-box">
+        <a class="popup-close-button" (click)="dismissAll()"><i class="fas fa-times"></i></a>
+        <img src="assets/images/checkin.png">
+        <div class="popup-box-text">{{'WalkinHSQ.SubmitConfirmation'| translate}}</div>
+        <ul class="button-swap text-center">
+            <a href="javascript:void(0)" (click)="SaveHSQ()" class="primary-button mt-20">{{'WalkinHSQ.Yes'| translate}}</a>
+            <a href="javascript:void(0)" (click)="dismissAll()" class="secondary-button mt-20">{{'WalkinHSQ.No'| translate}}</a>
+        </ul>
+    </div>
+</ng-template>

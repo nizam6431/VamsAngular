@@ -1,0 +1,26 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+.image{
+  height: 2.5rem;
+  width: 3.5rem;
+}
+.c1{
+  text-align: center;
+}
+.fixedHei {
+  height:calc(100vh - 124px);
+}
+.bordR_Red {
+  border-right:1px solid #eb5527
+}
+.form-control-md {
+  min-height:calc(1.5em + 1rem + 2px);
+  padding:0.5rem 1rem;
+}
+.defImg {
+  border: 1px solid #f78958;
+  border-radius: 4px;
+}

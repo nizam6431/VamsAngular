@@ -1,0 +1,54 @@
+{
+    "data": [
+        {
+            "name": "xxxx",
+            "short_name": "josh",
+            "building": "ABCD",
+            "floor": "1",
+            "cell": "9898989898",
+            "email": "anand@josh.com",
+            "status": "Active",
+            "department": "show list",
+            "employee": "show list",
+            "contractor": "show list",
+            "uploadLogo":"Yes",
+            "companyUrl":"https://joshsoftware.com/"
+        },
+        {
+            "name": "yyyy",
+            "short_name": "JOSH Software",
+            "building": "ABCD",
+            "floor": "1",
+            "cell": "9898989898",
+            "email": "anand@josh.com",
+            "status": "Active",
+            "department": "show list",
+            "employee": "show list",
+            "contractor": "show list"
+        },
+        {
+            "name": "xxxx",
+            "short_name": "josh",
+            "building": "ABCD",
+            "floor": "1",
+            "cell": "9898989898",
+            "email": "anand@josh.com",
+            "status": "Active",
+            "department": "show list",
+            "employee": "show list",
+            "contractor": "show list"
+        },
+        {
+            "name": "yyyy",
+            "short_name": "JOSH Software",
+            "building": "ABCD",
+            "floor": "1",
+            "cell": "9898989898",
+            "email": "anand@josh.com",
+            "status": "Active",
+            "department": "show list",
+            "employee": "show list",
+            "contractor": "show list"
+        }
+    ]
+}

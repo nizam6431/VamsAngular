@@ -1,0 +1,486 @@
+<!-- View Contractor Company Form -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'show'">
+  <div class="popup-header">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+    <div class="popup-title-wrapper d-flex align-items-center">
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+        "contractorCompany.showContractorsCompany" | translate }}</span>
+    </div>
+  </div>
+<ng-container *ngIf="getContractorCompany">
+<div class="popup-content">
+    
+<div class="row">
+  <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="buildingName" class="col-md-4 col-form-label">{{ "contractorCompany.compnayLogo" | translate}}</label>
+      <div class="col-md-8">
+        <div class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+          <img _ngcontent-lde-c178="" [src]="selfPhotoUrlByBase64" class="img-fluid" />
+        </div>
+        <!-- <div class="picture picture-lg d-flex align-items-center justify-content-center p-1 overflow-hidden">
+          <img  [src]="selfPhotoUrlByBase64">
+      </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="buildingName" class="col-md-4 col-form-label">{{ "contractorCompany.uniqueId" | translate}}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="uniqueId"
+          value="{{getContractorCompany?.data?.uniqueId}}" />
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+<div class="row">
+  <div class="col-md-6">
+
+    <div class="row mb-3">
+      <label for="companyName" class="col-md-4 col-form-label">{{ "contractorCompany.companyName" | translate
+        }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="companyName"
+          value="{{ getContractorCompany?.data?.companyName}}" />
+      </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="row mb-3">
+      <label for="contractorCompanyUrl" class="col-md-4 col-form-label">{{ "contractorCompany.contractorCompanyUrl" |
+        translate }}</label>
+        <div class="col-md-8">
+          <input type="text" readonly class="form-control-plaintext" id="contractorCompanyUrl"
+          value="{{ getContractorCompany?.data?.url}}" />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="contractPerson" class="col-md-4 col-form-label">{{ "contractorCompany.contractPerson" |
+        translate}}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="contractPerson"
+          value="{{getContractorCompany?.data?.contactFirstName + ' '+ getContractorCompany?.data?.contactLastName}}" />
+      </div>
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="contactLastName" class="col-md-4 col-form-label">{{ "EmployeeForm.Email" | translate}}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="contactLastName"
+          value="{{ getContractorCompany?.data?.email}}" />
+      </div>
+    </div>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="phone" class="col-md-4 col-form-label">{{ "EmployeeForm.CellNumber" | translate }}</label>
+      <div class="col-md-8">
+        <p class="form-control-plaintext">
+          +{{getContractorCompany?.data?.isdCode +" " +formatCellNumber( getContractorCompany?.data?.phone)
+            }}
+        </p>       
+      </div>
+    </div>
+    </div>
+  <div class="col-md-6">
+
+    <div class="row mb-3">
+      <label for="city" class="col-md-4 col-form-label">{{ "contractorCompany.city" | translate }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="city"
+          value="{{ getContractorCompany?.data?.address?.city }}" />
+      </div>
+    </div>
+    </div>
+    </div>
+
+
+<div class="row">
+  <div class="col-md-6">
+
+    <div class="row mb-3">
+      <label for="buildingStatus" class="col-md-4 col-form-label">{{ "contractorCompany.zipCode" | translate }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="country"
+          value="{{ getContractorCompany?.data?.address?.zipCode }}" />
+      </div>
+    </div>
+</div>
+  <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="buildingStatus" class="col-md-4 col-form-label">{{ "contractorCompany.state" | translate }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="state"
+          value="{{ getContractorCompany?.data?.address?.state }}" />
+      </div>
+    </div>
+</div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="buildingStatus" class="col-md-4 col-form-label">{{ "contractorCompany.country" | translate }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="country"
+          value="{{ getContractorCompany?.data?.address?.country }}" />
+      </div>
+    </div>
+</div>
+
+  <div class="col-md-6">
+    <div class="row mb-3">
+      <label for="buildingStatus" class="col-md-4 col-form-label">{{
+        "Building.Status" | translate
+        }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="buildingStatus"
+          value="{{ formData.data.status }}" />
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+  <div class="popup-footer d-flex align-items-center gap-3">
+    <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3" (click)="formData.mode = 'edit'">
+      {{ "CommonToken.Edit" | translate }}
+    </button>
+    <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+      {{ "CommonToken.Cancel" | translate }}
+    </button>
+  </div>
+</ng-container>
+</div>
+
+<!-- Add/Edit Building Form -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+  <div class="popup-header">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+    <div class="popup-title-wrapper d-flex align-items-center">
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative"
+        *ngIf="!formData.data">{{ "contractorCompany.AddContractorsCompany" | translate }}</span>
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative"
+        *ngIf="formData.data">{{ "contractorCompany.EditContractorsCompany" | translate }}</span>
+    </div>
+  </div>
+  <ng-container *ngIf="formContractorCompany">
+    <form class="popup-form" [formGroup]="formContractorCompany" novalidate  autocomplete="off">
+      <div class="d-flex flex-column flex-1 scroll-y ng-star-inserted">
+        <div class="popup-content">
+          <div class="row gx-5">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                  <label for="lightThemeLogo" class="col-md-4 col-form-label">{{"contractorCompany.compnayLogo" | translate}}
+                  <span class="mendatory" *ngIf="formData?.mode == 'add'">*</span>
+                  </label>
+                  <div class="col-md-8">
+                      <div class="d-flex gap-3">
+                          <div class="d-grid">
+                              <input formControlName="logo" id="file" name="file" placeholder="Please select new logo" #fileInput
+                                  accept="image/x-png,image/jpeg" class="custom-file-input" type="file"
+                                  (change)="onFileChange($event)" />
+                          </div>
+                          <mat-error *ngFor="let message of showValidationMessages('logo')">
+                            {{ message }}
+                          </mat-error>
+                          <!-- <div *ngIf="!imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                              <img src="assets/images/login-vams-logo.png" class="img-fluid" alt="Logo" />
+                          </div> -->
+                          
+                          <div *ngIf="imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                              <img *ngFor="let item of base64textString" class="img-fluid" src="{{ item }}"
+                                  alt="Logo" />
+                          </div>
+                          <div *ngIf="formData?.mode == 'edit' && !imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">                               
+                              <img _ngcontent-lde-c178="" [src]="selfPhotoUrlByBase64" class="img-fluid" />
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+
+
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feFirstName" class="col-md-4 col-form-label">{{ "contractorCompany.uniqueId" | translate}}
+                  <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-8">
+                  <input maxlength="20" type="text" class="form-control"[readonly]="formData?.mode == 'edit'?true:false" id="uniqueId" formControlName="uniqueId"
+                    placeholder="{{'contractorCompany.PleaseEnterUniqueId' | translate }}" />
+                  <mat-error *ngFor="let message of showValidationMessages('uniqueId')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row gx-5">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feFirstName" class="col-md-4 col-form-label">{{ "contractorCompany.companyName" |
+                  translate}}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input maxlength="100" type="text" class="form-control" id="fecompanyName"
+                    formControlName="companyName"
+                    placeholder="{{'contractorCompany.PleaseEnterCompanyName' | translate }}" />
+                  <mat-error *ngFor="let message of showValidationMessages('companyName')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feLastName" class="col-md-4 col-form-label">{{ "contractorCompany.contractorCompanyUrl" |
+                  translate }}
+                  <!-- <span class="mendatory">*</span>-->
+                </label>
+                <div class="col-md-8">
+                  <input maxlength="200" type="text" class="form-control" id="fecompanUrl" formControlName="companUrl"
+                    placeholder="{{'contractorCompany.PleaseEnterContractorCompanyUrl' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('companUrl')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row gx-5">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feFirstName" class="col-md-4 col-form-label">{{ "contractorCompany.addressLine1" | translate
+                  }}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input maxlength="100" type="text" class="form-control" id="fecompanyName"
+                    formControlName="addressLine1"
+                    placeholder="{{'contractorCompany.PleaseEnterAddress' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('addressLine1')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feLastName" class="col-md-4 col-form-label">{{ "contractorCompany.addressLine2" | translate
+                  }}
+                  <!-- <span class="mendatory">*</span> -->
+                </label>
+                <div class="col-md-8">
+                  <input maxlength="200" type="text" class="form-control" id="fecompanUrl"
+                    formControlName="addressLine2"
+                    placeholder="{{'contractorCompany.PleaseEnterAddress' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('addressLine2')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row gx-5">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feFirstName" class="col-md-4 col-form-label">{{ "contractorCompany.city" | translate
+                  }}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input maxlength="100" type="text" class="form-control" id="fecompanyName" formControlName="city"
+                    placeholder="{{'contractorCompany.PleaseEnterCity' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('city')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feLastName" class="col-md-4 col-form-label">{{ "contractorCompany.zipCode" | translate }}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input maxlength="10" type="text" class="form-control" id="feZipCode" formControlName="zipCode"
+                    placeholder="{{'contractorCompany.PleaseEnterzipCode' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('zipCode')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row gx-5">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feFirstName" class="col-md-4 col-form-label">{{ "contractorCompany.state" | translate
+                  }}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input maxlength="100" type="text" class="form-control" id="FeState" formControlName="state"
+                    placeholder="{{'contractorCompany.stateRequired' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('state')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feLastName" class="col-md-4 col-form-label">{{ "contractorCompany.country" | translate
+                  }}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <!-- <input type="text" placeholder="{{ 'contractorCompany.countryRequired' | translate}}"
+                    formControlName="country" aria-label="Number" matInput [matAutocomplete]="auto"
+                    class="form-control">
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onStateChange($event.option.value,true)">
+                    <mat-option *ngFor="let country of countryList" [value]="country.niceName" class="fs-sm">
+                      {{ country.niceName }}
+                    </mat-option>
+                  </mat-autocomplete> -->
+
+                  <mat-select disableOptionCentering class="form-control"  (selectionChange)="onStateChange($event.value, true)" formControlName="country" placeholder="{{ 'contractorCompany.countryRequired'  | translate }}">                   
+                    <mat-option *ngFor="let country of countryList" [value]="country.niceName" class="fs-sm">
+                      {{ country.niceName }}
+                    </mat-option>
+                  </mat-select>
+
+                  <mat-error *ngFor="let message of showValidationMessages('country')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="d-inline-flex align-items-center fs-sm fw-bold position-relative">{{"contractorCompany.contactPersonDetails" | translate }}</span>
+          </div>
+
+          <!-- <div class="popup-content"> -->
+          <div class="row gx-5">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feFirstName" class="col-md-4 col-form-label">{{ "EmployeeForm.FirstName" | translate
+                  }}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input maxlength="50" type="text" class="form-control" id="feFirstName" formControlName="firstName"
+                    placeholder="{{'EmployeeForm.PleaseEnterFirstName' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feLastName" class="col-md-4 col-form-label">{{ "EmployeeForm.LastName" | translate}}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input maxlength="50" type="text" class="form-control" id="feLastName" formControlName="lastName"
+                    placeholder="{{'EmployeeForm.PleaseEnterLastName' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('lastName')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>          
+          <div class="row gx-5">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="forMobile" class="col-md-4 col-form-label">{{ "EmployeeForm.CellNumber" | translate }}
+                  <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-8">
+                  <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                    [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                    [enablePlaceholder]="true" [searchCountryFlag]="true"
+                    [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                    [selectedCountryISO]="selectedCountry" [phoneValidation]="true"
+                    [separateDialCode]="separateDialCode" [maxLength]="'15'" (countryChange)="checkNumber($event)"
+                    name="phone" formControlName="contactMobile" appMobileNumberFormat>
+                  </ngx-intl-tel-input>
+
+                  <mat-error
+                    *ngIf="formContractorCompany.get('contactMobile').hasError('validatePhoneNumber') && (formContractorCompany.get('contactMobile').pristine || formContractorCompany.get('contactMobile').touched)">
+                    {{ "error_messages.invalid_contact_format" |translate }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feEmailAddress" class="col-md-4 col-form-label">{{ "EmployeeForm.Email" | translate}}
+                  <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                  <input type="email" maxlength="150" class="form-control" id="feEmailAddress" formControlName="emailId"
+                    placeholder="{{'EmployeeForm.PleaseEnterEmailAddress' | translate}}" />
+                  <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row gx-5" *ngIf="formData?.mode == 'edit'">
+            <div class="col-md-6">
+              <div class="row mb-3">
+                <label for="feStatus" class="col-md-4 col-form-label">{{ "contractorCompany.status" | translate}}
+                  <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-8">
+                  <mat-select disableOptionCentering class="form-control" formControlName="status" placeholder="{{'Building.Status' | translate }}">                   
+                    <mat-option *ngFor="let name of statusList" [value]="name">
+                      {{ name }}        
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngFor="let message of showValidationMessages('status')">
+                    {{ message }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'add'" (click)="submitContractorCompany()">
+          {{ "CommonToken.Add" | translate }}
+        </button>
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'edit'" (click)="submitContractorCompany()">
+          {{ "CommonToken.Save" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'edit'" (click)="cancel()">
+          {{ "CommonToken.Cancel" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'add'" (click)="resetForm()">
+          {{ "CommonToken.Clear" | translate }}
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</div>

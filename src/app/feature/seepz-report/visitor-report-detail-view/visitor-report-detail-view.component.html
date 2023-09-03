@@ -1,0 +1,127 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center" *ngIf="SeepzWorkFlow">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                {{ 'reportFilterView.visitor_report'| translate }}            
+            </span>
+        </div>
+
+    </div>
+    <div class="popup-form">
+        <div class="popup-content d-flex flex-column flex-1 scroll-y px-0 py-4">
+            <div class="pt-2 ps-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="employeeFirstName" class="col-form-label px-0">
+                            {{ "SeepzVisitorReportDetails.selfPhoto" | translate }}</label>
+                        <div class="picture picture-lg d-flex align-items-center justify-content-center p-1 overflow-hidden">
+                            <img (error)="handleIamge(selfPhotoUrl,'self')" [src]="selfPhotoUrl">
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6" *ngIf="productType == productTypeList.Commercial">
+                        <label for="employeeFirstName" class="col-form-label px-0">
+                            {{ "SeepzVisitorReportDetails.DLPhoto" | translate }}</label>
+                        <div class="picture picture-lg d-flex align-items-center justify-content-center p-1 overflow-hidden">
+                            <img (error)="handleIamge(drivingPhotoUrl,'dl')" [src]="drivingPhotoUrl">
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+
+            <hr class="mb-0">
+            <div class="gap-3 py-3 ps-5 scroll-y flex-1">
+                <div class="row">
+                    <ng-container *ngFor="let item of reportDetailsKeys ; let ind = index;">
+                        <ng-container *ngIf="ind % 2 == 0">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label *ngIf="reportDetailsKeys[ind]" for="employeeFirstName" class="col-md-4 col-form-label">
+                                    {{ "SeepzVisitorReportDetails."+reportDetailsKeys[ind] | translate }}</label>
+                                    <div class="col-md-8" *ngIf="reportDetailsKeys[ind]">
+                                        <ng-container *ngIf="!specialColumn.includes(reportDetailsKeys[ind])">
+                                            <ng-container *ngIf="isBoolean(reportData[reportDetailsKeys[ind]]) != true">
+                                                <div class="d-inline-block" *ngIf="reportDetailsKeys[ind] && reportData[reportDetailsKeys[ind]]!=undefined else NotAvailable">
+                                                    <p class="form-control-plaintext d-flex align-items-center mb-0 p-0">
+                                                        {{reportData[reportDetailsKeys[ind]]}}
+                                                        <!-- <input type="text" readonly class="form-control-plaintext" id="employeeFirstName" [value]="reportData[reportDetailsKeys[ind]]" /> -->
+                                                    </p>
+                                                </div>
+                                                <ng-template #NotAvailable>
+                                                    <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                                                </ng-template>
+                                            </ng-container>
+                                            <ng-container *ngIf="isBoolean(reportData[reportDetailsKeys[ind]]) == true">
+                                                <p *ngIf="reportData[reportDetailsKeys[ind]]" class="form-control-plaintext d-flex align-items-center mb-0 p-0">{{ "report_common.Yes" | translate }}</p>
+                                                <p *ngIf="!reportData[reportDetailsKeys[ind]]" class="form-control-plaintext d-flex align-items-center mb-0 p-0">{{ "report_common.No" | translate }}</p>
+                                                <!-- <input *ngIf="reportData[reportDetailsKeys[ind]]" type="text" readonly class="form-control-plaintext" id="employeeFirstName" value='{{ "report_common.Yes" | translate }}' />
+                                                <input *ngIf="!reportData[reportDetailsKeys[ind]]" type="text" readonly class="form-control-plaintext" id="employeeFirstName" value='{{ "report_common.No" | translate }}' /> -->
+                                            </ng-container>
+                                        </ng-container>
+                                        <ng-container *ngIf="specialColumn.includes(reportDetailsKeys[ind])">
+                                            <div class="d-inline-block" *ngIf="reportDetailsKeys[ind] && reportData[reportDetailsKeys[ind]]!=undefined else NotAvailable">
+                                                <p class="form-control-plaintext d-flex align-items-center mb-0 p-0">
+                                                    {{formatCell(reportData[reportDetailsKeys[ind]])}}
+                                                    <!-- <input type="text" readonly class="form-control-plaintext" id="employeeFirstName" [value]="reportData[reportDetailsKeys[ind]]" /> -->
+                                                </p>
+                                                <!-- <input type="text" readonly class="form-control-plaintext" id="employeeFirstName" [value]='formatCell(reportData[reportDetailsKeys[ind]])' /> -->
+                                            </div>
+                                            <ng-template #NotAvailable>
+                                                <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                                            </ng-template>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label *ngIf="reportDetailsKeys[ind+1]" for="employeeFirstName" class="col-md-4 col-form-label">
+                                    {{"SeepzVisitorReportDetails."+reportDetailsKeys[ind+1] | translate}}</label>
+                                    <div class="col-md-8" *ngIf="reportDetailsKeys[ind+1]">
+                                        <ng-container *ngIf="!specialColumn.includes(reportDetailsKeys[ind+1])">
+                                            <ng-container *ngIf="!isBoolean(reportData[reportDetailsKeys[ind+1]])">
+                                                <div class="d-inline-block" *ngIf="reportDetailsKeys[ind+1] && reportData[reportDetailsKeys[ind+1]]!=undefined else NotAvailable">
+                                                    <p class="form-control-plaintext d-flex align-items-center mb-0 p-0">
+                                                        {{reportData[reportDetailsKeys[ind+1]]}}
+                                                        <!-- <input type="text" readonly class="form-control-plaintext" id="employeeFirstName" [value]="reportData[reportDetailsKeys[ind+1]]" /> -->
+                                                    </p>
+                                                </div>
+                                                <ng-template #NotAvailable>
+                                                    <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                                                </ng-template>
+                                            </ng-container>
+                                            <ng-container *ngIf="isBoolean(reportData[reportDetailsKeys[ind+1]])">
+                                                <p *ngIf="reportData[reportDetailsKeys[ind+1]]" class="form-control-plaintext d-flex align-items-center mb-0 p-0">{{ "report_common.Yes" | translate }}</p>
+                                                <p *ngIf="!reportData[reportDetailsKeys[ind+1]]" class="form-control-plaintext d-flex align-items-center mb-0 p-0">{{ "report_common.No" | translate }}</p>
+                                                <!-- <input *ngIf="reportData[reportDetailsKeys[ind+1]]" type="text" readonly class="form-control-plaintext" id="employeeFirstName" value='{{ "report_common.Yes" | translate }}' />
+                                                <input *ngIf="!reportData[reportDetailsKeys[ind+1]]" type="text" readonly class="form-control-plaintext" id="employeeFirstName" value='{{ "report_common.No" | translate }}' /> -->
+                                            </ng-container>
+                                        </ng-container>
+                                        <ng-container *ngIf="specialColumn.includes(reportDetailsKeys[ind+1])">
+                                            <div class="d-inline-block" *ngIf="reportDetailsKeys[ind+1] && reportData[reportDetailsKeys[ind+1]]!=undefined else NotAvailable">
+                                                <p class="form-control-plaintext d-flex align-items-center mb-0 p-0">
+                                                    {{formatCell(reportData[reportDetailsKeys[ind+1]])}}
+                                                    <!-- <input type="text" readonly class="form-control-plaintext" id="employeeFirstName" [value]="reportData[reportDetailsKeys[ind]]" /> -->
+                                                </p>
+                                                <!-- <input type="text" readonly class="form-control-plaintext" id="employeeFirstName" [value]='formatCell(reportData[reportDetailsKeys[ind+1]])' /> -->
+                                            </div>
+                                            <ng-template #NotAvailable>
+                                                <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                                            </ng-template>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3">
+            {{ "report_common.apply_filter" | translate }}</button>
+        <button class="btn btn-sm btn-white px-3">
+            {{ "report_common.clear_filter" | translate }}</button>
+    </div> -->
+</div>

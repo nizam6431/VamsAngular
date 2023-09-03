@@ -1,0 +1,29 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.btn-wrapper {
+
+  .btn {
+    min-width: 11rem;
+  }
+}
+.sendOtp {
+  margin:8px 0 0
+}
+.sendOtp span {
+  font-size: 14px;
+  color: #bbbbbb;
+}
+.sendOtp span.resendOtp {
+  margin:0 0 0 5px;
+  color: #eb5527;
+  cursor: pointer;
+}
+.otpError {
+  color: red;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}

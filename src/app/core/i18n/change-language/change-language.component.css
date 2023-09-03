@@ -1,0 +1,15 @@
+::ng-deep .select2-container {
+    top: -4px;
+}
+
+::ng-deep .select2-container--default .select2-selection--single {
+    border       : none;
+    border-bottom: 1px solid #aaa;
+    border-radius: 0px;
+}
+
+::ng-deep .select2-results__option
+{
+    cursor: pointer;
+}
+

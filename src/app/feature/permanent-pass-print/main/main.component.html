@@ -1,0 +1,22 @@
+
+<div class="vams-grid-wrapper">
+    <app-grid-view [dataSource]="dataSource" [columns]="columns"
+        (rowData)="rowData($event)" (modeEmmiter)="changeMode($event)" (onDataChange)="paginate($event)" [totalCount]="totalCount"
+        [pageSizeCount]="pageSize"></app-grid-view>
+</div>
+
+<footer class="vams-grid-footer bg-floral-white">
+    <button class="btn btn-sm btn-white px-3" (click)="singleMultiplePrint_2()">
+            {{ "buttons.printSelected" | translate }}
+    </button>
+    <button class="btn btn-sm btn-white px-3" (click)="singleMultiplePrint_()" style="margin-left: 1rem" [disabled]="printData.mode == 'multiple'">
+            {{ "buttons.printAll" | translate }}
+    </button>
+</footer>
+
+<pdf-viewer [src]="printPassDocu"
+              [render-text]="true" class="pdf-viewer"
+              [original-size]="true" [autoresize]="true" (after-load-complete)="onLoaded($event)"
+              style="width:100%; height:300px;position:absolute;top:-100000000px;left:-100000000px;" id="printThis"
+  ></pdf-viewer>
+  <!-- width:100%; height:300px;position:absolute;top:-100000000px;left:-100000000px; -->

@@ -1,0 +1,214 @@
+<div class="light-box-style">
+    <h2>{{ 'Schedule.Schedule' | translate}}</h2>
+    <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+    <div class="walkin-web-inner-box-profile-photo" *ngIf="visitorThumbnail != ''" ><img src="{{visitorThumbnail}}"></div>
+    <form (ngSubmit)="nextClick()" #form="ngForm" [formGroup]="scheduleFirstForm" autocomplete="off" novalidate>
+        <div class="inner-box" [ngStyle]="(isOnSecondScreen)?{'display': 'none'} : {'display': 'block'}">
+            <h3>{{ 'Schedule.VisitorDetails' | translate}}</h3>
+            <label class="error-color fontSize-10"
+                *ngIf="(form?.submitted && phonenumber?.errors?.atLeastOne) && (form?.submitted && email?.errors?.atLeastOne)">
+                {{ 'Schedule.EmailOrCellNumberRequiredMessage' | translate}}
+            </label>
+            <div class="contact-detail-small">
+
+                <li>
+
+                    <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{ 'Schedule.ISD' |
+                        translate}}</div>
+                    <div class="input-area pb-20">
+                         <!-- <select class="input-style" ui-select2 (change)="isdCodeChange($event)" formControlName="isdCode" name="isdCode">
+                            <option *ngFor="let code of isdCodes" value="{{code.id}}">+{{code.text}}</option>
+                        </select>   -->
+                         <ng-select2 *ngIf="isdCodes.length>0" [options]="options" formControlName="isdCode" 
+                             name="isdCode" (valueChanged)="isdCodeChange($event)" [data]="isdCodes">
+                        </ng-select2> 
+                        <label class="error-color fontSize-10" *ngIf="(isdCode?.invalid && form?.submitted && isdCode?.errors?.required) 
+                    || (isdCode?.invalid && isdCode?.touched && isdCode?.errors?.required)">
+                            {{ 'Schedule.ISDRequired' | translate}}
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular pb-5">{{ 'Schedule.CellNumber' | translate}}
+                    </div>
+                    <div class="input-area pb-20">
+                        <input type="text" mask='(000) 099-999999' #phonenumberInput pattern="[0-9]*" inputmode="numeric" formControlName="phonenumber"
+                            name="phonenumber" (blur)="clearEmail();"
+                            placeholder="{{ 'Schedule.PleaseEnterCellNumber' | translate}}" class="input-style unicode-phone-number">
+                        <label class="error-color fontSize-10" *ngIf="(phonenumber?.invalid && form?.submitted && phonenumber?.errors?.pattern) 
+                    || (phonenumber?.invalid && phonenumber?.touched && phonenumber?.errors?.pattern)">
+                            {{ 'Schedule.CellNumberValid' | translate}}
+                        </label>
+                    </div>
+
+                </li>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="text-center">
+                <div class="or-style">{{'Walkin.Or' | translate}}</div>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{ 'Schedule.EmailId' | translate}}</div>
+            <div class="input-area pb-20">
+                <input type="text" formControlName="email" maxlength="150" name="email"
+                    placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate}}"
+                    (blur)="clearCellNumber();" class="input-style">
+                <label class="error-color fontSize-10"
+                    *ngIf="(email?.invalid && form?.submitted && email?.errors?.email)||(email?.invalid && email?.touched && email?.errors?.email)">
+                    {{'Schedule.EmailValid' | translate}}
+                </label>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{ 'Schedule.FirstName' | translate}}
+            </div>
+            <div class="input-area pb-20">
+                <input type="text" style="text-transform: capitalize;" maxlength="50" formControlName="firstName"
+                    name="firstName" placeholder="{{ 'Schedule.FirstNamePlaceholder' | translate}}" class="input-style">
+                <label class="error-color fontSize-10"
+                    *ngIf="(firstName?.invalid && form?.submitted && firstName?.errors?.required)||(firstName?.invalid && firstName?.touched && firstName?.errors?.required)">
+                    {{ 'Schedule.FirstNameRequired' | translate}}
+                </label>
+
+                <label class="error-color fontSize-10"
+                    *ngIf="(firstName?.invalid && form?.submitted && firstName?.errors?.maxlength)||(firstName?.invalid && firstName?.touched && firstName?.errors?.maxlength)">
+                    {{ 'Schedule.FirstNameMaxlength' | translate}}
+                </label>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{ 'Schedule.LastName' | translate}}
+            </div>
+            <div class="input-area pb-20">
+                <input type="text" style="text-transform: capitalize;" maxlength="50" formControlName="lastName"
+                    name="lastName" placeholder="{{ 'Schedule.LastNamePlaceholder' | translate}}" class="input-style">
+                <label class="error-color fontSize-10"
+                    *ngIf="(lastName?.invalid && form?.submitted && lastName?.errors?.required)||(lastName?.invalid && lastName?.touched && lastName?.errors?.required)">
+                    {{ 'Schedule.LastNameRequired' | translate}}
+                </label>
+                <label class="error-color fontSize-10"
+                    *ngIf="(lastName?.invalid && form?.submitted && lastName?.errors?.maxlength)||(lastName?.invalid && lastName?.touched && lastName?.errors?.maxlength)">
+                    {{ 'Schedule.LastNameMaxlength' | translate}}
+                </label>
+            </div>
+
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{ 'Schedule.Company' | translate}}</div>
+            <div class="input-area pb-20">
+                <input type="text" style="text-transform: capitalize;" maxlength="100" formControlName="company"
+                    name="company" placeholder="{{ 'Schedule.CompanyPlaceholder' | translate}}" class="input-style">
+
+                <label class="error-color fontSize-10"
+                    *ngIf="(company?.invalid && form?.submitted && company?.errors?.maxlength)||(company?.invalid && company?.touched && company?.errors?.maxlength)">
+                    {{ 'Schedule.CompanyMaxLength' | translate}}
+                </label>
+            </div>
+            <!-- <div class="favourit-section">
+                <li>
+                    {{ 'Schedule.AddFavorites' | translate}}
+                </li>
+                <li>
+                    <div>
+                        <label class="favourite-switch">
+                            <input type="checkbox" formControlName="addToFavoirites" name="addToFavoirites">
+                            <span class="favourite-slider favourite-round"></span>
+                        </label>
+                    </div>
+                </li>
+            </div> -->
+        </div>
+        <div class="text-center" [ngStyle]="(isOnSecondScreen)?{'display': 'none'} : {'display': 'block'}">
+            <button type="submit" class="primary-button mt-20">{{ 'Schedule.Next' | translate}}</button>
+        </div>
+    </form>
+    <form (ngSubmit)="scheduleAppointment()" #secondform="ngForm" [formGroup]="scheduleSecondForm" autocomplete="off"
+        novalidate>
+        <div class="inner-box" [ngStyle]="(!isOnSecondScreen)?{'display': 'none'} : {'display': 'block'}">
+            <h3>{{ 'Schedule.AppointmentDetails' | translate}}</h3>
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{ 'Schedule.PurposeofVisit' |
+                translate}}</div>
+            <div class="input-area pb-20">
+                <select class="input-style" formControlName="selectedPurpose" name="selectedPurpose">
+                    <option value="" disabled selected hidden>{{ 'Schedule.PurposeOfVisitPlaceholder' | translate}}
+                    </option>
+                    <option *ngFor="let purpose of purposeOfVisits" value="{{purpose.Value}}">{{purpose.Value}}
+                    </option>
+                </select>
+                <label class="error-color fontSize-10"
+                    *ngIf="(selectedPurpose?.invalid && secondform?.submitted && selectedPurpose?.errors?.required)||(selectedPurpose?.invalid && selectedPurpose?.touched && selectedPurpose?.errors?.required)">
+                    {{ 'Schedule.PurposeOfVisitRequired' | translate}}
+                </label>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{ 'Schedule.Date' | translate}}
+            </div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="{{ 'Schedule.PleaseSelectAppointmentDate' | translate}}"
+                    class="input-style" theme="dp-material" [dpDayPicker]="datePickerConfig" name="appointmentDate"
+                    (onSelect)="selectedDateChanged($event)" formControlName="appointmentDate">
+                <label class="error-color fontSize-10"
+                    *ngIf="(appointmentDate?.invalid && secondform?.submitted && appointmentDate?.errors?.required)||(appointmentDate?.invalid && appointmentDate?.touched && appointmentDate?.errors?.required)">
+                    {{ 'Schedule.AppointmentDateIsRequired' | translate}}
+                </label>
+            </div>
+            <div class="date-section">
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{ 'Schedule.From' |
+                        translate}}</div>
+                    <div class="input-area pb-20">
+                        <input type="text" placeholder="{{ 'Schedule.FromTime' | translate}}" class="input-style"
+                            [theme]="'dp-material dp-main'" [mode]="'time'" [dpDayPicker]="timePickerFromTimeConfig"
+                            (onSelect)="changedFromTime($event)" [(ngModel)]="fromtime" name="appointmentFromTime"
+                            formControlName="appointmentFromTime">
+                        <label class="error-color fontSize-10"
+                            *ngIf="(appointmentFromTime?.invalid && secondform?.submitted && appointmentFromTime?.errors?.required)||(appointmentFromTime?.invalid && appointmentFromTime?.touched && appointmentFromTime?.errors?.required)">
+                            {{ 'Schedule.FromTimeRequired' | translate}}
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{ 'Schedule.To' |
+                        translate}}</div>
+                    <div class="input-area pb-20">
+                        <input #dateComponent="dpDayPicker" type="text" placeholder="{{ 'Schedule.ToTime' | translate}}"
+                            class="input-style" [theme]="'dp-material dp-main'" [mode]="'time'" name="appointmentToTime"
+                            formControlName="appointmentToTime" [dpDayPicker]="timePickerToTimeConfig">
+                        <label class="error-color fontSize-10"
+                            *ngIf="(appointmentToTime?.invalid && secondform?.submitted && appointmentToTime?.errors?.required)||(appointmentToTime?.invalid && appointmentToTime?.touched && appointmentToTime?.errors?.required)">
+                            {{ 'Schedule.ToTimeRequired' | translate}}
+                        </label>
+                    </div>
+                </li>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{ 'Schedule.MeetingNotes' | translate}}</div>
+            <div class="input-area pb-20">
+                <textarea rows="3" name="meetingNotes" formControlName="meetingNotes"
+                    placeholder="{{ 'Schedule.PleaseEnterMeetingNotes' | translate}}" class="input-style"></textarea>
+                <label class="error-color fontSize-10" style="position:unset"
+                    *ngIf="(meetingNotes?.invalid && secondform?.submitted && meetingNotes?.errors?.maxlength)||(meetingNotes?.invalid && meetingNotes?.touched && meetingNotes?.errors?.maxlength)">
+                    {{ 'Schedule.MeetingNoteMaxLength' | translate}}
+                </label>
+            </div>
+        </div>
+        <div class="text-center" [ngStyle]="(!isOnSecondScreen)?{'display': 'none'} : {'display': 'block'}">
+            <button type="submit" class="primary-button mt-20">{{ 'Schedule.Schedule' | translate}}</button><br />
+            <a href="javascript:void(0)" (click)="isOnSecondScreen=false" class="back-button">{{
+                'Schedule.Back' | translate}}</a>
+        </div>
+    </form>
+</div>
+
+<ng-template #outOfHoursWarning>
+    <div class="popup-box">
+        <img src="assets/images/error.png">
+        <div class="popup-box-text">{{ 'Schedule.OutOfOfficeHours' | translate}}</div>
+        <ul class="button-swap">
+            <li><a href="javascript:void(0)" (click)="closeModal()" class="secondary-button mt-20">{{ 'Schedule.Ok' |
+                    translate}}</a></li>
+        </ul>
+    </div>
+</ng-template>
+
+
+<ng-template #scheduleSuccess>
+    <div class="popup-box">
+        <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+        <img src="assets/images/rechedule.png">
+        <div class="popup-box-text">{{ 'Schedule.AppointmentScheduledConfirmed' | translate : fullnameTranslate }}</div>
+        <a (click)="closeModal()" href="javascript:void(0)" class="primary-button mt-20">{{ 'Schedule.Ok' |
+            translate}}</a>
+    </div>
+</ng-template>

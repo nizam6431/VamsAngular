@@ -1,0 +1,607 @@
+<div class="d-flex flex-column flex-1 scroll-y"
+    *ngIf="(formData.mode == 'edit' || formData.mode == 'add' || formData.mode == 'create_pass') && this.formContractor">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'add'"
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "contractor.add_contractor" | translate}}</span>
+            <span *ngIf="formData.mode == 'edit'"
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "contractor.edit_contractor" | translate}}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="formContractor" novalidate>
+        <div class="popup-content">
+            <div class="row gx-5">
+                <div class="col-md-12">
+                    <div class="d-flex align-items-center gap-5 mb-3">
+                        <div class="vams-photo d-flex justify-content-center align-items-center border overflow-hidden rounded-4"
+                            *ngIf=" showImage">
+                            <img [src]="profileImage" src="assets/images/capture-photo.png" alt="Contractor" />
+                        </div>
+                        <webcam *ngIf="showWebcam" [height]="160" [width]="160" [trigger]="triggerObservable"
+                            [mirrorImage]="'never'" (imageCapture)="handleImage($event)"
+                            [switchCamera]="nextWebcamObservable" class="vams-webcam"></webcam>
+                        <div class="d-grid flex-1" *ngIf="!activeAppointment">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <button *ngIf="capturePhoto" class="btn btn-sm btn-primary-dark px-3"
+                                        (click)="takeSnapshot()">
+                                        {{ "Walkin.CapturePhoto" | translate}}
+                                    </button>
+                                    <button *ngIf="!capturePhoto" class="btn btn-sm btn-primary-dark px-3"
+                                        (click)="onRemovePhoto()">
+                                        {{"contractor.remove_photo" | translate }}
+                                    </button>
+                                </div>
+                                <input id="file" name="profileImage"
+                                    placeholder=" {{'contractor.profile_image' | translate }}"
+                                    accept="image/x-png,image/jpeg" onclick="this.value = null"
+                                    class="custom-file-input" type="file"
+                                    (change)="onFileChange($event);capturePhoto=false" />
+                            </div>
+                            <mat-error *ngFor="let message of showValidationMessages('contractorPhotoURL')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5" *ngIf="formData.mode == 'add'">
+                <div class="col-md-12">
+                    <div class="row mb-3">
+                        <label for="feStatus" class="col-md-4 col-form-label">{{ "contractor.contractor_compnay"
+                            |translate}}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control-plaintext" [value]="contractorCompanyName" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <ng-container>
+                            <label for="feStatus" class="col-md-4 col-form-label">{{ "contractor.location" |
+                                translate}}
+                                <span *ngIf="!activeAppointment" class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <mat-select class="form-control" [disabled]="activeAppointment"
+                                    formControlName="level2Id" placeholder="Please select location">
+                                    <mat-option *ngFor="let item of locations" [value]="item.id">{{ item.name }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngFor="let message of showValidationMessages('level2Id')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feDepartment" class="col-md-4 col-form-label">{{ "contractor.sub_location"
+                            |translate }}</label>
+                        <div class="col-md-8">
+                            <ng-container *ngIf="sublocations">
+                                <ng-container *ngIf="sublocations.length > 0">
+                                    <input type="text" #sublocationInput
+                                        placeholder="{{ 'contractor.sublocation_placeholder' | translate }}"
+                                        formControlName="level3Id" aria-label="Number" matInput [matAutocomplete]="auto"
+                                        class="form-control">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option *ngFor="let sublocation of sublocations" [value]="sublocation"
+                                            class="fs-sm" (onSelectionChange)="selectedSublocation(sublocation)">
+                                            {{ sublocation.sublocationName }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </ng-container>
+                                <ng-container *ngIf="sublocations.length == 0">
+                                    <select class="form-control">
+                                        <option value="" disabled selected hidden>
+                                            {{ 'contractor.sublocation_not_available' | translate }}.
+                                        </option>
+                                    </select>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feFirstName" class="col-md-4 col-form-label">{{ "EmployeeForm.FirstName"
+                            |translate}}<span *ngIf="!activeAppointment" class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <input maxlength="50" [readonly]="activeAppointment" type="text" class="form-control"
+                                id="feFirstName" formControlName="firstName"
+                                placeholder="{{'EmployeeForm.PleaseEnterFirstName' | translate}}" />
+                            <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feLastName" class="col-md-4 col-form-label">{{ "EmployeeForm.LastName" | translate
+                            }}
+                            <span *ngIf="!activeAppointment" class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <input maxlength="50" [readonly]="activeAppointment" type="text" class="form-control"
+                                id="feLastName" formControlName="lastName"
+                                placeholder="{{'EmployeeForm.PleaseEnterLastName' | translate}}" />
+                            <mat-error *ngFor="let message of showValidationMessages('lastName')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="forMobile" class="col-md-4 col-form-label">{{ "EmployeeForm.CellNumber" | translate
+                            }}
+                            <span *ngIf="!activeAppointment" class="mendatory">*</span>
+                        </label>
+                        <!-- <div class="col-md-8"> -->
+
+
+
+                        <div class="col-md-8">
+                            <ng-container *ngIf="activeAppointment; else addmobile">
+                                <input type="text" readonly class="form-control-plaintext" value="{{contractorData.isdCode +
+                                        ' ' +
+                                        formatCellNumber(contractorData.phone)}}" />
+                            </ng-container>
+                            <ng-template #addmobile>
+                                <ngx-intl-tel-input class="telephone-control-group" [disabled]="activeAppointment"
+                                    [cssClass]="'form-control'" [preferredCountries]="preferredCountries"
+                                    [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                                    [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]"
+                                    [selectFirstCountry]="false" [selectedCountryISO]="selectedCountry"
+                                    [phoneValidation]="true" [separateDialCode]="separateDialCode" [maxLength]="'15'"
+                                    (countryChange)="checkNumber($event)" name="phone" formControlName="phone"
+                                    appMobileNumberFormat>
+                                </ngx-intl-tel-input>
+                                <mat-error *ngFor="let message of showValidationMessages('phone')">
+                                    {{ message }}
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formContractor.get('phone').hasError('validatePhoneNumber') && (formContractor.get('phone').value!=null)">
+                                    {{ "error_messages.invalid_contact_format" |translate }}
+                                </mat-error>
+                            </ng-template>
+                        </div>
+
+
+                        <!-- <ngx-intl-tel-input class="telephone-control-group" [disabled]="activeAppointment"
+                                [cssClass]="'form-control'" [preferredCountries]="preferredCountries"
+                                [enableAutoCountrySelect]="false" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                [selectedCountryISO]="selectedCountry" [phoneValidation]="true"
+                                [separateDialCode]="separateDialCode" [maxLength]="'15'"
+                                (countryChange)="checkNumber($event)" name="phone" formControlName="phone"
+                                appMobileNumberFormat>
+                            </ngx-intl-tel-input>
+                            <mat-error *ngFor="let message of showValidationMessages('phone')">
+                                {{ message }}
+                            </mat-error>
+                            <mat-error
+                                *ngIf="formContractor.get('phone').hasError('validatePhoneNumber') && (formContractor.get('phone').value!=null)">
+                                {{ "error_messages.invalid_contact_format" |translate }}
+                            </mat-error> -->
+                        <!-- </div> -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feEmailAddress" class="col-md-4 col-form-label">{{ "EmployeeForm.Email" | translate
+                            }}
+                            <span *ngIf="!activeAppointment" class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <input type="email" maxlength="150"
+                                [readonly]="activeAppointment || formData.mode == 'edit'" class="form-control"
+                                id="feEmailAddress" formControlName="email"
+                                placeholder="{{'EmployeeForm.PleaseEnterEmailAddress' | translate}}" />
+                            <mat-error *ngFor="let message of showValidationMessages('email')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feDepartment" class="col-md-4 col-form-label">{{ "EmployeeForm.Department" |
+                            translate }}
+                            <span *ngIf="!activeAppointment" class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-8">
+                            <mat-select [disabled]="activeAppointment" class="form-control"
+                                formControlName="departmentId"
+                                placeholder="{{'EmployeeForm.PleaseSelectDepartment' | translate}}">
+                                <mat-option selected *ngFor="let item of departmentList; let i = index"
+                                    [value]="item.id">
+                                    {{ item?.name }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngFor="let message of showValidationMessages('departmentId')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="col-md-6" *ngIf="formData.mode == 'edit'">
+                    <div class="row mb-3">
+                        <label for="feStatus" class="col-md-4 col-form-label">{{ "EmployeeForm.Status" | translate }}
+                            <span class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <mat-select class="form-control" formControlName="status" placeholder="{{
+                  'EmployeeForm.PleaseSelectStatus' | translate
+                }}">
+                                <mat-option selected *ngFor="let name of statusList" [value]="name">{{ name }}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="dynamicFieldsKey.length && !activeAppointment">
+                <div class="card bg-floral-white mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                            {{"contractor.config_fields" | translate}}
+                        </h6>
+                        <ng-container *ngFor="let key of dynamicFieldsKey; let i = index ">
+                            <ng-container *ngIf="i %2 == 0">
+                                <div class="row gx-5">
+                                    <div class="col-md-6">
+                                        <div class="row mb-3">
+                                            <label class="col-md-4 col-form-label">{{dynamicFieldsKey[i]}}</label>
+                                            <div class="col-md-8">
+                                                <input (keyup)="dynamicValues(key, dynamic.value)" #dynamic type="text"
+                                                    [value]="dynamicFields[dynamicFieldsKey[i]]" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="dynamicFieldsKey[i+1]" class="col-md-6">
+                                        <div class="row mb-3">
+                                            <label class="col-md-4 col-form-label">{{dynamicFieldsKey[i+1]}}</label>
+                                            <div class="col-md-8">
+                                                <input (keyup)="dynamicValues(dynamicFieldsKey[i+1], dynamic.value)"
+                                                    #dynamic type="text" [value]="dynamicFields[dynamicFieldsKey[i+1]]"
+                                                    class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="activeAppointment">
+                <div class="card bg-floral-white mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                            {{"contractor.pass_details" | translate}}
+                        </h6>
+                        <div class="row gx-5">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label class="col-md-4 col-form-label">{{"contractor.start_date" | translate}}<span
+                                            class="mendatory">*</span></label>
+                                    <div class="col-md-8">
+                                        <ng-container *ngIf="runningAppointment; else changeDate">
+                                            <input readonly type="text" class="form-control"
+                                                [value]="startDateToShow" />
+                                        </ng-container>
+                                        <ng-template #changeDate>
+                                            <div class="input-group input-datepicker">
+                                                <input [min]="todayDate" (dateInput)="onDate($event.value)" type="text"
+                                                    placeholder="{{ 'contractor.start_date_placeholder' | translate}}"
+                                                    class="form-control" theme="dp-material" [matDatepicker]="picker"
+                                                    name="startDate" formControlName="startDate">
+                                                <div class="datepicker-toggle">
+                                                    <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                                                </div>
+                                                <mat-datepicker #picker></mat-datepicker>
+                                            </div>
+                                            <mat-error *ngFor="let message of showValidationMessages('startDate')">
+                                                {{ message }}
+                                            </mat-error>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="endDate" class="col-md-4 col-form-label">{{"contractor.expiry_date" |
+                                        translate}}<span class="mendatory">*</span></label>
+                                    <div class="col-md-8">
+                                        <div class="input-group input-datepicker">
+                                            <input matInput [min]="minEndDate" type="text"
+                                                placeholder="{{ 'contractor.expiry_date_placeholder' | translate}}"
+                                                class="form-control" theme="dp-material" [matDatepicker]="pickerTo"
+                                                name="endDate" formControlName="endDate">
+                                            <div class="datepicker-toggle">
+                                                <mat-datepicker-toggle [for]="pickerTo"></mat-datepicker-toggle>
+                                            </div>
+                                            <mat-datepicker #pickerTo></mat-datepicker>
+                                        </div>
+                                        <mat-error *ngFor="let message of showValidationMessages('endDate')">
+                                            {{ message }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gx-5" *ngIf="showTimePicker">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label class="col-md-4 col-form-label">{{"contractor.start_time" | translate}}<span
+                                            class="mendatory">*</span></label>
+                                    <div class="col-md-8">
+                                        <app-time-picker
+                                            [value]="{time:this.formContractor.value.startTime,callFrom:this.callFrom}"
+                                            (timePickerAppointment)="getScheduledTime($event)"
+                                            [format]="timeFormatForTimePicker"
+                                            [defaultTime]="this.formContractor.value.startTime" screen="scheduled"
+                                            type="from">
+                                        </app-time-picker>
+                                        <mat-error *ngFor="let message of showValidationMessages('startTime')">
+                                            {{ message }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="endDate" class="col-md-4 col-form-label">{{"contractor.end_time" |
+                                        translate}}<span class="mendatory">*</span></label>
+                                    <div class="col-md-8">
+                                        <app-time-picker
+                                            [value]="{time:this.formContractor.value.endTime,callTo:this.callTo}"
+                                            (timePickerAppointment)="getScheduledTime($event)"
+                                            [format]="timeFormatForTimePicker"
+                                            [defaultTime]="this.formContractor.value.endTime" screen="scheduled"
+                                            type="to">
+                                        </app-time-picker>
+                                        <mat-error *ngFor="let message of showValidationMessages('endTime')">
+                                            {{ message }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'add'" (click)="onSubmit()">
+                {{ "CommonToken.Add" | translate }}
+            </button>
+            <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'edit'" (click)="onSubmit()">
+                {{ "CommonToken.Save" | translate }}
+            </button>
+            <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'create_pass'"
+                (click)="createNewPass()">
+                {{ "CommonToken.create" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3"
+                *ngIf="formData?.mode == 'edit' || formData?.mode == 'create_pass'" (click)="cancel()">
+                {{ "CommonToken.Cancel" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'add'" (click)="resetForm()">
+                {{ "CommonToken.Clear" | translate }}
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'show'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "contractor.contractor_details" | translate }}</span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="row mb-4">
+            <div class="vams-photo d-flex justify-content-center align-items-center border overflow-hidden rounded-4">
+                <img [src]="profileImage" alt="Contractor" />
+            </div>
+        </div>
+        <!-- <div class="row gx-5" *ngIf="formData.mode == 'add'">
+            <div class="col-md-12">
+                <div class="row mb-3">
+                    <label for="feStatus" class="col-md-4 col-form-label">{{ "contractor.contractor_compnay"
+                        |translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control-plaintext" [value]="contractorCompanyName" />
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div *ngIf="department && location" class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="location" class="col-sm-3 col-form-label">{{"contractor.location" | translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ location.name || 'NA' }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">{{"contractor.department" |
+                        translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ department.name || 'NA' }}" />
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="lastName" class="col-sm-3 col-form-label">subLocation</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" 
+                            value="{{ contractorData.level3Id }}" />
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">{{
+                        "EmployeeForm.FirstName"|translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ contractorData.firstName }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">{{
+                        "EmployeeForm.LastName"|translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ contractorData.lastName }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">{{
+                        "EmployeeForm.CellNumber"|translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" value="{{contractorData.isdCode +
+                            ' ' +
+                            formatCellNumber(contractorData.phone)}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">{{
+                        "EmployeeForm.Email"|translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" value="{{ contractorData.email }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="dynamicFields">
+
+            <!-- <div class="card bg-floral-white mt-3">
+                <div class="card-body">
+    
+                </div>
+            </div> -->
+
+            <div *ngIf="dynamicFields.length" class="card bg-floral-white mt-3">
+                <div class="card-body">
+                    <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                        {{"contractor.config_fields" | translate}}
+                    </h6>
+                    <ng-container *ngFor="let key of dynamicFieldsKey; let i = index ">
+                        <ng-container *ngIf="i %2 == 0">
+                            <div class="row gx-5">
+                                <div class="col-md-6">
+                                    <div class="row mb-3">
+                                        <label class="col-md-4 col-form-label">{{dynamicFieldsKey[i]}}</label>
+                                        <div class="col-md-8">
+                                            <!-- <input readonly #dynamic type="text"
+                                                [value]="dynamicFields[dynamicFieldsKey[i]]" class="form-control" /> -->
+                                            <input type="text" readonly class="form-control-plaintext"
+                                                [value]="dynamicFields[dynamicFieldsKey[i]]" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="dynamicFieldsKey[i+1]" class="col-md-6">
+                                    <div class="row mb-3">
+                                        <label class="col-md-4 col-form-label">{{dynamicFieldsKey[i+1]}}</label>
+                                        <div class="col-md-8">
+                                            <input type="text" readonly class="form-control-plaintext"
+                                                [value]="dynamicFields[dynamicFieldsKey[i+1]]" />
+                                            <!-- <input readonly #dynamic type="text"
+                                                [value]="dynamicFields[dynamicFieldsKey[i+1]]" class="form-control" /> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- <div class="row gx-5">
+            <div *ngIf=" department" class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">department</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" 
+                            value="{{ department.name }}" />
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="formData.mode = 'edit'">
+            {{ "CommonToken.Edit" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>
+
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'print_pass'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{"contractor.contractor_pass"
+                | translate}}</span>
+        </div>
+    </div>
+    <div class="d-flex flex-column flex-1 scroll-y" id="printSection">
+        <app-conractor-pass [selectedContractor]="formData"></app-conractor-pass>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" [useExistingCss]="true" printSectionId="printSection" ngxPrint>
+            {{ "contractor.print_pass" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>

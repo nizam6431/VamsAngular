@@ -1,0 +1,186 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                <!-- Report Details -->
+                {{"card.cart_details.seepzReportDetails" | translate }}
+            </span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="popup-form">
+            <div class="row mb-3 fs-sm fw-bold">
+                <label for="category" class="col-md-4 col-form-label">
+                    {{ "card_view_Detail.category" | translate }}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext px-1" id="category">{{permanentData?.category ?permanentData?.category :'-' }}</p>
+                </div>
+            </div>
+            <div class="row mb-3 fs-sm fw-bold" *ngIf="categoryType == 'Car Pass' || categoryType =='Employee Pass with Vehicle'|| categoryType == 'Two Wheeler Pass' || categoryType == 'Commercial Vehicle Pass' || categoryType == 'Contract Bus Pass'|| categoryType == 'Contract Bus Service'|| categoryType == 'Night Parking Pass'">
+                <div class="col-md-8">
+                    <p class="form-control-plaintext px-1" id="category">{{"card_view_Detail.vehicleDetails" | translate }}</p>
+                </div>
+            </div>
+                
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <div
+                        class="picture picture-lg d-flex align-items-center justify-content-center p-1 overflow-hidden">
+                        <img (error)="handleIamge(permanentData.photoUrl[0])" [src]="photoUrl">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row col-md-6">
+                    <label for="company_name" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.company_name" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="unitName">{{reportData?.unit ? reportData?.unit :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row col-md-6">
+                    <label for="validFromDateTime" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.validFromDateTime" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="validFromDateTime">{{permanentData?.startDate
+                            ?permanentData?.startDate :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row col-md-6" *ngIf="categoryType == 'Labour(Manufacturer)' || categoryType == 'Daily pass with Vehicle' || categoryType == 'Labour(Ancillary)'|| categoryType == 'Visitor'">
+                    <label for="firstName" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.startTime" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="startTime">{{permanentData?.startTime ?permanentData?.startTime :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row"  *ngIf="categoryType != 'Car Pass'&& categoryType != 'Two Wheeler Pass' && categoryType != 'Commercial Vehicle Pass' && categoryType != 'Contract Bus Pass' && categoryType != 'Contract Bus Service'&& categoryType != 'Night Parking Pass'">
+                <div class="row col-md-6">
+                    <label for="validFromDateTime" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.firstName" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="validFromDateTime">{{permanentData?.firstName
+                            ?permanentData?.firstName :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row col-md-6">
+                    <label for="lastName" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.lastName" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="lastName">{{permanentData?.lastName ?permanentData?.lastName :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row"  *ngIf="categoryType != 'Car Pass'&& categoryType != 'Two Wheeler Pass' && categoryType != 'Commercial Vehicle Pass' && categoryType != 'Contract Bus Pass' && categoryType != 'Contract Bus Service'&& categoryType != 'Night Parking Pass'">
+                <div class="row col-md-6">
+                    <label for="validFromDateTime" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.gender" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="validFromDateTime">{{permanentData?.gender
+                            ?permanentData?.gender :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row col-md-6">
+                    <label for="lastName" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.emailAddress" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="lastName">{{permanentData?.emailAddress ?permanentData?.emailAddress :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="row">
+                <div class="row col-md-6">
+                    <label for="validFromDateTime" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.checkInDate" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="validFromDateTime">{{permanentData?.checkInDate
+                            ?permanentData?.checkInDate :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row col-md-6">
+                    <label for="lastName" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.checkInTime" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="lastName">{{permanentData?.checkInTime ?permanentData?.checkInTime :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row col-md-6">
+                    <label for="validFromDateTime" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.checkOutDate" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="validFromDateTime">{{permanentData?.checkOutDate
+                            ?permanentData?.checkOutDate :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row col-md-6">
+                    <label for="lastName" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.checkOutTime" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="lastName">{{permanentData?.checkOutTime ?permanentData?.checkOutTime :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row" >
+                <div class="row col-md-6" *ngIf="categoryType != 'Utility Service' && categoryType != 'Employee Pass without Vehicle'">
+                    <label for="validFromDateTime" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.vehicleNo" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="validFromDateTime">{{permanentData?.vehicleNo
+                            ?permanentData?.vehicleNo :'-' }}</p>
+                    </div>
+                </div>
+                <div class="row col-md-6" *ngIf="categoryType != 'Car Pass'&& categoryType == 'Two Wheeler Pass' && categoryType != 'Commercial Vehicle Pass' && categoryType != 'Contract Bus Pass' && categoryType != 'Contract Bus Service'&& categoryType != 'Night Parking Pass'">
+                    <label for="lastName" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.purpose" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="lastName">{{permanentData?.purpose ?permanentData?.purpose :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row col-md-6">
+                    <label for="mobileNO" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.mobileNO" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="mobileNO">
+                            <span>+{{ permanentData?.isdCode +" " + formatCellNumber(permanentData?.mobileNo ? permanentData?.mobileNo :'-') }}</span>
+                    </div>
+                </div>
+                <div class="row col-md-6" *ngIf="categoryType == 'Daily pass with Vehicle' || categoryType == 'Labour(Ancillary)' || categoryType == 'Labour(Manufacturer)'">
+                    <label for="contractor_name" class="col-md-5 col-form-label">
+                        {{ "card_view_Detail.contractor_name" | translate }}
+                    </label>
+                    <div class="col-md-7">
+                        <p class="form-control-plaintext px-1" id="lastName">{{permanentData?.contractorName ?permanentData?.contractorName :'-' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <app-document-grid-view [postDocumentData]="postDocumentData" [columns]="columns" [pageSizeCount]="pageSize"
+                [testDate]="testDate">
+            </app-document-grid-view>
+        </div>
+    </div>
+  
+</div>

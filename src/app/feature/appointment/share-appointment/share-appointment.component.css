@@ -1,0 +1,70 @@
+.input-style.unicode-phone-number {
+    unicode-bidi: isolate-override;
+}
+
+::ng-deep .select2-container {
+    top: -4px;
+}
+
+::ng-deep .select2-container--default .select2-selection--single {
+    border: none;
+    border-bottom: 1px solid #aaa;
+    border-radius: 0px;
+}
+
+::ng-deep .select2-results__option {
+    cursor: pointer;
+}
+
+:host ::ng-deep ngx-intl-tel-input input {
+    height: 44px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #c7cace;
+    border-radius: 4px;
+    font-size: 18px;
+}
+
+:host ::ng-deep ngx-intl-tel-input.ng-invalid.ng-touched input {
+    border: 1px solid #c0392b;
+}
+
+:host ::ng-deep ngx-intl-tel-input input:hover {
+    box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.24);
+}
+
+:host ::ng-deep ngx-intl-tel-input input:focus {
+    outline: none !important;
+    border-color: #3498db;
+    box-shadow: 0 0 0 0 #000;
+}
+
+:host ::ng-deep ngx-intl-tel-input input::-webkit-input-placeholder {
+    color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input:-ms-input-placeholder {
+    color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input::-ms-input-placeholder {
+    color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input::placeholder {
+    color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input[disabled] {
+    background-color: #e5eaf1;
+}
+
+.material-icons {
+    cursor: pointer;
+}
+
+.main {
+    padding: 10px
+}

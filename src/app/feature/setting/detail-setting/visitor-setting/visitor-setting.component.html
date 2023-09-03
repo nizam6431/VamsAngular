@@ -1,0 +1,1016 @@
+<div class="d-flex flex-column flex-1 scroll-y" [formGroup]="visitorForm" novalidate *ngIf="complexSetting ">
+    <div class="vams-grid-filters d-flex gap-3">
+        <div class="d-flex align-items-center gap-3 me-auto">
+            <h6 class="vams-page-sub-title fw-bold mb-0 px-0">
+                {{"visitor_setting.visitor_settings" | translate }}
+            </h6>
+            <div class="vams-dropdown">
+                <mat-select class="form-control" formControlName="level2Id"
+                    placeholder="{{'placeholders.select_level' | translate}}"
+                    (selectionChange)="onLevelChange($event.value)">
+                    <mat-option selected *ngFor="let level of buildingList;let i = index" [value]="level.id">
+                        {{ level.name }}
+                    </mat-option>
+                </mat-select>
+                <!-- <input type="text" placeholder="Please select company" aria-label="Number" matInput
+                    [matAutocomplete]="auto" class="form-control" name="level2Id" (input)="getValue(name.value)" #name
+                    formControlName="level2Id">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+                    <mat-option *ngFor="let company of buildingList" [value]="company" class="fs-sm"
+                        (onSelectionChange)="onLevelChange(company.id)">
+                        {{ company.name }}
+                    </mat-option>
+                </mat-autocomplete> -->
+                <mat-error *ngIf="isError">
+                    {{'visitor_setting.select_valid_building'|translate}}
+                </mat-error>
+            </div>
+        </div>
+        <button type="submit" *ngIf="!complexSetting" class="btn btn-sm btn-primary-dark px-3"
+            (click)="getComplexSetting()">
+            <span *ngIf="productType === ProductType.Commercial">{{'visitor_setting.reset_to_complex_setting'
+                |translate}}</span>
+            <span *ngIf="productType === ProductType.Enterprise">{{'visitor_setting.reset_to_enterprise_setting'
+                |translate}}</span>
+        </button>
+    </div>
+    <div class="mt-3 px-3 scroll-y">
+        <ng-container *ngIf="productType === ProductType.Commercial">
+            <div class="card rounded-4 mb-3">
+                <div class="card-body d-flex align-items-center gap-5 py-2">
+                    <p class="fs-sm fw-semi-bold mb-0">{{'visitor_setting.visitor_check_in_at' | translate}}</p>
+                    <mat-button-toggle-group *ngIf="!isExcel"
+                        class="vams-button-toggle-group vams-button-toggle-group-secondary bg-floral-white"
+                        (change)="onButtonToggleChange($event.value)"
+                        [value]="(this.visitorForm && this.visitorForm.get('visitorCheckinAtBuilding') &&this.visitorForm.get('visitorCheckinAtBuilding').value)?'building_level':'complex_level'">
+                        <mat-button-toggle value="complex_level">{{'visitor_setting.complex_level' | translate}}
+                        </mat-button-toggle>
+                        <mat-button-toggle value="building_level">{{'visitor_setting.building_level' | translate}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                    <p *ngIf="isExcel" class="fs-sm fw-semi-bold mb-0">{{'visitor_setting.building_level' |
+                        translate}}</p>
+                </div>
+            </div>
+        </ng-container>
+        <div class="row gap-5">
+            <div class="col" *ngIf="!isExcel">
+                <!-- Authentication -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel && productType != ProductType.Enterprise">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.authentication" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1">
+                            <label for="isAuth"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.visitor_authentication" |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isAuth" name="isAuth"
+                                    (change)="onToggleChange($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="isByPass"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.allow_bypass_visitor_entry" |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isByPass" name="isByPass"
+                                    (change)="onToggleChange($event)"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Walk In -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.walk_in" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                            <label for="isHostRequired"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.host_mandatory"
+                                | translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isHostRequired" (change)="getWalkInStatus($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="allowWalkinApproval" class="col-sm-5 col-form-label mb-0"
+                                [ngClass]="(!this.visitorForm.get('isHostRequired').value)?'disabled':''">{{"visitor_setting.allow_walkin_approval"
+                                |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle [disabled]="!this.visitorForm.get('isHostRequired').value"
+                                    formControlName="allowWalkinApproval"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="productType != ProductType.Enterprise">
+                    <mat-divider class="mb-3"></mat-divider>
+                </div>
+                <!-- Camera -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel && productType != ProductType.Enterprise">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.camera" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1">
+                            <label for="isCamera" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.camera_enabled" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isCamera" (change)="getCameraStatus($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="isLivePhoto" class="col-sm-5 col-form-label mb-0"
+                                [ngClass]="(!this.visitorForm.get('isCamera').value)?'disabled':''">{{"visitor_setting.mandatatory_to_capture_live_photo"
+                                |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle [disabled]="!this.visitorForm.get('isCamera').value"
+                                    formControlName="isLivePhoto"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Visitor Pass -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.visitor_pass" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                            <label for="isSoftPass" class="col-sm-5 col-form-label mb-0">{{"visitor_setting.soft_pass"
+                                |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isSoftPass"></mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="printPass" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.print_pass" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isPrintPass"></mat-slide-toggle>
+                            </div>
+                        </div>
+                        <mat-radio-group class="d-grid gap-2" aria-label="Select an option" labelPosition="after"
+                            (change)="photoStatus($event)" *ngIf="productType != ProductType.Enterprise">
+                            <mat-radio-button value="registerPhoto" [checked]="isRegisterPhoto">
+                                <label for="showRegisterVisitorPhotoOnVisitorPass" class="form-label mb-0">{{
+                                    "visitor_setting.show_registered_photo_on_visitor_pass" | translate
+                                    }}</label>
+                            </mat-radio-button>
+                            <mat-radio-button value="livePhoto" [checked]="isLivePhoto"
+                                (change)="showLivePhotoOnVisitorPassFnc($event)">
+                                <label for="showLivePhotoOnVisitorPass" class="form-label mb-0">{{
+                                    "visitor_setting.show_live_photo_on_visitor_pass" | translate
+                                    }}
+                                </label>
+                            </mat-radio-button>
+                        </mat-radio-group>
+                        <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                            <label for="printPass" class="col-sm-5 col-form-label mb-0"
+                                [ngClass]="isRegisterPhoto?'disabled':''">{{
+                                "visitor_setting.printRegisterPhotoIfNotLivePhoto" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle [disabled]="!this.visitorForm.get('showLivePhotoOnVisitorPass').value"
+                                    formControlName="printRegisterPhotoIfNotLivePhoto"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Authentication methods -->
+                <div class="d-flex align-items-center gap-3 me-auto mb-3">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.auth_method" | translate}}</p>
+                    <div class="vams-dropdown">
+                        <mat-select class="form-control" formControlName="visitorAuthenticationType"
+                            placeholder="{{'visitor_setting.select_method' | translate}}"
+                            (selectionChange)="selectAuthenticationMethod($event.value)">
+                            <mat-option selected *ngFor="let method of methodList | keyvalue;let i = index"
+                                [value]="method.value">
+                                <!-- {{ method.key }} -->
+                                {{'visitor_setting.'+method.key|translate}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="isError">
+                            {{'visitor_setting.select_valid_location'|translate}}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!-- HSQ -->
+                <div class="d-grid gap-2 mb-3">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.hsq" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1">
+                            <label for="isVisitorHSQ" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.hsq_allowed" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isVisitorHSQ" (change)="hsqToggle($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column flex-1">
+                            <div class="row flex-1">
+                                <label for="hsqValue"
+                                    class="col-sm-5 col-form-label mb-0">{{"visitor_setting.hsq_statement"
+                                    |
+                                    translate}}</label>
+                                <div class="col-sm-5">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="vams-input-group d-flex align-items-center gap-2">
+                                            <button class="btn btn-input-group" type="button" (click)="HsqCount(false)">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <input type="number"
+                                                [value]="this.visitorForm.get('hsqAlertSendBeforeHours').value"
+                                                class="form-control" formControlName="hsqAlertSendBeforeHours"
+                                                min="0" />
+                                            <button class="btn btn-input-group" type="button" (click)="HsqCount(true)">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <span class="fs-xs" style="width: 4rem;">
+                                            {{
+                                            "visitor_setting.hours" | translate
+                                            }}
+                                        </span>
+                                    </div>
+                                    <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'required')">
+                                        {{"visitor_setting.requried_error_massage" | translate}}</mat-error>
+                                    <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'min')">
+                                        {{"visitor_setting.minimum_hours" | translate}}</mat-error>
+                                    <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'max')">
+                                        {{"visitor_setting.maximum_hours" | translate}}</mat-error>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Check In -->
+                <div class="d-grid gap-2 mb-3">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.check_in" | translate}}</p>
+                    <div class="d-flex flex-column flex-1">
+                        <div class="row flex-1">
+                            <label for="earlyCheckin"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.early_check_in"
+                                | translate}}</label>
+                            <div class="col-sm-5">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="vams-input-group d-flex align-items-center gap-2">
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="earlyCheckInWindow(false)">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                        <input type="number" [value]="this.visitorForm.get('earlyCheckinMins').value"
+                                            class="form-control" formControlName="earlyCheckinMins" min="0" max="120" />
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="earlyCheckInWindow(true)">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <span class="fs-xs" style="width: 4rem;">
+                                        {{
+                                        "visitor_setting.mins" | translate
+                                        }}
+                                    </span>
+                                </div>
+                                <mat-error *ngIf="formError('earlyCheckinMins', 'required')">
+                                    {{"visitor_setting.requried_error_minutes_massage" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('earlyCheckinMins', 'min')">
+                                    {{"visitor_setting.minimum_minutes" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('earlyCheckinMins', 'max')">
+                                    {{"visitor_setting.maximum_minutes" | translate}}</mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- hide late check in for both product as per nilesh sir -->
+                    <!-- <div class="d-flex flex-column flex-1">
+                        <div class="row flex-1">
+                            <label for="lateCheckIn"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.late_check_in"
+                                | translate}}</label>
+                            <div class="col-sm-5">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="vams-input-group d-flex align-items-center gap-2">
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="lateCheckInWindow(false)">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                        <input type="number" [value]="this.visitorForm.get('lateCheckinMins').value"
+                                            class="form-control" formControlName="lateCheckinMins" min="0" max="120" />
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="lateCheckInWindow(true)">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <span class="fs-xs" style="width: 4rem;">
+                                        {{
+                                        "visitor_setting.mins" | translate
+                                        }}
+                                    </span>
+                                </div>
+                                <mat-error *ngIf="formError('lateCheckinMins', 'required')">
+                                    {{"visitor_setting.requried_error_minutes_massage" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('lateCheckinMins', 'min')">
+                                    {{"visitor_setting.minimum_minutes" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('lateCheckinMins', 'max')">
+                                    {{"visitor_setting.maximum_minutes" | translate}}</mat-error>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div *ngIf="productType != ProductType.Enterprise">
+                      <mat-divider></mat-divider>
+                    </div>
+                    <!-- Check Out -->
+                    <p class="fs-sm fw-semi-bold mb-0" *ngIf="productType != ProductType.Enterprise">{{"visitor_setting.checkOut" | translate}}</p>
+                    <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                        <label for="autoCheckOut" class="col-sm-5 col-form-label mb-0">{{"visitor_setting.auto_checkout"
+                            | translate}}</label>
+                        <div class="col-sm-5">
+                            <div class="d-flex align-items-center gap-3">
+                                <mat-slide-toggle formControlName="autoCheckOut" (change)="noCheckOut($event)">
+                                </mat-slide-toggle>
+                                <div class="d-flex align-items-center gap-2">
+                                    <app-time-picker [value]="{time:this.visitorForm.value.autoCheckoutTime}"
+                                        [readOnlyVisitorSetting]="this.visitorForm.value.autoCheckOut"
+                                        [format]="timeFormat" [defaultTime]="this.visitorForm.value.autoCheckoutTime"
+                                        screen="visitorSetting" type="from"
+                                        visitorSettingsDisplay="visitorSettingsDisplay"
+                                        (timePickerAppointment)="getTimeValue($event)"></app-time-picker>
+                                </div>
+                                <!-- <div class="d-flex align-items-center gap-2">
+                                    <input #input1 [ngxTimepicker]="darkPickerForStartTime"
+                                        [disabled]="!this.visitorForm.get('autoCheckOut').value" [readonly]="true"
+                                        [format]="timeFormat" [value]="this.visitorForm.get('autoCheckoutTime').value"
+                                        placeholder="{{ 'visitor_setting.AutoCheckOut' | translate}}"
+                                        class="form-control" name="autoCheckoutTime" type="text" autocomplete="off"
+                                        name="autoCheckoutTime" formControlName="autoCheckoutTime"
+                                        style="width: 11rem;">
+                                    <ngx-material-timepicker [enableKeyboardInput]="true" [confirmBtnTmpl]="confirmBtn"
+                                        [cancelBtnTmpl]="cancelBtn" #time1 #appendedToInput [appendToInput]="false"
+                                        #darkPickerForStartTime>
+                                    </ngx-material-timepicker>
+                                    <ng-template #confirmBtn>
+                                        <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' |
+                                            translate}}</button>
+                                    </ng-template>
+                                    <ng-template #cancelBtn>
+                                        <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' |
+                                            translate}}</button>
+                                    </ng-template>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                        <label for="noCheckOutVisitorAlert"
+                            class="col-sm-5 col-form-label mb-0">{{"visitor_setting.send_not_checkot_visitor_alert" |
+                            translate}}</label>
+                        <div class="col-sm-5">
+                            <div class="d-flex align-items-center gap-3">
+                                <mat-slide-toggle formControlName="noCheckOutVisitorAlert"
+                                    (change)="noCheckOutAlert($event)"></mat-slide-toggle>
+                                <div class="d-flex align-items-center gap-2" *ngIf="false">
+                                    <app-time-picker [value]="{time:this.visitorForm.value.noCheckOutVisitorAlertTime}"
+                                        [readOnlyVisitorSetting]="this.visitorForm.value.noCheckOutVisitorAlert"
+                                        [format]="timeFormat"
+                                        [defaultTime]="this.visitorForm.value.noCheckOutVisitorAlertTime"
+                                        screen="visitorSetting" type="to"
+                                        visitorSettingsDisplay="visitorSettingsDisplay"
+                                        (timePickerAppointment)="getTimeValue($event)"></app-time-picker>
+                                </div>
+                                <!-- <div class="d-flex align-items-center gap-2">
+                                    <input #input1 [ngxTimepicker]="darkPickerForStartTime1"
+                                        [disabled]="!this.visitorForm.get('noCheckOutVisitorAlert').value"
+                                        [readonly]="true" [format]="timeFormat"
+                                        [value]="this.visitorForm.get('noCheckOutVisitorAlertTime').value"
+                                        placeholder="{{ 'visitor_setting.AutoCheckOutAlert' | translate}}"
+                                        class="form-control" name="noCheckOutVisitorAlertTime" type="text"
+                                        autocomplete="off" name="noCheckOutVisitorAlertTime"
+                                        formControlName="noCheckOutVisitorAlertTime" style="width: 11rem;">
+                                    <ngx-material-timepicker [enableKeyboardInput]="true" [confirmBtnTmpl]="confirmBtn"
+                                        [cancelBtnTmpl]="cancelBtn" #time1 #appendedToInput [appendToInput]="false"
+                                        #darkPickerForStartTime1>
+                                    </ngx-material-timepicker>
+                                    <ng-template #confirmBtn>
+                                        <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' |
+                                            translate}}</button>
+                                    </ng-template>
+                                    <ng-template #cancelBtn>
+                                        <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' |
+                                            translate}}</button>
+                                    </ng-template>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid flex-1" *ngIf="productType != ProductType.Enterprise">
+                        <div class="d-flex align-items-center gap-3">
+                            <label for="email"
+                                [ngClass]="!this.visitorForm.get('noCheckOutVisitorAlert').value?'disabled form-label me-auto mb-0':'form-label me-auto mb-0'"
+                                class="form-label me-auto mb-0">{{
+                                "visitor_setting.email" | translate
+                                }}</label>
+                            <input class="form-control flex-1" (input)="readEmail()"
+                                [readonly]="!this.visitorForm.get('noCheckOutVisitorAlert').value"
+                                formControlName="noCheckoutVisitorAlertEmail">
+                        </div>
+                        <mat-error *ngIf="invalidEmail" class="ms-5">
+                            {{
+                            "visitor_setting.validEmail" | translate
+                            }}
+                        </mat-error>
+                    </div>
+                </div>
+                <div *ngIf="productType != ProductType.Enterprise">
+                  <mat-divider class="mb-3"></mat-divider>
+                </div>
+                <!-- Visitor pass -->
+                <div class="d-grid gap-2 mb-3" *ngIf="isExcel">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.visitor_pass" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1">
+                            <label for="printPass" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.print_visitor_badge" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isPrintPass"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- NDA -->
+                <ng-container *ngIf="!isExcel">
+                    <mat-divider class="mb-3"></mat-divider>
+                    <div class="d-grid gap-2 mb-3">
+                        <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.send_nda" | translate}}</p>
+                        <div class="row flex-1">
+                            <label for="sendNDA" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.send_nda_before" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="sendNDA"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column flex-1 scroll-y" [formGroup]="visitorForm" novalidate
+    *ngIf="!complexSetting && productType === ProductType.Enterprise">
+    <div class="vams-grid-filters d-flex gap-3">
+        <div class="d-flex align-items-center gap-3 me-auto">
+            <h6 class="vams-page-sub-title fw-bold mb-0 px-0">
+                {{"visitor_setting.visitor_settings" | translate }}
+            </h6>
+            <div class="vams-dropdown">
+                <mat-select class="form-control" formControlName="level2Id"
+                    placeholder="{{'placeholders.select_level' | translate}}"
+                    (selectionChange)="onLevelChange($event.value)">
+                    <mat-option selected *ngFor="let level of buildingList;let i = index" [value]="level.id">
+                        {{ level.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="isError">
+                    {{'visitor_setting.select_valid_building'|translate}}
+                </mat-error>
+            </div>
+        </div>
+        <button type="submit" *ngIf="!complexSetting" class="btn btn-sm btn-primary-dark px-3"
+            (click)="getComplexSetting()">
+            <span *ngIf="productType === ProductType.Commercial">{{'visitor_setting.reset_to_complex_setting'
+                |translate}}</span>
+            <span *ngIf="productType === ProductType.Enterprise">{{'visitor_setting.reset_to_enterprise_setting'
+                |translate}}</span>
+        </button>
+    </div>
+    <div class="mt-3 px-3 scroll-y">
+        <div class="card rounded-4 mb-3">
+            <div class="card-body d-flex align-items-center gap-5 py-2">
+                <p class="fs-sm fw-semi-bold mb-0">{{'visitor_setting.visitor_check_in_at' | translate}}</p>
+                <mat-button-toggle-group *ngIf="!isExcel && productType === ProductType.Commercial"
+                    class="vams-button-toggle-group vams-button-toggle-group-secondary bg-floral-white"
+                    (change)="onButtonToggleChange($event.value)"
+                    [value]="(this.visitorForm && this.visitorForm.get('visitorCheckinAtBuilding') &&this.visitorForm.get('visitorCheckinAtBuilding').value)?'building_level':'complex_level'">
+                    <mat-button-toggle value="complex_level">{{'visitor_setting.complex_level' | translate}}
+                    </mat-button-toggle>
+                    <mat-button-toggle value="building_level">{{'visitor_setting.building_level' | translate}}
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+                <p *ngIf="!isExcel && productType === ProductType.Enterprise" class="fs-sm fw-semi-bold mb-0">
+                    {{'visitor_setting.Location_level' |
+                    translate}}</p>
+                <p *ngIf="isExcel" class="fs-sm fw-semi-bold mb-0">{{'visitor_setting.building_level' |
+                    translate}}</p>
+            </div>
+        </div>
+        <div class="row gap-5">
+            <div class="col" *ngIf="!isExcel">
+                <!-- Authentication -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel && productType != ProductType.Enterprise">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.authentication" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1">
+                            <label for="isAuth"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.visitor_authentication" |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isAuth" name="isAuth"
+                                    (change)="onToggleChange($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="isByPass"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.allow_bypass_visitor_entry" |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isByPass" name="isByPass"
+                                    (change)="onToggleChange($event)"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Walk In -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.walk_in" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                            <label for="isHostRequired"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.host_mandatory"
+                                | translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isHostRequired" (change)="getWalkInStatus($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="allowWalkinApproval" class="col-sm-5 col-form-label mb-0"
+                                [ngClass]="(!this.visitorForm.get('isHostRequired').value)?'disabled':''">{{"visitor_setting.allow_walkin_approval"
+                                |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle [disabled]="!this.visitorForm.get('isHostRequired').value"
+                                    formControlName="allowWalkinApproval"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="productType != ProductType.Enterprise">
+                 <mat-divider class="mb-3"></mat-divider>
+               </div>
+                <!-- Camera -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel && productType != ProductType.Enterprise">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.camera" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1">
+                            <label for="isCamera" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.camera_enabled" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isCamera" (change)="getCameraStatus($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="isLivePhoto" class="col-sm-5 col-form-label mb-0"
+                                [ngClass]="(!this.visitorForm.get('isCamera').value)?'disabled':''">{{"visitor_setting.mandatatory_to_capture_live_photo"
+                                |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle [disabled]="!this.visitorForm.get('isCamera').value"
+                                    formControlName="isLivePhoto"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Visitor Pass -->
+                <div class="d-grid gap-2 mb-3" *ngIf="!isExcel">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.visitor_pass" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                            <label for="isSoftPass" class="col-sm-5 col-form-label mb-0">{{"visitor_setting.soft_pass"
+                                |
+                                translate}}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isSoftPass"></mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="row flex-1">
+                            <label for="printPass" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.print_pass" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isPrintPass"></mat-slide-toggle>
+                            </div>
+                        </div>
+                        <mat-radio-group class="d-grid gap-2" aria-label="Select an option" labelPosition="after"
+                            (change)="photoStatus($event)" *ngIf="productType != ProductType.Enterprise">
+                            <mat-radio-button value="registerPhoto" [checked]="isRegisterPhoto">
+                                <label for="showRegisterVisitorPhotoOnVisitorPass" class="form-label mb-0">{{
+                                    "visitor_setting.show_registered_photo_on_visitor_pass" | translate
+                                    }}</label>
+                            </mat-radio-button>
+                            <mat-radio-button value="livePhoto" [checked]="isLivePhoto"
+                                (change)="showLivePhotoOnVisitorPassFnc($event)">
+                                <label for="showLivePhotoOnVisitorPass" class="form-label mb-0">{{
+                                    "visitor_setting.show_live_photo_on_visitor_pass" | translate
+                                    }}
+                                </label>
+                            </mat-radio-button>
+                        </mat-radio-group>
+                        <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                            <label for="printPass" class="col-sm-5 col-form-label mb-0"
+                                [ngClass]="isRegisterPhoto?'disabled':''">{{
+                                "visitor_setting.printRegisterPhotoIfNotLivePhoto" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle [disabled]="!this.visitorForm.get('showLivePhotoOnVisitorPass').value"
+                                    formControlName="printRegisterPhotoIfNotLivePhoto"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Authentication methods -->
+                <div class="d-flex align-items-center gap-3 me-auto mb-3">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.auth_method" | translate}}</p>
+                    <div class="vams-dropdown">
+                        <mat-select class="form-control" formControlName="visitorAuthenticationType"
+                            placeholder="{{'visitor_setting.select_method' | translate}}"
+                            (selectionChange)="selectAuthenticationMethod($event.value)">
+                            <mat-option selected *ngFor="let method of methodList | keyvalue;let i = index"
+                                [value]="method.value">
+                                <!-- {{ method.key }} -->
+                                {{'visitor_setting.'+method.key|translate}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="isError">
+                            {{'visitor_setting.select_valid_location'|translate}}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <!-- HSQ -->
+                <div class="d-grid gap-2 mb-3">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.hsq" | translate}}</p>
+                    <div class="d-grid gap-2">
+                        <div class="row flex-1">
+                            <label for="isVisitorHSQ" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.hsq_allowed" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="isVisitorHSQ" (change)="hsqToggle($event)">
+                                </mat-slide-toggle>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column flex-1">
+                            <div class="row flex-1">
+                                <label for="hsqValue"
+                                    class="col-sm-5 col-form-label mb-0">{{"visitor_setting.hsq_statement"
+                                    |
+                                    translate}}</label>
+                                <div class="col-sm-5">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="vams-input-group d-flex align-items-center gap-2">
+                                            <button class="btn btn-input-group" type="button" (click)="HsqCount(false)">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <input type="number"
+                                                [value]="this.visitorForm.get('hsqAlertSendBeforeHours').value"
+                                                class="form-control" formControlName="hsqAlertSendBeforeHours"
+                                                min="0" />
+                                            <button class="btn btn-input-group" type="button" (click)="HsqCount(true)">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
+                                        <span class="fs-xs" style="width: 4rem;">
+                                            {{
+                                            "visitor_setting.hours" | translate
+                                            }}
+                                        </span>
+                                    </div>
+                                    <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'required')">
+                                        {{"visitor_setting.requried_error_massage" | translate}}</mat-error>
+                                    <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'min')">
+                                        {{"visitor_setting.minimum_hours" | translate}}</mat-error>
+                                    <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'max')">
+                                        {{"visitor_setting.maximum_hours" | translate}}</mat-error>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider class="mb-3"></mat-divider>
+                <!-- Check In -->
+                <div class="d-grid gap-2 mb-3">
+                    <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.check_in" | translate}}</p>
+                    <div class="d-flex flex-column flex-1">
+                        <div class="row flex-1">
+                            <label for="earlyCheckin"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.early_check_in"
+                                | translate}}</label>
+                            <div class="col-sm-5">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="vams-input-group d-flex align-items-center gap-2">
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="earlyCheckInWindow(false)">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                        <input type="number" [value]="this.visitorForm.get('earlyCheckinMins').value"
+                                            class="form-control" formControlName="earlyCheckinMins" min="0" max="120" />
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="earlyCheckInWindow(true)">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <span class="fs-xs" style="width: 4rem;">
+                                        {{
+                                        "visitor_setting.mins" | translate
+                                        }}
+                                    </span>
+                                </div>
+                                <mat-error *ngIf="formError('earlyCheckinMins', 'required')">
+                                    {{"visitor_setting.requried_error_minutes_massage" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('earlyCheckinMins', 'min')">
+                                    {{"visitor_setting.minimum_minutes" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('earlyCheckinMins', 'max')">
+                                    {{"visitor_setting.maximum_minutes" | translate}}</mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- late check in hide for all product as per nilesh sir -->
+                    <!-- <div class="d-flex flex-column flex-1">
+                        <div class="row flex-1">
+                            <label for="lateCheckIn"
+                                class="col-sm-5 col-form-label mb-0">{{"visitor_setting.late_check_in"
+                                | translate}}</label>
+                            <div class="col-sm-5">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="vams-input-group d-flex align-items-center gap-2">
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="lateCheckInWindow(false)">
+                                            <mat-icon>remove</mat-icon>
+                                        </button>
+                                        <input type="number" [value]="this.visitorForm.get('lateCheckinMins').value"
+                                            class="form-control" formControlName="lateCheckinMins" min="0" max="120" />
+                                        <button class="btn btn-input-group" type="button"
+                                            (click)="lateCheckInWindow(true)">
+                                            <mat-icon>add</mat-icon>
+                                        </button>
+                                    </div>
+                                    <span class="fs-xs" style="width: 4rem;">
+                                        {{
+                                        "visitor_setting.mins" | translate
+                                        }}
+                                    </span>
+                                </div>
+                                <mat-error *ngIf="formError('lateCheckinMins', 'required')">
+                                    {{"visitor_setting.requried_error_minutes_massage" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('lateCheckinMins', 'min')">
+                                    {{"visitor_setting.minimum_minutes" | translate}}</mat-error>
+                                <mat-error *ngIf="formError('lateCheckinMins', 'max')">
+                                    {{"visitor_setting.maximum_minutes" | translate}}</mat-error>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div *ngIf="productType != ProductType.Enterprise">
+                        <mat-divider></mat-divider>
+                    </div>
+                 
+                    <!-- Check Out -->
+                    <p class="fs-sm fw-semi-bold mb-0" *ngIf="productType != ProductType.Enterprise">{{"visitor_setting.checkOut" | translate}}</p>
+                    <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                        <label for="autoCheckOut" class="col-sm-5 col-form-label mb-0">{{"visitor_setting.auto_checkout"
+                            | translate}}</label>
+                        <div class="col-sm-5">
+                            <div class="d-flex align-items-center gap-3">
+                                <mat-slide-toggle formControlName="autoCheckOut" (change)="noCheckOut($event)">
+                                </mat-slide-toggle>
+                                <div class="d-flex align-items-center gap-2">
+                                    <app-time-picker [value]="{time:this.visitorForm.value.autoCheckoutTime}"
+                                        [readOnlyVisitorSetting]="this.visitorForm.value.autoCheckOut"
+                                        [format]="timeFormat" [defaultTime]="this.visitorForm.value.autoCheckoutTime"
+                                        screen="visitorSetting" type="from"
+                                        visitorSettingsDisplay="visitorSettingsDisplay"
+                                        (timePickerAppointment)="getTimeValue($event)"></app-time-picker>
+                                </div>
+                                <!-- <div class="d-flex align-items-center gap-2">
+                                    <input #input1 [ngxTimepicker]="darkPickerForStartTime"
+                                        [disabled]="!this.visitorForm.get('autoCheckOut').value" [readonly]="true"
+                                        [format]="timeFormat" [value]="this.visitorForm.get('autoCheckoutTime').value"
+                                        placeholder="{{ 'visitor_setting.AutoCheckOut' | translate}}"
+                                        class="form-control" name="autoCheckoutTime" type="text" autocomplete="off"
+                                        name="autoCheckoutTime" formControlName="autoCheckoutTime"
+                                        style="width: 11rem;">
+                                    <ngx-material-timepicker [enableKeyboardInput]="true" [confirmBtnTmpl]="confirmBtn"
+                                        [cancelBtnTmpl]="cancelBtn" #time1 #appendedToInput [appendToInput]="false"
+                                        #darkPickerForStartTime>
+                                    </ngx-material-timepicker>
+                                    <ng-template #confirmBtn>
+                                        <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' |
+                                            translate}}</button>
+                                    </ng-template>
+                                    <ng-template #cancelBtn>
+                                        <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' |
+                                            translate}}</button>
+                                    </ng-template>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row flex-1" *ngIf="productType != ProductType.Enterprise">
+                        <label for="noCheckOutVisitorAlert"
+                            class="col-sm-5 col-form-label mb-0">{{"visitor_setting.send_not_checkot_visitor_alert" |
+                            translate}}</label>
+                        <div class="col-sm-5">
+                            <div class="d-flex align-items-center gap-3">
+                                <mat-slide-toggle formControlName="noCheckOutVisitorAlert"
+                                    (change)="noCheckOutAlert($event)"></mat-slide-toggle>
+                                <div class="d-flex align-items-center gap-2" *ngIf="false">
+                                    <app-time-picker [value]="{time:this.visitorForm.value.noCheckOutVisitorAlertTime}"
+                                        [readOnlyVisitorSetting]="this.visitorForm.value.noCheckOutVisitorAlert"
+                                        [format]="timeFormat"
+                                        [defaultTime]="this.visitorForm.value.noCheckOutVisitorAlertTime"
+                                        screen="visitorSetting" type="to"
+                                        visitorSettingsDisplay="visitorSettingsDisplay"
+                                        (timePickerAppointment)="getTimeValue($event)"></app-time-picker>
+                                </div>
+                                <!-- <div class="d-flex align-items-center gap-2">
+                                    <input #input1 [ngxTimepicker]="darkPickerForStartTime1"
+                                        [disabled]="!this.visitorForm.get('noCheckOutVisitorAlert').value"
+                                        [readonly]="true" [format]="timeFormat"
+                                        [value]="this.visitorForm.get('noCheckOutVisitorAlertTime').value"
+                                        placeholder="{{ 'visitor_setting.AutoCheckOutAlert' | translate}}"
+                                        class="form-control" name="noCheckOutVisitorAlertTime" type="text"
+                                        autocomplete="off" name="noCheckOutVisitorAlertTime"
+                                        formControlName="noCheckOutVisitorAlertTime" style="width: 11rem;">
+                                    <ngx-material-timepicker [enableKeyboardInput]="true" [confirmBtnTmpl]="confirmBtn"
+                                        [cancelBtnTmpl]="cancelBtn" #time1 #appendedToInput [appendToInput]="false"
+                                        #darkPickerForStartTime1>
+                                    </ngx-material-timepicker>
+                                    <ng-template #confirmBtn>
+                                        <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' |
+                                            translate}}</button>
+                                    </ng-template>
+                                    <ng-template #cancelBtn>
+                                        <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' |
+                                            translate}}</button>
+                                    </ng-template>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid flex-1" *ngIf="productType != ProductType.Enterprise">
+                        <div class="d-flex align-items-center gap-3">
+                            <label for="email"
+                                [ngClass]="!this.visitorForm.get('noCheckOutVisitorAlert').value?'disabled form-label me-auto mb-0':'form-label me-auto mb-0'"
+                                class="form-label me-auto mb-0">{{
+                                "visitor_setting.email" | translate
+                                }}</label>
+                            <input class="form-control flex-1" (input)="readEmail()"
+                                [readonly]="!this.visitorForm.get('noCheckOutVisitorAlert').value"
+                                formControlName="noCheckoutVisitorAlertEmail">
+                        </div>
+                        <mat-error *ngIf="invalidEmail" class="ms-5">
+                            {{
+                            "visitor_setting.validEmail" | translate
+                            }}
+                        </mat-error>
+                    </div>
+                </div>
+                <!-- NDA -->
+                <ng-container *ngIf="!isExcel">
+                    <mat-divider class="mb-3"></mat-divider>
+                    <div class="d-grid gap-2 mb-3">
+                        <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.send_nda" | translate}}</p>
+                        <div class="row flex-1">
+                            <label for="sendNDA" class="col-sm-5 col-form-label mb-0">{{
+                                "visitor_setting.send_nda_before" | translate
+                                }}</label>
+                            <div class="col-sm-5">
+                                <mat-slide-toggle formControlName="sendNDA"></mat-slide-toggle>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-column flex-1 scroll-y" [formGroup]="visitorForm" novalidate
+    *ngIf="!complexSetting && productType === ProductType.Commercial">
+    <div class="vams-grid-filters d-flex gap-3">
+        <div class="d-flex align-items-center gap-3 me-auto">
+            <h6 class="vams-page-sub-title fw-bold mb-0 px-0">
+                {{"visitor_setting.visitor_settings" | translate }}
+            </h6>
+            <div class="vams-dropdown">
+                <mat-select class="form-control" formControlName="level2Id"
+                    placeholder="{{'placeholders.select_level' | translate}}"
+                    (selectionChange)="onLevelChange($event.value)">
+                    <mat-option selected *ngFor="let level of buildingList" [value]="level.id">
+                        {{ level.name }}
+                    </mat-option>
+                </mat-select>
+                <!-- <input type="text" placeholder="{{'visitor_setting.select_building' | translate}}" aria-label="Number"
+                    matInput [matAutocomplete]="auto" class="form-control" name="level2Id" formControlName="level2Id"
+                    (input)="getValue(name.value)" #name>
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+                    <mat-option *ngFor="let company of buildingList" [value]="company" class="fs-sm"
+                        (onSelectionChange)="onLevelChange(company.id)">
+                        {{ company.name }}
+                    </mat-option>
+                </mat-autocomplete> -->
+                <mat-error *ngIf="isError">
+                    {{'visitor_setting.select_valid_building'|translate}}
+                </mat-error>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-sm btn-primary-dark px-3" (click)="getComplexSetting()">
+            <span *ngIf="productType === ProductType.Commercial">{{'visitor_setting.reset_to_complex_setting'
+                |translate}}</span>
+            <span *ngIf="productType === ProductType.Enterprise">{{'visitor_setting.reset_to_enterprise_setting'
+                |translate}}</span>
+        </button>
+    </div>
+    <div class="mt-3 px-3 scroll-y">
+        <!-- HSQ -->
+        <div class="d-grid gap-2 mb-3">
+            <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.hsq" | translate}}</p>
+            <div class="d-grid gap-2">
+                <div class="row flex-1">
+                    <label for="isVisitorHSQ" class="col-sm-4 col-form-label mb-0">{{
+                        "visitor_setting.hsq_allowed" | translate
+                        }}</label>
+                    <div class="col-sm-4">
+                        <mat-slide-toggle formControlName="isVisitorHSQ" (change)="hsqToggle($event)">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="d-flex flex-column flex-1">
+                    <div class="row flex-1">
+                        <label for="hsqValue" class="col-sm-5 col-form-label mb-0">{{"visitor_setting.hsq_statement"
+                            |
+                            translate}}</label>
+                        <div class="col-sm-5">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="vams-input-group d-flex align-items-center gap-2">
+                                    <button class="btn btn-input-group" type="button" (click)="HsqCount(false)">
+                                        <mat-icon>remove</mat-icon>
+                                    </button>
+                                    <input type="number" [value]="this.visitorForm.get('hsqAlertSendBeforeHours').value"
+                                        class="form-control" formControlName="hsqAlertSendBeforeHours" min="0" />
+                                    <button class="btn btn-input-group" type="button" (click)="HsqCount(true)">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                </div>
+                                <span class="fs-xs" style="width: 4rem;">
+                                    {{
+                                    "visitor_setting.hours" | translate
+                                    }}
+                                </span>
+                            </div>
+                            <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'required')">
+                                {{"visitor_setting.requried_error_massage" | translate}}</mat-error>
+                            <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'min')">
+                                {{"visitor_setting.minimum_hours" | translate}}</mat-error>
+                            <mat-error *ngIf="formError('hsqAlertSendBeforeHours', 'max')">
+                                {{"visitor_setting.maximum_hours" | translate}}</mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Visitor pass -->
+        <mat-divider class="mb-3"></mat-divider>
+        <div class="d-grid gap-2 mb-3" *ngIf="isExcel">
+            <p class="fs-sm fw-semi-bold mb-0">{{"visitor_setting.visitor_pass" | translate}}</p>
+            <div class="d-grid gap-2">
+                <div class="row flex-1">
+                    <label for="printPass" class="col-sm-4 col-form-label mb-0">{{
+                        "visitor_setting.print_visitor_badge" | translate
+                        }}</label>
+                    <div class="col-sm-4">
+                        <mat-slide-toggle formControlName="isPrintPass"></mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

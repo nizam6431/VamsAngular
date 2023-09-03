@@ -1,0 +1,8 @@
+<app-sidebar></app-sidebar>
+<div class="vams-page d-flex flex-column flex-1 scroll-y bg-white">
+  <app-header (Signal_R_Emittir)="deleteSignalRConnection()"></app-header>
+  <!-- <app-header></app-header> -->
+  <div class="vams-page-content d-flex flex-column flex-1 scroll-y">
+    <router-outlet></router-outlet>
+  </div>
+</div>

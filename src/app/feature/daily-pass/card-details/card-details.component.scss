@@ -1,0 +1,64 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.picture-lgs{
+  width: 7.5rem;
+  height: 7.5rem;
+}
+.uploadPhoto{
+  margin-top: 1px;
+  margin-bottom: 11px;
+}
+
+
+
+// .form-control {
+//   background-color: white !important;
+// }
+
+.nonEditCl {
+  pointer-events: none;
+}
+
+.slide2Photo {
+  position: fixed;
+  top: 0;
+  right: 70px;
+}
+.popupTopLable {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-title-left {
+  height: 100%;
+  background-color: #FBF8F3;
+  background-color: #FBF8F3;
+    /*var(--popup-heading-bg)*/
+  ;
+  color: #5dcb19;
+  // color: var(--heading-text);
+  padding: 0.25rem 2rem;
+}
+
+
+.popup-title-left:after {
+  content: "";
+  position: absolute;
+  left: -1.125rem;
+  border-top: 1.125rem solid transparent;
+  border-bottom: 1.125rem solid transparent;
+  border-right: 1.125rem solid #FBF8F3;
+  border-right: 1.125rem solid #FBF8F3;
+    /*var(--popup-heading-bg)*/
+  ;
+}
+.popup-balance-title {
+  margin-right: 0%;
+}

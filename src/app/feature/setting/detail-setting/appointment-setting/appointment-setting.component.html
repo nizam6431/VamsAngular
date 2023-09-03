@@ -1,0 +1,180 @@
+<h6 class="vams-page-sub-title fw-bold mb-0 pt-4 px-3">
+    {{"setting_side_menu.appoinement_setting" | translate }}
+</h6>
+<form [formGroup]="appointmentSettingForm" class="mt-3 scroll-y">
+    <mat-list class="vams-list pt-0">
+        <mat-list-item class="vams-list-item border-0">
+            <div class="row flex-1">
+                <label class="col-sm-4 col-form-label mb-0">{{"appoinetments_settings.multi_day_appointment"
+                    | translate}}</label>
+                <div class="col-sm-4">
+                    <div class="d-flex align-items-center" style="width: 11.5rem;">
+                        <mat-slide-toggle formControlName="isMultipleDays"
+                            (change)="isMultiday(appointmentSettingForm.value.isMultipleDays,1)"></mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-list-item class="vams-list-item">
+            <div class="d-flex flex-column flex-1">
+                <div class="row flex-1">
+                    <label class="col-sm-4 col-form-label mb-0">{{"appoinetments_settings.maximum_appoinement_duaration"
+                        |
+                        translate}}</label>
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="vams-input-group d-flex align-items-center gap-2">
+                                <button class="btn btn-input-group" type="button" (click)="minusMaxDuration()"
+                                    [disabled]="readonlyAppointment">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <input type="number" id="feCompany" min="1" max="364" formControlName="maximumDuration"
+                                    class="form-control" [readonly]="readonlyAppointment" maxlength="3" />
+                                <button class="btn btn-input-group" type="button" (click)="addMaxDuration()"
+                                    [disabled]="readonlyAppointment">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <span class="fs-xs" style="width: 4rem;">{{"appoinetments_settings.days" |
+                                translate}}</span>
+                        </div>
+                        <mat-error *ngIf="formError('maximumDuration', 'required')">
+                            {{"appoinetments_settings.DURATION_IS_REQUIRE" | translate}}</mat-error>
+                        <mat-error
+                            *ngIf="(formError('maximumDuration', 'min')) && !(appointmentSettingForm.value.isMultipleDays)">
+                            {{"appoinetments_settings.MINMUM_DURATION_IS_1" | translate}}</mat-error>
+                        <mat-error
+                            *ngIf="(formError('maximumDuration', 'min'))&& (appointmentSettingForm.value.isMultipleDays)">
+                            {{"appoinetments_settings.MINMUM_DURATION_IS_2" | translate}}</mat-error>
+                        <mat-error *ngIf="formError('maximumDuration', 'max')">
+                            {{"appoinetments_settings.MAXIMUM_DURATION_IS_364" | translate}}</mat-error>
+                    </div>
+                </div>
+            </div>
+        </mat-list-item>
+        <!-- <mat-list-item class="vams-list-item">
+            <div class="row flex-1">
+                <label class="col-sm-4 col-form-label mb-0">{{"appoinetments_settings.maximum_number_visitor" |
+                    translate}}
+                </label>
+                <div class="col-sm-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="vams-input-group d-flex align-items-center gap-2">
+                            <button class="btn btn-input-group" type="button" (click)="minusMaxVistor()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <input type="text" id="feCompany" formControlName="maximumVistor" class="form-control" />
+                            <button class="btn btn-input-group" type="button" (click)="addMaxVisitor()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                        <span class="fs-xs" style="width: 4rem;">{{"appoinetments_settings.visitor" | translate}}</span>
+                    </div>
+                </div>
+            </div>
+        </mat-list-item> -->
+        <mat-list-item class="vams-list-item">
+            <div class="row flex-1">
+                <label class="col-sm-4 col-form-label mb-0">{{"appoinetments_settings.minimum_appointment_duaration" |
+                    translate}}</label>
+                <div class="col-sm-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <mat-select class="form-control" formControlName="minimumDuaration" style="width: 7rem;">
+                            <mat-option value={{item.value}} *ngFor="let item of defalutArray">{{item.duration}}
+                                {{"appoinetments_settings.mintues" | translate}}</mat-option>
+                            <!-- <mat-option value="{{item}}">30 {{"appoinetments_settings.mintues" | translate}}
+                            </mat-option>
+                            <mat-option value="60">60 {{"appoinetments_settings.mintues" | translate}}</mat-option> -->
+                        </mat-select>
+                        <span class="fs-xs" style="width: 4rem;"></span>
+                    </div>
+                    <!-- <div class="d-flex align-items-center gap-2">
+                        <div class="vams-input-group d-flex align-items-center gap-2">
+                            <button class="btn btn-input-group" type="button" (click)="minusMinDuration()">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <input type="number" id="feCompany" formControlName="minimumDuaration" class="form-control"
+                                maxlength="4" />
+                            <button class="btn btn-input-group" type="button" (click)="addMinDuration()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                        <span class="fs-xs" style="width: 4rem;">{{"appoinetments_settings.mintues" | translate}}</span>
+                        <mat-error *ngIf="formError('minimumDuaration', 'required')">
+                            {{"appoinetments_settings.DEFALUT_DURATION_IS_REQUIRED" | translate}} \</mat-error>
+                        <mat-error *ngIf="formError('minimumDuaration', 'min')">{{"appoinetments_settings.DEFAULT_MIN" |
+                            translate}} </mat-error>
+                        <mat-error *ngIf="formError('minimumDuaration', 'max')">{{"appoinetments_settings.DEFAULT_MAX" |
+                            translate}}
+                        </mat-error>
+                    </div> -->
+                </div>
+            </div>
+        </mat-list-item>
+        <!-- <mat-list-item class="vams-list-item">
+            <div class="row flex-1">
+                <label
+                    class="col-sm-4 col-form-label mb-0">{{"appoinetments_settings.appointment_time_selection_interval_slot"
+                    |
+                    translate}}</label>
+                <div class="col-sm-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <mat-select class="form-control" formControlName="timeSelectioninterval" style="width: 7rem;">
+                            <mat-option value="15">15 {{"appoinetments_settings.mintues" | translate}}</mat-option>
+                            <mat-option value="30">30 {{"appoinetments_settings.mintues" | translate}}</mat-option>
+                            <mat-option value="60">60 {{"appoinetments_settings.mintues" | translate}}</mat-option>
+                        </mat-select>
+                        <span class="fs-xs" style="width: 4rem;"></span>
+                    </div>
+                </div>
+            </div>
+        </mat-list-item> -->
+        <!-- <mat-list-item class="vams-list-item">
+            <div class="row flex-1">
+                <label
+                    class="form-label mb-0">{{"appoinetments_settings.allow_to_create_appoinement_on_behalf_of__Other_hosts"
+                    | translate}}</label>
+                <div class="col-sm-4">
+                    <div class="d-flex align-items-center" style="width: 11.5rem;">
+                        <mat-slide-toggle disabled></mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </mat-list-item> -->
+        <mat-list-item class="vams-list-item border-0" *ngIf="productType != ProductType.Enterprise">
+            <div class="row flex-1">
+                <label
+                    class="col-sm-4 col-form-label mb-0">{{"appoinetments_settings.activate_dl_scan_for_multiday_appointment"
+                    | translate}}</label>
+                <div class="col-sm-4">
+                    <div class="d-flex align-items-center" style="width: 11.5rem;">
+                        <mat-slide-toggle formControlName="activateDLScanScheduledAppointment"
+                            (change)="setDlScanValue($event,'activateDLScanScheduledAppointment')"></mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-list-item class="vams-list-item border-0" *ngIf="productType != ProductType.Enterprise">
+            <div class="row flex-1">
+                <label class="col-sm-4 col-form-label mb-0">{{"appoinetments_settings.access_control_for_schedule"
+                    | translate}}</label>
+                <div class="d-flex align-items-center" style="width: 11.5rem;">
+                    <mat-slide-toggle formControlName="isAccessControlEnabled"
+                        (change)="scheduleWithBio($event,'isAccessControlEnabled')"></mat-slide-toggle>
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-list-item class="vams-list-item border-0" *ngIf="productType != ProductType.Enterprise">
+            <div class="row flex-1">
+                <label
+                    [ngClass]="(this.appointmentSettingForm.controls['isAccessControlEnabled'].value)?'col-sm-4 col-form-label mb-0':'col-sm-4 col-form-label mb-0 disabled'">{{"appoinetments_settings.walkin_with_biosecurity_authentication"
+                    | translate}}</label>
+                <div class="d-flex align-items-center" style="width: 11.5rem;">
+                    <mat-slide-toggle formControlName="walkinWithBioAuth"
+                        [disabled]="!this.appointmentSettingForm.controls['isAccessControlEnabled'].value"
+                        (change)="walkinWithBio($event,'walkinWithBioAuth')"></mat-slide-toggle>
+                </div>
+            </div>
+        </mat-list-item>
+    </mat-list>
+</form>

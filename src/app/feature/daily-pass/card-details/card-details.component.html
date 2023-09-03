@@ -1,0 +1,444 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="d-flex popupTopLable">
+            <div class="popup-title-wrapper d-flex align-items-center">
+                <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                    "card.cart_details.add_daily_pass" | translate }}</span>
+                    <!-- <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                        "card.cart_details.add_daily_pass" | translate }}</span> -->
+            </div>
+        
+            <div class="popup-title-wrapper d-flex align-items-center popup-balance-title">
+                <!-- Available Balance is {{balance}} -->
+                <span class="popup-title-left d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                    Available Balance: <span style="font-weight: bold;padding-left: 10px;">&#8377;</span> {{balance}}
+                </span>
+            </div>
+        </div>
+    </div>
+   
+    <form novalidate [formGroup]="formCardDetails" novalidate autocomplete="off" class="popup-form">
+        <div class="row" style="margin-top: 2rem;">
+            <div class="col-md-6" style=" margin-top: 1rem;">
+                <div class="row mb-3">
+                    <label for="feCategoryType" style="margin-left: 35px;"
+                        class="col-md-4 col-form-label">{{"card.cart_details.CategoryType"|translate }}
+                        <span class="mendatory">*</span></label>
+                    <div class="col-md-8" style="margin-left: -35px;">
+                        <mat-select *ngIf="currentSlide==1" class="form-control" formControlName="categoryType"
+                            placeholder="Select Category Type" (selectionChange)="changeCategory($event.value)" tabindex="1">
+                            <mat-option *ngFor="let item of categoryType" [value]="item">
+                                <p class="d-flex align-items-center mb-0">
+                                    <span class="me-auto">{{item.name}}</span>
+                                </p>
+                            </mat-option>
+                        </mat-select>
+                        <input *ngIf="currentSlide!=1" readonly type="text" class="form-control" id="vehicleNumber"
+                            [value]="selectedCategory" />
+                        <mat-error *ngFor=" let message of showValidationMessages('categoryType')">
+                            {{ message }}
+                        </mat-error>
+                       
+                    </div> 
+                </div>
+                <div class="row mb-3" style="margin-left: 35px;">
+                    <mat-error *ngIf="!categoryInRateCardAvailable">
+                        {{"card.cart_details.rateCardError" | translate }}
+                    </mat-error>
+                </div>
+            </div>
+            
+            
+            <div class="row col-md-6" *ngIf="selectedCategory && currentSlide == 1 && categoryInRateCardAvailable">
+                <div class="row mb-3" *ngIf="!uploadAndCapture">
+                    <div class="picture picture-lgs d-flex align-items-center justify-content-center p-1 overflow-hidden">
+                        <img (error)="handleIamge(selfPhotoUrl,'self')" [src]="selfPhotoUrl">
+                    </div>
+                    <mat-error *ngFor="let message of showValidationMessages('photoURLs')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+                <div class="row" *ngIf="uploadAndCapture">
+                    <div class="card-body p-2 border-primary overflow-hidden">
+                        <div class="pb-20" *ngIf="!showWebcam">
+                            <img height="100" width="150" [src]="webcamImage?.imageAsDataUrl"
+                                src="assets/images/capture-photo.png" />
+                            <mat-error *ngFor="let message of showValidationMessages('photoURLs')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                        <webcam [height]="100" [width]="150" [trigger]="triggerObservable" [mirrorImage]="'never'"
+                            (imageCapture)="handleImage($event)" *ngIf="showWebcam" [switchCamera]="nextWebcamObservable"
+                            formControlName="photoURLs">
+                        </webcam>
+                        <div *ngIf="errors.length > 0">
+                            <h4>{{ "Walkin.ErrorMessages" | translate }}:</h4>
+                            <ul *ngFor="let error of errors">
+                                <li>{{ error | json }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-mb-3" style="margin-left: 10rem; margin-top: -7rem;">
+                    <button class="btn btn-sm btn-primary-dark px-3"
+                        onclick="document.getElementById('selectBannerImage').click()">{{'card.cart_details.uploadPhoto'
+                        | translate}}</button>
+                    <input id="selectBannerImage" name="file" accept="image/x-png,image/jpeg" onclick="this.value = null"
+                        class="custom-file-input" type="file" (change)="onFileChange($event)" style="display:none"
+                        formControlName="photoURLs" />
+                </div>
+                <div *ngIf="capturePhoto" class="col-mb-3" style="margin-left: 10rem;margin-top: -4rem;">
+                    <button class="btn btn-sm btn-primary-dark px-3" (click)="takeSnapshot()">
+                        {{ "Walkin.CapturePhoto" | translate}}
+                    </button>
+                </div>
+                <div *ngIf="!capturePhoto" class="col-mb-3" style="margin-left: 10rem;margin-top: -4rem;">
+                    <button class="btn btn-sm btn-primary-dark px-3"
+                        (click)="showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined;uploadAndCapture=true">
+                        {{'Walkin.CaptureAgain' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngIf="currentSlide == 1 && selectedCategory && categoryInRateCardAvailable">
+            <h6 class="card-title fw-bold" *ngIf="categoryTypeLayout != 'C'" style="margin-left: 3rem;">Personal Details</h6>
+            <h6 class="card-title fw-bold" *ngIf="categoryTypeLayout == 'C'" style="margin-left: 3rem;">Vehicle Details</h6>
+
+            <div class="popup-content">
+                <!-- first Name Last Name -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row mb-3" >
+                            <label for="feFirstName" class="col-md-4 col-form-label">{{'card.cart_details.FirstName' |
+                                translate}}
+                                <span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="50" type="text" class="form-control" id="feFirstName" (keyup)="keyFunc($event,'firstName')"
+                                    formControlName="firstName" 
+                                    placeholder="{{'card.cart_details.PleaseEnterFirstName' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3" *ngIf="categoryTypeLayout != 'C'">
+                            <label for="feLastName" class="col-md-4 col-form-label">Last Name
+                                <span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="50" type="text" class="form-control" id="feLastName" (keyup)="keyFunc($event,'lastName')" 
+                                    formControlName="lastName" placeholder="{{'card.cart_details.PleaseEnterLastName' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('lastName')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- cell number email address -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                                <label for="forMobile" class="col-md-4 col-form-label">Cell Number<span class="mendatory">*</span></label>
+                                <div class="col-md-8">
+                                    <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                        [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" 
+                                        [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]"
+                                        [selectFirstCountry]="false" [separateDialCode]="separateDialCode" [maxLength]="'19'"
+                                        [selectedCountryISO]="selectedCountry" [phoneValidation]="true" name="phone" formControlName="MobileNo"
+                                        (countryChange)="checkNumber($event)" appMobileNumberFormat>
+                                    </ngx-intl-tel-input>
+                                    <p *ngIf="submitted">
+                                        <mat-error *ngIf="!formCardDetails.value.MobileNo">Enter Cell Number
+                                        </mat-error>
+                                    </p>
+                                    <mat-error
+                                        *ngIf="formCardDetails.get('MobileNo').hasError('validatePhoneNumber') && (formCardDetails.get('MobileNo').value!=null)">
+                                        {{'card.cart_details.ValidCellNumber' | translate}}
+                                    </mat-error>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3" *ngIf="categoryTypeLayout != 'C'">
+                            <label for="gmail" class="col-md-4 col-form-label">{{'card.cart_details.gmail' |
+                                translate}}
+                                <!-- <span class="mendatory">*</span> -->
+                            </label>
+                            <div class="col-md-8">
+                                <input maxlength="50" type="email" class="form-control" id="gmail" formControlName="gmail" 
+                                    placeholder="{{'card.cart_details.gmail' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('gmail')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- gender && purpose -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label for="forMobile" class="col-md-4 col-form-label">Gender <span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <mat-select placeholder="{{'card.cart_details.add_filter' | translate}}" class="form-control"
+                                    formControlName="gender" [(ngModel)]="showStatus1" name="status" >
+                                    <mat-option class="mat-option-with-close" *ngFor="let status of genderType" [value]="status.value">
+                                        <span class="me-2">{{ status.viewValues }}</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngFor="let message of showValidationMessages('gender')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3" *ngIf="categoryTypeLayout != 'C'">
+                            <label for="feFirstName" class="col-md-4 col-form-label">{{'card.cart_details.purpose' |
+                                translate}}
+                                <span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="50" type="text" class="form-control" id="feFirstName" formControlName="purpose" 
+                                    placeholder="{{'card.cart_details.enter_purpose' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('purpose')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- start date && start Time -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label for="feStartDateandTime" class="col-md-4 col-form-label">Start Date<span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <div class="input-group input-datepicker">
+                                    <input [min]="todayDate" type="text" placeholder="{{'card.cart_details.startDate' | translate}}"
+                                        class="form-control" theme="dp-material" [matDatepicker]="picker"  name="startDate"
+                                        formControlName="startDate" readonly style="background-color: white;">
+                                    <div class="datepicker-toggle" >
+                                        <mat-datepicker-toggle [for]="picker" ></mat-datepicker-toggle>
+                                    </div>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </div>
+                                <mat-error *ngFor="let message of showValidationMessages('startDate')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3" *ngIf="categoryTypeLayout != 'C'">
+                            <label for="feStartDateandTime" class="col-md-4 col-form-label">{{ "Schedule.FromTime" | translate
+                                }}<span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <app-time-picker  [value]="{time:this.formCardDetails.value.startTime,callFrom:callFrom}"
+                                    (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+                                    [defaultTime]="defaultTime" screen="scheduled" type="from" >
+                                </app-time-picker>
+                                <mat-error *ngFor="let message of showValidationMessages('startTime')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- name of person to meet && contractor name -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <label for="nameOfPersonToMeet" class="col-md-4 col-form-label">{{'card.cart_details.nameOfPersonToMeet' |
+                                translate}}
+                                <span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <ng-container>
+                                    <input type="text" id="nameOfPerson"  #hostCompanyInput (input)="getValue(hostCompanyInput.value)" 
+                                        placeholder="{{ 'card.cart_details.nameOfPersonToMeet' | translate }}" formControlName="nameOfPersonToMeet"
+                                        aria-label="Number" matInput [matAutocomplete]="auto" class="form-control">
+                                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                                        <mat-option *ngFor="let company of hostName" [value]="company" class="fs-sm"
+                                            (onSelectionChange)="getHostCompanyValue(company)">
+                                            {{ company.name }} | {{ company.email }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                            
+                                    <mat-error *ngFor="let message of showValidationMessages('nameOfPersonToMeet')">
+                                        {{ message }}
+                                    </mat-error>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row" *ngIf="categoryTypeLayout != 'D'">
+                            <label for="contractorName" class="col-md-4 col-form-label">{{'card.cart_details.contractorName' |
+                                translate}}
+                                <span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="50" type="text" class="form-control" id="contractorName" formControlName="contractorName"
+                                     placeholder="{{'card.cart_details.contractorName' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('contractorName')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- vehicle number -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row mb-3" *ngIf="categoryTypeLayout =='F' ">
+                            <label for="vehicleNumber" class="col-md-4 col-form-label">Vehicle No
+                                <span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="15" type="text" class="form-control" id="vehicleNumber" formControlName="vehicleNumber" (keyup)="keyFunc($event,'vehicleNumber')"
+                                    placeholder="Enter Vehicle No"  />
+                                <mat-error *ngFor="let message of showValidationMessages('vehicleNumber')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        
+                    </div>  
+                </div>
+            </div>
+<!-- 
+                <div class="col-md-2">
+                        <div class="row mb-3" *ngIf="!uploadAndCapture" style="margin-left: 16px;">
+                            <div
+                                class="picture picture-lgs d-flex align-items-center justify-content-center p-1 overflow-hidden">
+                                <img (error)="handleIamge(selfPhotoUrl,'self')" [src]="selfPhotoUrl">
+                            </div>
+                            <mat-error *ngFor="let message of showValidationMessages('photoURLs')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                        <div class="row mb-3" *ngIf="uploadAndCapture">
+                            <div class="card-body p-2 border-primary overflow-hidden">
+                                <div class="pb-20" *ngIf="!showWebcam">
+                                    <img height="100" width="150" [src]="webcamImage?.imageAsDataUrl"
+                                        src="assets/images/capture-photo.png" />
+                                </div>
+                                <webcam [height]="100" [width]="150" [trigger]="triggerObservable"
+                                    [mirrorImage]="'never'" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                                    [switchCamera]="nextWebcamObservable" formControlName="photoURLs">
+                                </webcam>
+                                <mat-error *ngFor="let message of showValidationMessages('photoURLs')">
+                                    {{ message }}
+                                </mat-error>
+                                <div *ngIf="errors.length > 0">
+                                    <h4>{{ "Walkin.ErrorMessages" | translate }}:</h4>
+                                    <ul *ngFor="let error of errors">
+                                        <li>{{ error | json }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <button class="btn btn-sm btn-primary-dark px-3"
+                                onclick="document.getElementById('selectBannerImage').click()"tabindex="13">{{'card.cart_details.uploadPhoto'
+                                | translate}}</button>
+                            <input id="selectBannerImage" name="file" accept="image/x-png,image/jpeg"
+                                onclick="this.value = null" class="custom-file-input" type="file"
+                                (change)="onFileChange($event)" style="display:none" formControlName="photoURLs"/>
+                        </div>
+                        <div class="row mb-3">
+                            <button *ngIf="capturePhoto" class="btn btn-sm btn-primary-dark px-3"
+                                (click)="takeSnapshot()" tabindex="14">
+                                {{ "Walkin.CapturePhoto" | translate}}
+                            </button>
+                        </div>
+                        <div class="row mb-3">
+                            <button *ngIf="!capturePhoto" class="btn btn-sm btn-primary-dark px-3" tabindex="15"
+                                (click)="showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined;uploadAndCapture=true">
+                                {{'Walkin.CaptureAgain' | translate}}
+                            </button>
+                        </div>
+                    </div> -->
+               
+    
+
+                <div class="popup-footer d-flex align-items-center gap-3">
+                    <button class="btn btn-sm btn-white px-3" (click)="resetForm()">{{'buttons.clear' | translate}}
+                    </button>
+                    <button (click)="goToNextSlide(currentSlide)" class="btn btn-sm btn-primary-dark px-3">
+                        {{ "CommonToken.Next" | translate }}
+                    </button>
+                </div>
+        </ng-container>
+
+        <ng-container *ngIf="currentSlide == 2">
+            <div class="popup-content">
+                <h6 class="card-title fw-bold">Documents</h6><br>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row mb-3">
+                            <label for="forMobile" class="col-md-4 col-form-label">Document Type<span
+                                    class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <mat-select class="form-control" formControlName="documentType"
+                                    placeholder="Select Document Type" id="selectedDocType" (click)="docTypeFunOnclick()">
+                                    <mat-option *ngFor="let item of documentType" [value]="item">
+                                        <p class="d-flex align-items-center mb-0">
+                                            <span class="me-auto">{{item.documentType}}</span>
+                                        </p>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngFor="let message of showValidationMessages('documentType')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <input id="file" name="file" accept="image/x-png,image/jpeg,application/pdf" onclick="this.value = null"
+                            formControlName="documentUrl" class="form-control" type="file" (change)="onFileChanges($event)" />
+                            <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"image.docType" | translate}}</p>
+                        <mat-error *ngFor="let message of showValidationMessages('documentUrl')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-sm btn-primary-dark px-3"
+                            (click)="addDocument()">Add</button>
+                    </div>
+                </div>
+            
+
+            <app-document-grid-view [postDocumentData]="postDocumentData" (changeDocumentList)="changeDocumentList($event)" [originalpostDocumentData]="originalpostDocumentData" [columns]="columns" [pageSizeCount]="pageSize"
+                [testDate]="testDate" [passCreate] = "true">
+            </app-document-grid-view>
+            <mat-error *ngIf="insufficiantBalance" style="font-size: 14px;margin-top: 5px;">
+                Insufficient Balance
+            </mat-error>
+           
+        </div>
+
+            <!-- <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlide1(currentSlide)">
+                    {{ "Schedule.Back" | translate }}
+                </button>
+                <button (click)="goToNextSlide(currentSlide)" class="btn btn-sm btn-primary-dark px-3">
+                    {{ "CommonToken.Next" | translate }}
+                </button>
+            </div> -->
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlide(currentSlide)">
+                    {{ "Schedule.Back" | translate }}
+                </button>
+                <button class="btn btn-sm btn-primary-dark px-3" (click)="uploadFileOnS3()">
+                    {{ "card.cart_details.submit" | translate }}
+                </button>
+            </div>
+        </ng-container>
+
+    </form>
+</div>

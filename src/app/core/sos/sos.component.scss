@@ -1,0 +1,36 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.visitorLabel{
+margin-left: 8rem;
+}
+.test{
+  overflow: visible !important;
+}
+
+.visitor-list{
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  // height: 48px;
+  font-size: 16px;
+  border-bottom: 1px solid #e5e5e5;
+  position: relative;
+}
+.visitor-list:hover{
+  background-color: #f9f0e4;
+}
+.visitor-list span{
+  float: right;
+  margin-top: 4px;
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+  padding: 3px;
+}
+.visitor-list span > i{
+  color: #eb5527;
+}

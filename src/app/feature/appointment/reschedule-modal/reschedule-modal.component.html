@@ -1,0 +1,230 @@
+<div *ngIf="scheduleSecondForm" class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Reschedule.AppointmentDetails" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" (ngSubmit)="rescheduleAppointment()" #secondform="ngForm" [formGroup]="scheduleSecondForm"
+        autocomplete="off" novalidate>
+        <div class="popup-content">
+        <div *ngIf="visitorDetails?.isMultiDayAppointment" class="fw-medium text-primary-dark mb-3 gap-1">
+            <div class="d-flex gap-2">
+              <mat-icon class="h5 mb-0">date_range</mat-icon>      
+              <div class="d-flex gap-1 fs-sm">
+                <p class="mb-0">
+                  <ng-container>{{ "AppointmentCardOfVisitors.ShowMultiDayReschedule" | translate }}</ng-container>
+                  <ng-container>
+                    {{ "AppointmentCardOfVisitors.SmallFrom" | translate }} {{visitorDetails?.multiDayStartDate}} {{ "AppointmentCardOfVisitors.SmallTo" | translate }} {{visitorDetails.multiDayEndDate}}.
+                  </ng-container>
+                </p>
+              </div>
+            </div>
+          </div>
+            <ng-container *ngIf="appointmentData.appointmentData.isMultiDayAppointment">
+                <div class="row mb-3">
+                    <label for="fromDate" class="col-md-4 col-form-label">
+                        {{ "Reschedule.AppointmentDate" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">
+                            {{ appointmentData?.appointmentData.date }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- <div class="row mb-3">
+                    <label for="fromDate" class="col-md-4 col-form-label">
+                        {{ "Reschedule.AppointmentToDate" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">
+                            {{ appointmentData?.appointmentData.multiDayEndDate }}
+                        </p>
+                    </div>
+                </div> -->
+            </ng-container>
+
+            <ng-container *ngIf="!appointmentData.appointmentData.isMultiDayAppointment">
+                <div class="row mb-3">
+                    <label for="fromDate" class="col-md-4 col-form-label">
+                        {{ "Reschedule.FromDate" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <div class="input-group input-datepicker">
+                            <!-- <input type="text" placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}"
+                    class="input-style" theme="dp-material" [dpDayPicker]="datePickerConfig" name="appointmentDate"
+                    formControlName="fromDate"> -->
+                            <input type="text" [min]="todayDate" (dateInput)="onDate($event.value)"
+                                placeholder="{{'Reschedule.PleaseSelectAppointmentDate' | translate}}"
+                                class="form-control" theme="dp-material" [matDatepicker]="picker" name="appointmentDate"
+                                formControlName="fromDate" />
+                            <div class="datepicker-toggle">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            </div>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </div>
+                        <mat-error
+                            *ngIf="(fromDate?.invalid && secondform?.submitted && fromDate?.errors?.required) || (fromDate?.invalid && fromDate?.touched && fromDate?.errors?.required)">
+                            {{ "Reschedule.AppointmentDateIsRequired" | translate }}
+                        </mat-error>
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- <div *ngIf="appointmentData.appointmentData.isMultiDayAppointment" class="row mb-3">
+                <label for="fromDate" class="col-md-4 col-form-label">
+                    {{ "Reschedule.ToDate" | translate }}
+                </label>
+                <div class="col-md-8">
+                    <div class="input-group input-datepicker">
+                        <input type="text" [disabled]="appointmentData.appointmentData.isMultiDayAppointment" [min]="todayDate" (dateInput)="onDate($event.value)" placeholder="{{'Reschedule.PleaseSelectAppointmentDate' | translate}}" class="form-control" theme="dp-material" [matDatepicker]="picker" name="appointmentDate"
+                        formControlName="toDate" />
+                        <div class="datepicker-toggle">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div *ngIf="timePickerFromTimeConfig">
+                <div class="row mb-3">
+                    <label for="appointmentFromTime" class="col-md-4 col-form-label">
+                        {{ "Reschedule.FromTime" | translate }}
+                        <span class="mendatory">*</span>
+                    </label>
+                    <div class="col-md-8">
+                        <app-time-picker [value]="{time:this.scheduleSecondForm.value.appointmentFromTime,callFrom:this.callFrom}" (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker" [defaultTime]="this.scheduleSecondForm.value.appointmentFromTime"   screen="rescheduled" type="from" ></app-time-picker>
+
+                        <mat-error *ngFor="let message of showValidationMessages('appointmentFromTime')">
+                            {{ message }}
+                        </mat-error>
+                        <mat-error *ngIf="this.scheduleSecondForm.valid && isApptFromTimeInvalid">
+                            Please enter valid time format
+                        </mat-error>
+
+                        <!-- <input type="text" placeholder="{{ 'Reschedule.FromTime' | translate}}" class="input-style"
+                        [theme]="'dp-material dp-main'" [mode]="'time'" [dpDayPicker]="timePickerFromTimeConfig"
+                        (onSelect)="changedFromTime($event)" [(ngModel)]="fromtime" name="appointmentFromTime"
+                        formControlName="appointmentFromTime"> -->
+                        <!-- <input maxlength="8" (keyup)="onEnter($event,'appointmentFromTime')" #input1
+                            [ngxTimepicker]="darkPickerForStartTime" [min]="fromMinTimeAppt"
+                            [format]="timeFormatForTimePicker"
+                            [value]="this.scheduleSecondForm.value.appointmentFromTime"
+                            placeholder="{{ 'Reschedule.FromTime' | translate}}" class="form-control"
+                            name="appointmentFromTime" type="text" required autocomplete="off"
+                            name="appointmentFromTime" formControlName="appointmentFromTime">
+                        <ngx-material-timepicker (timeChanged)="onTimeChanged($event)" [enableKeyboardInput]="true"
+                            [confirmBtnTmpl]="confirmBtn" [cancelBtnTmpl]="cancelBtn" #time1 #appendedToInput
+                            [appendToInput]="false" #darkPickerForStartTime (closed)="setTimeValue('startTime')"
+                            [defaultTime]="(this.scheduleSecondForm.get('appointmentFromTime').value)?(this.scheduleSecondForm.get('appointmentFromTime').value):defaultTime"
+                            [theme]="darkTheme">
+                        </ngx-material-timepicker>
+                        <ng-template #confirmBtn>
+                            <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' |
+                                translate}}</button>
+                        </ng-template>
+                        <ng-template #cancelBtn>
+                            <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' | translate}}</button>
+                        </ng-template>
+                        <mat-error *ngFor="let message of showValidationMessages('appointmentFromTime')">
+                            {{ message }}
+                        </mat-error>
+                        <mat-error *ngIf="this.scheduleSecondForm.valid && isApptFromTimeInvalid">
+                            Please enter valid time format
+                        </mat-error> -->
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="appointmentToTime" class="col-md-4 col-form-label">
+                        {{ "Reschedule.ToTime" | translate }}
+                        <span class="mendatory">*</span>
+                    </label>
+                    <div class="col-md-8">
+                        <app-time-picker [value]="{time:this.scheduleSecondForm.value.appointmentToTime,callFrom:this.callFrom}" (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker" [defaultTime]="this.scheduleSecondForm.value.appointmentToTime"   screen="rescheduled" type="to" ></app-time-picker>
+
+                        <mat-error *ngFor="let message of showValidationMessages('appointmentToTime')">
+                            {{ message }}
+                        </mat-error>
+                        <mat-error *ngIf="this.scheduleSecondForm.valid && isApptToTimeInvalid">
+                            Please enter valid time format
+                        </mat-error>
+                        
+                        <!-- <input #dateComponent="dpDayPicker" type="text" placeholder="{{ 'Reschedule.ToTime' | translate}}"
+                        class="input-style" [theme]="'dp-material dp-main'" [mode]="'time'" name=appointmentToTime""
+                        formControlName="appointmentToTime" [dpDayPicker]="timePickerToTimeConfig"> -->
+                        <!-- <input maxlength="8" (keyup)="onEnter($event,'appointmentToTime')" #input2
+                            [ngxTimepicker]="darkPickerFormEndTime" [min]="toMinTime" [format]="timeFormatForTimePicker"
+                            [value]="this.scheduleSecondForm.value.appointmentToTime"
+                            placeholder="{{ 'Reschedule.ToTime' | translate}}" class="form-control"
+                            name="appointmentToTime" type="text" required autocomplete="off"
+                            formControlName="appointmentToTime">
+                        <ngx-material-timepicker (timeChanged)="onTimeChanged($event)" [enableKeyboardInput]="true"
+                            [confirmBtnTmpl]="confirmBtn" [cancelBtnTmpl]="cancelBtn" #time2 #appendedToInput
+                            [appendToInput]="false" #darkPickerFormEndTime (closed)="setTimeValue('toTime')"
+                            [defaultTime]="(this.scheduleSecondForm.get('appointmentToTime').value)?(this.scheduleSecondForm.get('appointmentToTime').value):defaultTime"
+                            [theme]="darkTheme"></ngx-material-timepicker>
+                        <ng-template #confirmBtn>
+                            <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' |
+                                translate}}</button>
+                        </ng-template>
+                        <ng-template #cancelBtn>
+                            <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' | translate}}</button>
+                        </ng-template>
+                        <mat-error *ngFor="let message of showValidationMessages('appointmentToTime')">
+                            {{ message }}
+                        </mat-error>
+                        <mat-error *ngIf="this.scheduleSecondForm.valid && isApptToTimeInvalid">
+                            Please enter valid time format
+                        </mat-error> -->
+                    </div>
+                  
+                </div>
+                <div class="row mb-3" *ngIf="enterPrise">
+                    <label for="meeting_notes" class="col-md-4 col-form-label">
+                      {{"Reschedule.MeetingNotes" |translate}}
+                    </label>
+                    <div class="col-md-8">
+                      <textarea maxlength="250" placeholder=" {{'Reschedule.PleaseEnterMeetingNotes' |translate}}" class="form-control text-capitalize" id="meeting_notes"
+                        formControlName="meetingNotes" maxlength="250">
+                        </textarea>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button type="submit" class="btn btn-sm btn-primary-dark px-3">
+                {{ "Reschedule.Reschedule" | translate }}</button>
+        </div>
+    </form>
+
+    <!-- <ng-template #outOfHoursWarning>
+        <div class="popup-box">
+            <img src="assets/images/error.png" />
+            <div class="popup-box-text">
+                {{ "Reschedule.OutOfOfficeHours" | translate }}
+            </div>
+            <ul class="button-swap">
+                <li>
+                    <a href="javascript:void(0)" (click)="closeModal()" class="secondary-button mt-20">
+                        {{ "Reschedule.Ok" | translate }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </ng-template>
+
+    <ng-template #rescheduleSuccess>
+        <div class="popup-box">
+            <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+            <img src="assets/images/rechedule.png" />
+            <div class="popup-box-text">
+                {{ "Reschedule.AppointmentRescheduledConfirmed" | translate: fullnameTranslate }}
+            </div>
+            <a href="javascript:void(0)" (click)="closeModal()" class="primary-button mt-20">{{ "Reschedule.Ok" |
+                translate
+                }}</a>
+        </div>
+    </ng-template> -->
+</div>

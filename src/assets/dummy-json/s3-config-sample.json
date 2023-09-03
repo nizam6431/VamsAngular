@@ -1,0 +1,20 @@
+{
+    "development": {
+        "BucketName": "",
+        "AccessKeyId": "",
+        "SecretAccessKey": "",
+        "Region": ""
+    },
+    "UAT": {
+        "BucketName": "",
+        "AccessKeyId": "",
+        "SecretAccessKey": "",
+        "Region": ""
+    },
+    "SIT": {
+        "BucketName": "",
+        "AccessKeyId": "",
+        "SecretAccessKey": "",
+        "Region": ""
+    }
+}

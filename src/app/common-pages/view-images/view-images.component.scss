@@ -1,0 +1,11 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+    @extend .host;
+}
+.dialg-popup-content{
+    overflow: auto;
+    min-height: 150px;
+    max-height: 500px;
+    max-width: 400px;
+}

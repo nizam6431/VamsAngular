@@ -1,0 +1,220 @@
+:host ::ng-deep .mat-table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+:host ::ng-deep tr.mat-row,
+tr.mat-footer-row {
+    height: 1px;
+}
+
+:host ::ng-deep tr.mat-row:hover {
+    background-color: rgb(236, 237, 202);
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    width: 25%;
+}
+
+:host ::ng-deep .mat-elevation-z8 {
+    /*box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f;*/
+    box-shadow: none;
+}
+
+:host ::ng-deep .mat-table {
+    background: white;
+}
+
+:host ::ng-deep tr.mat-header-row {
+    /* height: 56px; */
+    height: 4px;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-bottom-color: #F5F6FA !important;
+}
+
+
+/*th.mat-header-cell{
+    padding-bottom: 10px;
+    padding-top: 10px;
+    color: #131523;
+    font-weight: 600;
+    font-size: 14px;
+}*/
+
+td.mat-cell,
+td.mat-footer-cell {
+    padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #DBDBDB;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-size: 12px;
+    color: #333;
+}
+
+.mat-dialog-container {
+    display: block;
+    padding: 24px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    overflow: auto;
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+    background: white !important;
+}
+
+.mat-dialog-content {
+    display: block;
+    margin: 0 -24px;
+    padding: 0 24px;
+    max-height: 65vh;
+    overflow: auto;
+    background: white;
+    -webkit-overflow-scrolling: touch;
+}
+
+.rightPanel {
+    background-color: white;
+}
+
+td.mat-cell {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+th.mat-header-cell {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+    border-bottom: 2px solid #C6C6C6 !important;
+    font-size: 12px;
+    color: #131523;
+    font-weight: 600;
+}
+
+tr td a {
+    color: #666666;
+    background: #fff;
+    border: solid 1px #F4530C;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    text-decoration: none;
+}
+
+tr td a:hover {
+    color: #fff;
+    background: #F4530C;
+    border: solid 0px #F4530C;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    text-decoration: none;
+}
+
+tr.mat-row:hover {
+    background-color: #FBF4EB;
+}
+
+.mat-paginator-range-actions .mat-paginator-icon {
+    padding-top: 40px !important;
+}
+
+
+/*Pagination css*/
+
+::ng-deep .mat-paginator-page-size {
+    margin-right: 0px !important;
+    margin-top: 0px;
+    align-items: center !important;
+}
+
+.my-custom-scrollbar {
+    position: relative;
+    height: calc(100vh - 300px);
+    overflow: auto;
+    width: 100%;
+}
+
+.table-height-vary {
+    position: relative;
+    height: calc(100vh - 250px) !important;
+    overflow: auto;
+    width: 100%;
+}
+
+.table-wrapper-scroll-y {
+    display: inline-table;
+}
+
+.edit-btn {
+    float: left;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.edit-btn .icon-edit {
+    padding: 8px;
+}
+
+.edit-btn a {
+    color: #000;
+    background: none !important;
+    border: solid 0px #F4530C !important;
+    border-radius: 0px !important;
+    padding: 0px !important;
+}
+
+.edit-btn a:hover {
+    color: #E10000 !important;
+}
+
+.delete-btn {
+    float: left;
+    font-size: 14px;
+}
+
+.delete-btn .icon-delete {
+    padding: 8px;
+}
+
+.delete-btn a {
+    color: #000;
+    background: none !important;
+    border: solid 0px #F4530C !important;
+    border-radius: 0px !important;
+    padding: 0px !important;
+}
+
+.delete-btn a:hover {
+    color: #E10000 !important;
+}
+
+.mat-paginator {
+    width: 100%;
+    border-top: solid 1px #FFD2BE !important;
+}

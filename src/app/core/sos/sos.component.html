@@ -1,0 +1,225 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button class="btn-close popup-close position-absolute opacity-100" (click)="cancelDiloag()"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Sosform.sosDetails" | translate }}</span>
+        </div>
+    </div>
+
+    <form class="popup-form" [formGroup]="sosForm">
+        <div class="popup-content">
+            <div class="row gx-5">
+                <div class="col-md-5">
+                    <div class="row mb-3">
+                        <label for="employeeFirstName" class="col-md-4 col-form-label" *ngIf="productType == productTypeList.Commercial">{{"Sosform.Building" |
+                            translate}}</label>
+                            <label for="employeeFirstName" class="col-md-4 col-form-label" *ngIf="productType == productTypeList.Enterprise">{{"Sosform.location" |
+                                translate}}</label>
+                        <div class="col-md-8">
+                            <div class=" d-flex flex-column scroll-y test ">
+                                <input type="text" *ngIf="unSelectFlag" (keyup)="searchLocation(input.value)" #input placeholder="{{'placeholders.Search' | translate}}" 
+                                    aria-label="Number" matInput [matAutocomplete]="auto" class="form-control">
+
+                                <mat-select *ngIf="!unSelectFlag" disableOptionCentering  class="form-control" formControlName="selectedBuilding">
+                                    <mat-option *ngFor="let building of locationList" [value]="building.locationName">
+                                        {{building["locationName"]}}
+                                    </mat-option>
+                                </mat-select>
+
+                                <div *ngIf="locationNotFound">
+                                    <p class="text-muted fs-xs p-2 mb-0" *ngIf="productType == productTypeList.Commercial">
+                                        {{'report_common.BuildingNotFound' | translate}}
+                                    </p>
+                                    <p class="text-muted fs-xs p-2 mb-0" *ngIf="productType == productTypeList.Enterprise ">
+                                        {{'Sosform.location_not_found' | translate}}
+                                    </p>
+                                </div>
+                            </div>
+                            <!--  -->
+                        </div>
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                            <mat-option (onSelectionChange)="selectLocation($event)" *ngFor="let bldg of locationList" [value]="bldg"
+                                class="fs-sm">
+                                {{ bldg.locationName }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <!-- selected show -->
+
+                        <div class="card card-selection-list mh-100 scroll-y" style="margin-top: 5px;" *ngIf="showSelectedLocationList?.length>0 && unSelectFlag">
+                            <div class="card-body p-0 scroll-y" style="height:auto;max-height: 200px;">
+                                <div *ngFor="let location of showSelectedLocationList;let  index = index" class="visitor-list">
+                                    {{location['locationName']}}
+                                
+                                    <span *ngIf="unSelectFlag" (click)="unselectLocation(location)">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--  -->
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-5">
+                    <div class="row mb-6">
+                        <mat-checkbox formControlName="isSelectedVisitor" (change)="allSelectedVistor($event)">
+                            <span class="col-md-4 ">
+                                {{'Sosform.select_all_visitor' | translate}}
+                            </span>
+                        </mat-checkbox>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <div class="row mb-3">
+                        <mat-checkbox formControlName="isSelectedEmployee" (change)="allSelectedEmployee($event)"> 
+                            <span class="col-md-4 ">
+                                {{'Sosform.select_all_employee' | translate}}
+                            </span>
+                         </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row gx-5">
+                <div class="col-md-5">
+                    <div class="row mb-3">
+                        <label for="visitor" class="col-md-4 col-form-label">{{"Sosform.visitor" | translate}}</label>
+                        <div class="col-md-8">
+                                <input type="text" (keyup)="searchvisitor($event,input10.value)" #input10 placeholder="{{'placeholders.Search' | translate}}"
+                                    aria-label="Number" matInput [matAutocomplete]="autovisitor" class="form-control">
+                            <!-- <mat-error *ngIf="visitorFlag">
+                                {{'Sosform.visitor_error' | translate}}
+                            </mat-error> -->
+                            <div *ngIf="VisitorNotFound">
+                                <p class="text-muted fs-xs p-2 mb-0" >
+                                    {{'Sosform.visitor_not_found' | translate}}
+                                </p>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <mat-autocomplete  #autovisitor="matAutocomplete" [displayWith]="displayWith1">
+                            <mat-option (onSelectionChange)="selectVisitor($event)" *ngFor="let visitor of visitorTypeData" [value]="visitor"
+                                class="fs-sm">
+                            {{visitor['firstName']}} {{visitor['lastName']}}
+                            {{formatListData(visitor)}} {{visitor['email']}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <!-- show selected visitor list -->
+                        
+                        <div class="card card-selection-list mh-100 scroll-y" style="margin-top: 5px;"
+                            *ngIf="showSelectedVisitorList?.length>0">
+                            <div class="card-body p-0 scroll-y" style="height:auto;max-height: 200px;">
+                                <div *ngFor="let visitor of showSelectedVisitorList;let  index = index" class="visitor-list">
+                                    <!-- {{visitor['firstName']}} {{visitor['lastName']}} ( +{{visitor['isd']}} {{visitor['phone']}} )
+                                    {{visitor['email']}} -->
+                                    <!-- {{formatListData(visitor)}} -->
+                                    {{visitor['firstName']}} {{visitor['lastName']}}
+                                    {{formatListData(visitor)}} {{visitor['email']}}
+                                    <span (click)="unselectVisitor(visitor)">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-5">
+                    <div class="row mb-3">
+                        <label for="employess" class="col-md-4 col-form-label">{{"Sosform.employess" |
+                            translate}}</label>
+                        <div class="col-sm-8">
+                            <input type="text" (keyup)="searchEmployee($event , input2.value)" #input2 placeholder="{{'placeholders.Search' | translate}}"
+                                aria-label="Number" matInput [matAutocomplete]="autoemp" class="form-control">
+                           
+                            <!-- <mat-error *ngIf="employeeFlag">
+                                {{'Sosform.employee_error' | translate}}
+                            </mat-error> -->
+                            <div *ngIf="EmployeeNotFound">
+                                <p class="text-muted fs-xs p-2 mb-0">
+                                    {{'Sosform.employee_not_found' | translate}}
+                                </p>
+                            </div>
+                        </div>
+                        <mat-autocomplete #autoemp="matAutocomplete" [displayWith]="displayWith1">
+                            <mat-option (onSelectionChange)="selectEmployee($event)" *ngFor="let employee of employeeTypeData" [value]="employee"
+                                                        class="fs-sm">
+                                                        <!-- {{employee['firstName']}} {{ employee['lastName']}} (+{{employee['isd']}} {{ employee['phone']}})  -->
+                                                        {{employee['firstName']}} {{employee['lastName']}}
+                                                        {{formatListData(employee)}} {{employee['email']}}
+                            </mat-option>
+                        </mat-autocomplete> 
+                        <!-- show Selected employee list -->
+                        <div class="card card-selection-list mh-100 scroll-y" style="margin-top: 5px;"
+                            *ngIf="showSelectedEmployeeList?.length>0">
+                            <div class="card-body p-0 scroll-y" style="height:auto;max-height: 200px;">
+                                <div *ngFor="let employee of showSelectedEmployeeList;let  index = index" class="visitor-list">
+                                    {{employee['firstName']}} {{employee['lastName']}} 
+                                    {{formatListData(employee)}} {{employee['email']}}
+                                    <span (click)="unselectEmployee(employee)">
+                                    <i class="fa fa-times" aria-hidden="true" ></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5 mb-3">
+                <mat-error *ngIf="employeeFlag">
+                    {{'Sosform.employee_error' | translate}}
+                </mat-error>
+            </div>
+
+            <div class="row gx-5">
+                <div class="col-md-5">
+                    <div class="row mb-3">
+                        <label for="employeeFirstName" class="col-md-4 col-form-label">{{"Sosform.sos" |
+                            translate}}</label>
+                        <div class="col-md-8">
+                            <mat-select class="form-control" formControlName="SOSId" disableOptionCentering
+                                (selectionChange)="onMessageChange($event)"   placeholder="{{'Sosform.sos' | translate}}">
+                                <mat-option selected *ngFor="let message of sosMessageList" [value]="message.id">
+                                    {{ message.shortMessageTemplate }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="sosMessageFlag && !sosForm.get('SOSId').value">
+                                {{'Sosform.sosMessageError' | translate}}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2" style="text-align: center;">
+                     {{"Sosform.or" |translate}}
+                </div>
+                <div class="col-md-5">
+                    <div class="row mb-3">
+                        <label for="meeting_notes" class="col-md-4 col-form-label">
+                            {{"Sosform.enterSosMessage" |translate}}
+                        </label>
+                        <div class="col-md-8">
+                            <textarea maxlength="250" (keyup)="customMessage($event , input5.value)" #input5 placeholder=" {{'Sosform.enterSosMessage' |translate}}"
+                                class="form-control text-capitalize" id="meeting_notes" formControlName="SOSMessage"
+                                maxlength="250">
+                              </textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-white px-3" (click)="resetSOS()">
+                {{ "Sosform.reset" | translate }}
+            </button>
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="sendSOS()">
+                {{ "Sosform.send" | translate }}
+            </button>
+        </div>
+    </form>
+</div>

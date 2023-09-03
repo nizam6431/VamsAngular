@@ -1,0 +1,152 @@
+<!-- <div class="popup-box">
+    <a class="popup-close-button" (click)="dismissAll()"><i class="fas fa-times"></i></a>
+    <img src="assets/images/checkout.png">
+    <div class="popup-box-text">{{ 'Checkout.CheckoutConfirm' | translate : fullnameTranslate}}</div>
+    <ul class="button-swap">
+        <li><a href="javascript:void(0)" (click)="dismissAll()" class="secondary-button mt-20">{{ 'Checkout.No'
+                | translate}}</a></li>
+        <li><a href="javascript:void(0)" (click)="checkoutVisitor(checkoutConfirmed)" class="primary-button mt-20">{{
+                'Checkout.Yes' | translate}}</a></li>
+    </ul>
+</div>
+
+<ng-template #checkoutConfirmed let-ref="dialogRef2">
+    <div class="popup-box">
+        <a class="popup-close-button" (click)="dismissAll()"><i class="fas fa-times"></i></a>
+        <img src="assets/images/checkout.png">
+        <div class="popup-box-text">{{ 'Checkout.CheckoutConfirmed' | translate : fullnameTranslate}}</div>
+        <a href="javascript:void(0)" class="primary-button mt-20" (click)="dismissAll()">{{ 'Checkout.Ok' |
+            translate}}</a>
+    </div>
+</ng-template> -->
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="currentSlide==1">
+    <div class="popup-header">
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{'Checkout.CheckoutWithQrCode'
+                | translate}}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="preScheduleForm">
+        <div class="popup-content">
+            <div class="d-flex align-items-center justify-content-center mb-3">
+                <zxing-scanner #scanner (scanSuccess)="scanSuccessHandler($event,'qrcode')">
+                </zxing-scanner>
+            </div>
+            <p class="text-center mb-3">
+                {{'Checkout.OR' | translate}}
+            </p>
+            <div class="row mb-3">
+                <label for="qrCode" class="col-md-4 col-form-label">{{'Checkout.EnterOrCode' | translate}}<span
+                        class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" id="qrCode" formControlName="qrCode">
+                    <mat-error *ngFor="let message of showValidationMessageForQrCode('qrCode')">
+                        {{message}}
+                    </mat-error>
+                </div>
+            </div>
+        </div>
+        <footer class="popup-footer">
+            <button class="btn btn-sm btn-primary-dark px-3" [disabled]="preScheduleForm.invalid"
+                (click)="scanSuccessHandler(null,'usercode')">{{'CommonToken.Next' |
+                translate}}</button>
+        </footer>
+    </form>
+</div>
+
+<!-- <div *ngIf="currentSlide==2">
+    <h1>{{'Checkout.CheckoutWithQrCode' | translate}}</h1>
+    <div class="row screen-outside">
+        {{'Checkout.CheckoutSuccessfully' | translate}}
+    </div>
+</div> -->
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="currentSlide==2">
+    <div class="popup-header">
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{'Checkout.Checkout'
+                | translate }}</span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="row mb-2">
+            <label class="col-md-4 col-form-label">{{'CheckoutDetails.VisitorName' | translate}}</label>
+            <div class="col-md-8">
+                <p class="form-control-plaintext text-break mb-0">{{(visitorData?.visitorFirstName)+"
+                    "+(visitorData?.visitorLastName)}}</p>
+            </div>
+        </div>
+        <ng-container *ngIf="!isExcel || visitorData.type !== appointmentsStatus.walkin">
+            <div class="row mb-2">
+                <label class="col-md-4 col-form-label">{{'CheckoutDetails.PersonToMeet' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{(visitorData?.hostFirstName)+"
+                        "+(visitorData?.hostLastName)}}</p>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isExcel && visitorData.type === appointmentsStatus.walkin">
+            <div class="row mb-2">
+                <label class="col-md-4 col-form-label">{{'CheckoutDetails.CompanyToMeet' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{(visitorData?.hostCompany)}}</p>
+                </div>
+            </div>
+        </ng-container>
+        <div class="row mb-2">
+            <label class="col-md-4 col-form-label">{{'CheckoutDetails.CheckIn' | translate}}</label>
+            <div class="col-md-8">
+                <p class="form-control-plaintext text-break mb-0">{{(visitorData?.checkInTime)}}</p>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-md-4 col-form-label">{{'CheckoutDetails.AppointmentDate' | translate}}</label>
+            <div class="col-md-8">
+                <p class="form-control-plaintext text-break mb-0">{{(visitorData?.date)}}</p>
+            </div>
+        </div>
+        <ng-container *ngIf="isExcel && visitorData.type !== appointmentsStatus.walkin">
+            <div class="row mb-2">
+                <label class="col-md-4 col-form-label">{{'CheckoutDetails.StartTime' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{(visitorData?.startTime)}}</p>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label class="col-md-4 col-form-label">{{'CheckoutDetails.EndTime' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{(visitorData?.endTime)}}</p>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="confirmCheckOut()">{{'Checkout.ConfirmCheckOut' |
+            translate}}</button>
+        <button class="btn btn-sm btn-white px-3" (click)="dialogRef.close()">{{'CommonToken.Back' |
+            translate}}</button>
+    </div>
+</div>
+
+
+<!-- 
+<div class="col-md-12">
+    <div class="dilogbox-label">{{'CheckoutDetails.BuildingName' | translate}}</div>
+    <div class="dilogbox-value">{{visitorData?.building}}</div>
+</div>
+<div class="col-md-12">
+    <div class="dilogbox-label">{{'CheckoutDetails.CompanyName' | translate}}</div>
+    <div class="dilogbox-value">{{visitorData?.hostCompany}}</div>
+</div>
+<div class="col-md-12">
+    <div class="dilogbox-label">{{'CheckoutDetails.TimeIn' | translate}}</div>
+    <div class="dilogbox-value">{{visitorData?.checkInTime}}</div>
+</div>
+<div class="col-md-12">
+    <div class="dilogbox-label">{{'CheckoutDetails.TimeOut' | translate}}</div>
+    <div class="dilogbox-value">{{visitorData?.checkOutTime}}</div>
+</div> -->

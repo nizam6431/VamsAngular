@@ -1,0 +1,43 @@
+.input-style.unicode-phone-number {
+    unicode-bidi: isolate-override;
+}
+
+
+::ng-deep .select2-container {
+    top: -4px;
+}
+
+::ng-deep .select2-results__option {
+    cursor: pointer;
+}
+
+::ng-deep .select2-container--default .select2-selection--single {
+    border       : none;
+    border-bottom: 1px solid #aaa;
+    border-radius: 0px;
+}
+
+.contact-detail li:nth-child(1) {
+    width: 26%;
+}
+
+.input-style.unicode-phone-number{
+    unicode-bidi: isolate-override;
+}
+
+.contact-detail li:nth-child(2) {
+    width: 70%;
+}
+
+@media (max-width : 480px) {
+    .contact-detail li:nth-child(1){
+        list-style: none;
+        width: 24%;
+        float: left;
+    }
+    .contact-detail li:nth-child(2){
+        list-style: none;
+        width: 70%;
+        float: right;
+    }
+}

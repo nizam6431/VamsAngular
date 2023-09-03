@@ -1,0 +1,121 @@
+<!-- Show Provider -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'show'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'show' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "sms_template.showTitle" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" novalidate>
+        <div class="popup-content">
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'SmsTemplate.name' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(smsTemplateRowClass?.name)}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'SmsTemplate.languageCode' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(smsTemplateRowClass?.languageCode)}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'SmsTemplate.sms_content' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(smsTemplateRowClass?.smsContent)}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'SmsTemplate.tag' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(smsTemplateRowClass?.tag)}}</p>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="!isSMSApproval" (click)="formData.mode = 'edit'">
+            {{ "CommonToken.Edit" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>
+
+<!-- Add/Edit SMS -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'edit' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "sms_template.editTitle" | translate }}</span>
+            <span *ngIf="formData.mode == 'add' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "sms_template.addTitle" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="smsTemplateForm" novalidate>
+        <div class="popup-content d-flex flex-column flex-1">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="row">
+                        <label class="col-4 col-form-label">{{'SmsTemplate.name' | translate}}</label>
+                        <div class="col-8 alignCntr">
+                            <p class="form-control-plaintext p-0 mb-0">{{(smsTemplateRowClass?.name)}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <label class="col-4 col-form-label">{{'SmsTemplate.languageCode' | translate}}</label>
+                        <div class="col-8 alignCntr">
+                            <p class="form-control-plaintext p-0 mb-0">{{(smsTemplateRowClass?.languageCode)}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row flex-1 flex-nowrap scroll-y">
+                <div class="col-md-6 d-flex flex-column scroll-y">
+                    <label for="out_port" class="form-label">{{ "SmsTemplate.sms_content" | translate}}
+                        <span class="mendatory">*</span></label>
+                    <div class="d-flex flex-column flex-1 scroll-y">
+                        <textarea class="form-control flex-1 border shadow-0 rounded-0" #textarea rows="10" (input)="getValue(textarea.value)"
+                            formControlName="content"
+                            placeholder="{{ 'placeholders.enter_sms_details' | translate }}"></textarea>
+                        <mat-error *ngFor="let message of showValidationMessages('question')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex flex-column scroll-y">
+                    <label for="out_port" class="form-label">{{ "SmsTemplate.tag" | translate}}</label>
+                    <div class="d-flex flex-column flex-1 mx-n2 scroll-y">
+                        <div class="d-flex flex-column flex-1 ps-2 pe-1 scroll-y">
+                            <mat-selection-list [multiple]="false"
+                                    class="vams-selection-list d-grid gap-2 pt-0 mb-2">
+                                <mat-list-option *ngFor="let tag of tagList" [value]="tag"
+                                    class="vams-selection-list-item">
+                                    <button (click)="getSelectedListValue(tag)"
+                                        class="btn btn-link border-0 text-start text-decoration-none text-dark fw-semi-bold">{{tag}}</button>
+                                </mat-list-option>
+                            </mat-selection-list>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="!isSMSApproval" (click)="updateForm()">
+            {{ "CommonToken.Save" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>

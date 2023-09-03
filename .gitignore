@@ -1,0 +1,5 @@
+node_modules
+dist
+./cache
+src/assets/dummy-json/s3-config.json
+package-lock.json

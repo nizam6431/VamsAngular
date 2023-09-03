@@ -1,0 +1,103 @@
+<!-- uncomment when we need -->
+<!-- <div class="row" style="display:none">
+  <div class="col-md-3 vams-grid-filters">
+  </div>
+  <div class="col-md-6">
+    </div>
+  <div class="col-md-3 vams-grid-filters d-flex">
+    <div class="input-group search-group">
+      <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+        class="form-control form-control-sm" />
+      <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+        (click)="cleanSearchBox(input)">
+        <i class="icon-cros-icon"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+        <i class="icon-search-icon"></i>
+      </button>
+    </div>
+  </div>
+</div> -->
+<div class="row fixedHei">
+  <!-- <div id="addForm">
+    <button class="btn btn-sm btn-primary-dark" (click)="openPayPopup()">Pay Now</button>
+    
+  </div> -->
+  <div class="col-md-6 text-center d-flex justify-content-center flex-wrap bordR_Red">
+    <div class="col-md-8 d-flex justify-content-center flex-wrap align-self-center">
+      <input [(ngModel)]="enterUniqueId" (keyup)="getId($event, uniqueId.value)" placeholder="{{ 'check_in.enterUniqueId' | translate}}" #uniqueId
+          class="form-control form-control-sm form-control-md" />
+      <div class="col-md-12">
+        <button class="btn btn-sm btn-primary-dark col-md-2 mt-4 text-center" (click)="checkIn(uniqueId.value)">
+          {{ 'check_in.next' | translate}}
+        </button>
+      </div>
+      
+    </div>
+  </div>
+  <div class="col-md-6 text-center d-flex justify-content-center flex-wrap">
+    <div class="col-md-8 text-center d-flex justify-content-center flex-wrap align-self-center py-5"
+    *ngIf="passValTrue">
+      <h3 *ngIf="passData.isExpired" class="col-md-12 text-danger">Pass Validity Expired</h3>
+      <div class="col-md-12">
+        <img [src]="userPhoto" height="200px" width="200px" class="img-fluid defImg" style="max-width:175px;max-height:175px" alt="Document" />
+      </div>
+      <div class="col-md-12">
+        <p class="mt-2 mb-0"><strong>{{passData.firstName}} {{passData.lastName}}</strong></p>
+      </div>
+      <div class="col-md-12">
+        <p class="mb-0">{{passData.tenantName}}</p>
+      </div>
+      <div class="col-md-12">
+        <p class="mt-2 mb-0" *ngIf="checkInPage"><strong *ngIf="passData.lastCheckOutTime != null">Last Check Out:</strong> 
+          {{passData.lastCheckOutTime}} 
+          <!-- {{passData.lastCheckOutTime | date:visitorSettings.dateFormat}}
+          {{passData.lastCheckOutTime | date:timeFormat}}  -->
+        </p>
+        <p class="mt-2 mb-0" *ngIf="checkOUtPage"><strong *ngIf="passData.lastCheckInTime != null">Last Check In:</strong> 
+          {{passData.lastCheckInTime}}
+          <!-- {{passData.lastCheckInTime | date:visitorSettings.dateFormat}} 
+          {{passData.lastCheckInTime | date:timeFormat}} -->
+        </p>
+      </div>
+      <div class="col-md-12">
+        <img [src]="validityNotExpiredPhoto" *ngIf="!passData.isExpired" class="img-fluid" alt="Document" />
+        <img [src]="validityExpiredPhoto" *ngIf="passData.isExpired" class="img-fluid" alt="Document" />
+      </div>
+      <div class="col-md-12" >
+        <button *ngIf="!raiseFlagHide" class="btn btn-sm btn-primary-dark col-md-4 mt-4 text-center" (click)="raiseFlag()">
+          {{ 'check_in.rais_flag' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="vams-table-wrapper vams-table-responsive" style="display:none">
+    <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="dataSource" class="mat-table-hover">
+      <ng-container *ngFor="let colName of columns; let i = index" [matColumnDef]="columns[i].key">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{colName.value | translate}} </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container class="mat-cell-sm " *ngIf="columns[i].key == 'photoUrl'">
+            <div *ngIf="element?.photoUrl;else elsePart" class="picture image flex align-items-center justify-content-center  overflow-hidden">
+              <img (error)="handleIamge(element.photoUrl,'self')" [src]="selfPhotoUrl">
+            </div>
+            <ng-template #elsePart >
+              -
+            </ng-template>
+          </ng-container>
+          <ng-container class="mat-cell-sm" *ngIf="columns[i].key == 'name' ">
+            {{element["firstName"]}} {{element["lastName"]}}
+          </ng-container>
+          <ng-container class="mat-cell-sm"  *ngIf="columns[i].key != 'photoUrl' && columns[i].key != 'name'  && columns[i].key != 'action' ">
+            {{element[colName.key]?element[colName.key]:"-"}} 
+          </ng-container>
+          <div class="d-inline-flex align-items-center gap-2" *ngIf="columns[i].key == 'action'">
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnKeys;" (click)="diplayRow(row)"></tr>
+    </table>
+  </div> -->
+  <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalCount"
+    (page)="getPaginationData($event)" aria-label="Select page of users"></mat-paginator> -->

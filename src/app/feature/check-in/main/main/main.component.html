@@ -1,0 +1,15 @@
+<div class="vams-grid-wrapper">
+    <app-checkin-view [dataSource]="dataSource" [columns]="columns"
+        (rowData)="rowData($event)" (modeEmmiter)="changeMode($event)" (onDataChange)="paginate($event)" [categoryType]="categoryType" [totalCount]="totalCount"
+        [pageSizeCount]="pageSize"></app-checkin-view>
+</div>
+
+<footer class="vams-grid-footer bg-floral-white">
+    <!-- <button class="btn btn-sm btn-primary-dark px-3"
+        (click)="openDialog('card')">
+        Pay Now
+    </button> -->
+    <!-- <button class="btn btn-sm btn-primary-dark" (click)="openPayPopup()">Pay Now</button> -->
+</footer>
+
+

@@ -1,0 +1,87 @@
+<!-- Appointment Filters -->
+<div class="row" *ngIf="SeepzWorkFlow">
+  <div class="col-md-10">
+      <button 
+      class="btn btn-link p-0 fw-medium text-success ms-auto text-decoration-none border-0 d-flex align-items-center timebtn"
+      (click)="onChange()" >
+      <i class="icon-refresh fs-sm me-1"></i>
+      <span class="fs-xs">{{"dashboard.Refresh" | translate}}</span>
+    </button>
+  </div>
+  <div  class="col-md-2" style="width: 8rem">
+    <div class="fs-sm fw-medium text-dark bg-light border border-light px-3 py-1 rounded-pill">
+      {{time |date: "shortTime"}}
+   </div>
+  </div>
+  
+</div>
+<button *ngIf="!SeepzWorkFlow"
+    class="btn btn-link p-0 fw-medium text-success ms-auto text-decoration-none border-0 d-flex align-items-center timebtn"
+    (click)="onChange()" >
+    <i class="icon-refresh fs-sm me-1"></i>
+    <span class="fs-xs">{{
+      "dashboard.Refresh" | translate
+      }}</span>
+  </button>
+  <div class="vams-grid-filters d-flex gap-3" *ngIf="lastTimeDisplay">
+    <div class="d-flex align-items-center gap-3"></div>
+    <div class="fs-sm fw-medium text-dark bg-light border border-light px-3 py-1 rounded-pill">
+      {{time |date: "shortTime"}}
+   </div>
+  </div>
+
+<div class="vams-grid-filters d-flex gap-3 btntime"*ngIf="!SeepzWorkFlow" >
+    <div class="d-flex align-items-center gap-3">
+        <p class="fw-semi-bold mb-0" *ngIf="this.productType != 'Enterprise' && !SeepzWorkFlow">{{"dashboard.Complex" | translate}}</p>
+        <p class="fw-semi-bold mb-0" *ngIf="this.productType == 'Enterprise'">{{"dashboard.Location" | translate}}</p>
+
+       
+        <div class="d-flex align-items-center" *ngIf="this.productType == 'Enterprise'">
+          <div class="vams-dropdown">
+            <mat-select disableOptionCentering  [(ngModel)]="selectedLocation" class="form-control"
+              placeholder="select Location" (selectionChange)="locationChange($event.value)" >
+              <mat-option *ngFor="let location of LocationList" [value]="location">
+                {{location.locationName}}
+              </mat-option>
+            </mat-select>
+          </div>
+        </div>
+        <div class="fs-sm fw-medium text-white bg-primary border border-primary px-3 py-1 rounded-4" *ngIf="!SeepzWorkFlow">
+             {{"dashboard.visitor" | translate}}
+        </div>  
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center" *ngIf="this.productType != 'Enterprise' && !SeepzWorkFlow">
+        <mat-button-toggle-group class="vams-button-toggle-group vams-button-toggle-group-secondary"
+            [(ngModel)]="currentValue" (change)="changeCurentvalue($event)">
+            <mat-button-toggle value="today">{{"dashboard.today" | translate}}</mat-button-toggle>
+            <mat-button-toggle value="thisweek">{{"dashboard.this_week" | translate}}</mat-button-toggle>
+            <mat-button-toggle value="thismonth">{{"dashboard.month" | translate}}</mat-button-toggle>
+            <mat-button-toggle value="thisyear">{{"dashboard.year" | translate}} </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <div class="d-flex justify-content-center align-items-center" *ngIf="this.productType == 'Enterprise' && !SeepzWorkFlow">
+        <mat-button-toggle-group class="vams-button-toggle-group vams-button-toggle-group-secondary"
+            [(ngModel)]="currentValue" (change)="changeCurentvalue($event)">
+            <mat-button-toggle value="Today">{{"dashboard.today" | translate}}</mat-button-toggle>
+            <mat-button-toggle value="CurrentWeek">{{"dashboard.this_week" | translate}}</mat-button-toggle>
+            <mat-button-toggle value="CurrentMonth">{{"dashboard.month" | translate}}</mat-button-toggle>
+            <mat-button-toggle value="CurrentYear">{{"dashboard.year" | translate}} </mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+    <div class="fs-sm fw-medium text-dark bg-light border border-light px-3 py-1 rounded-pill" *ngIf="!lastTimeDisplay">
+       {{time |date: "shortTime"}}
+    </div>
+</div>
+
+<ng-container [ngSwitch]="type" *ngIf="this.productType != 'Enterprise'">
+    <app-dashboard-level1 *ngSwitchCase="'level1' || 'level2'" [currentValue]="currentValue" [locationId]="locationId" [locationEventEmitter]="locationEventEmitter" ></app-dashboard-level1>
+    <!-- <app-dashboard-level2 *ngSwitchCase="'level2'"></app-dashboard-level2>
+    <app-dashboard-level3 *ngSwitchCase="'level3'"></app-dashboard-level3> -->
+</ng-container>
+
+<ng-container *ngIf="this.productType == 'Enterprise'">
+  <!-- <app-dashboard-level1 [currentValue]="currentValue" [locationId]="locationId" [locationEventEmitter]="locationEventEmitter" ></app-dashboard-level1> -->
+
+  <app-dashboard-level1 [currentValue]="currentValue" [locationId]="locationId" [locationEventEmitter]="locationEventEmitter" [locationListId]="locationListId" [hoursWiseLocationId]="hoursWiseLocationId"></app-dashboard-level1>
+</ng-container>

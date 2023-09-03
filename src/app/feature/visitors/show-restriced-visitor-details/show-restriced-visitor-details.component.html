@@ -1,0 +1,145 @@
+<div class="popup-header">
+  <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+  <div class="popup-title-wrapper d-flex align-items-center">
+    <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative"
+      *ngIf="restrictedVisitorsData.showRestrictorVisitor === 'restrictVisitor' ;else elseSpan">{{
+      "Visitors.RestrictedVisitorsDetails" | translate
+      }}</span>
+    <ng-template #elseSpan>
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+        "Visitors.AllVisitorsDetails" | translate
+        }}</span>
+    </ng-template>
+  </div>
+</div>
+<div class="popup-content p-0">
+  <div class="details-wrapper">
+    <div class="row mb-2">
+      <label for="employeeFirstName" class="col-md-3 col-form-label">
+          {{ "Visitors.photo" | translate }}</label>
+          <div class="col-md-9">
+      <div class="picture picture-lg d-flex align-items-center justify-content-center p-1 overflow-hidden">
+          <img (error)="handleIamge(selfPhotoUrl,'self')" [src]="selfPhotoUrl">
+      </div>
+    </div>
+</div>
+    <div class="row mb-2">
+      <label for="visitorName" class="col-md-3 col-form-label">
+        {{ "Visitors.VisitorName" | translate }}
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext" id="visitorName">{{
+          restrictedVisitorsData.firstName +
+          ' ' +
+          restrictedVisitorsData.lastName
+          }}</span>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitorEmail" class="col-md-3 col-form-label">
+        {{ "Visitors.Email" | translate }}
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext">{{ restrictedVisitorsData.email ? restrictedVisitorsData.email : '-'
+          }}</span>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitorPhone" class="col-md-3 col-form-label">
+        {{ "Visitors.CellNumber" | translate }}
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext" *ngIf="restrictedVisitorsData.isdCode && restrictedVisitorsData.phone">{{
+          '+'+ restrictedVisitorsData.isdCode + ' '+formatCellNumber(restrictedVisitorsData.phone)}}</span>
+        <span class="form-control-plaintext"
+          *ngIf="!restrictedVisitorsData.isdCode && !restrictedVisitorsData.phone">{{'-'}}</span>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitCompany" class="col-md-3 col-form-label">
+        {{ "Visitors.Company" | translate }}
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext">{{ (restrictedVisitorsData.company) ? restrictedVisitorsData.company :
+          '-'}}</span>
+      </div>
+    </div>
+    <div *ngIf="restrictedVisitorsData.showRestrictorVisitor === 'restrictVisitor'">
+    <div class="row mb-2">
+      <label for="visitCompany" class="col-md-3 col-form-label">
+        {{ "restricted_Visitor.remark" | translate }}
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext">{{ (restrictedVisitorsData.remark) ? restrictedVisitorsData.remark :
+          '-'}}</span>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitCompany" class="col-md-3 col-form-label">
+        {{ "restricted_Visitor.restrictedBy" | translate }}
+        <!-- Restricted By -->
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext">{{ (restrictedVisitorsData.employeeName) ? restrictedVisitorsData.employeeName :
+          '-'}}</span>
+        <!-- <span class="form-control-plaintext">Pallavi</span> -->
+      </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitCompany" class="col-md-3 col-form-label">
+        {{ "restricted_Visitor.role" | translate }}
+        <!-- Role -->
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext">{{ (restrictedVisitorsData.employeeRole) ? restrictedVisitorsData.employeeRole :
+          '-'}}</span>
+        <!-- <span class="form-control-plaintext">Complex</span> -->
+      </div>
+    </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitCompany" class="col-md-3 col-form-label">
+        {{ "Visitors.EntityName" | translate }}
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext">{{ (restrictedVisitorsData.entityName) ? restrictedVisitorsData.entityName
+          : '-'}}</span>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitCompany" class="col-md-3 col-form-label">
+        {{ "restricted_Visitor.level" | translate }}
+      </label>
+      <div class="col-md-9">
+        <span class="form-control-plaintext">{{ (restrictedVisitorsData.entityType) ? restrictedVisitorsData.entityType
+          : '-'}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="popup-footer d-flex align-items-center gap-3">
+  <!-- TODO :- It is on hold -->
+  <!-- <ng-container *isPermissible="permissionKeyObj.RESTRICTVISITORADD">
+  <ng-container *ngIf="restrictedVisitorsData?.entityType === 'Complex' && levelType === 'level1'">
+    <button class="btn btn-sm btn-primary-dark px-3" (click)="openRestrictDialog()" 
+    *ngIf="restrictedVisitorsData.showRestrictorVisitor !== 'restrictVisitor' && restrictedVisitorsData.isRestricted == 'No'">
+    {{ "Visitors.restrictVisitor" | translate }}
+  </button>
+  </ng-container>
+  <ng-container *ngIf="restrictedVisitorsData?.entityType === 'Building' && levelType === 'level2'">
+    <button class="btn btn-sm btn-primary-dark px-3" (click)="openRestrictDialog()" 
+    *ngIf="restrictedVisitorsData.showRestrictorVisitor !== 'restrictVisitor' && restrictedVisitorsData.isRestricted == 'No'">
+    {{ "Visitors.restrictVisitor" | translate }}
+  </button>
+  </ng-container>
+  <ng-container *ngIf="restrictedVisitorsData?.entityType === 'Company' && levelType === 'level3'">
+    <button class="btn btn-sm btn-primary-dark px-3" (click)="openRestrictDialog()" 
+    *ngIf="restrictedVisitorsData.showRestrictorVisitor !== 'restrictVisitor' && restrictedVisitorsData.isRestricted == 'No'">
+    {{ "Visitors.restrictVisitor" | translate }}
+  </button>
+  </ng-container>
+</ng-container> -->
+  <button class="btn btn-sm btn-white px-3" (click)="dialogRef.close()">
+    {{ "Visitors.Back" | translate }}
+  </button>
+</footer>

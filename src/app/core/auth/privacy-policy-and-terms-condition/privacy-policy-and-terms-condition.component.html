@@ -1,0 +1,45 @@
+<!-- Privacy policy -->
+<div class="card flex-1 scroll-y" *ngIf="currentSlide == 2">
+    <div class="card-header bg-transparent border-bottom-0 py-3">
+        <div class="text-center">
+            <img [src]="logoUrl?logoUrl:'assets/images/login-vams-logo.png'" alt="VAMS" height="64px" />
+        </div>
+    </div>
+    <div class="card-body d-flex flex-column scroll-y p-0">
+        <h5 class="card-title fw-bold text-center mb-3">{{ "policy_documents.privacy_policy" | translate }}</h5>
+        <div id="outerContainer" class="d-grid flex-1 border-top scroll-y">
+            <app-common-pdf-viewer [pdfUrl]="pdfUrl"></app-common-pdf-viewer>
+        </div>
+    </div>
+    <footer class="card-footer d-flex justify-content-center align-items-center gap-3 bg-transparent py-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="next()">
+            {{ "policy_documents.accept_button" | translate }}
+        </button>
+        <button type="submit" class="btn btn-sm btn-white px-3" (click)="back()">
+            {{ "policy_documents.back_button" | translate }}
+        </button>
+    </footer>
+</div>
+
+<!-- Terms and condition -->
+<div class="card flex-1 scroll-y" *ngIf="currentSlide == 3">
+    <div class="card-header bg-transparent border-bottom-0 py-3">
+        <div class="text-center">
+            <img [src]="logoUrl?logoUrl:'assets/images/login-vams-logo.png'" alt="VAMS" height="64px" />
+        </div>
+    </div>
+    <div class="card-body d-flex flex-column scroll-y p-0">
+        <h5 class="card-title fw-bold text-center mb-3">{{ "policy_documents.terms_condition" | translate }}</h5>
+        <div id="outerContainer" class="d-grid flex-1 border-top scroll-y">
+            <app-common-pdf-viewer [pdfUrl]="pdfUrl"></app-common-pdf-viewer>
+        </div>
+    </div>
+    <footer class="card-footer d-flex justify-content-center align-items-center gap-3 bg-transparent py-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="accept()">
+            {{ "policy_documents.accept_button" | translate }}
+        </button>
+        <button type="submit" class="btn btn-sm btn-white px-3" (click)="back()">
+            {{ "policy_documents.back_button" | translate }}
+        </button>
+    </footer>
+</div>

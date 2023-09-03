@@ -1,0 +1,90 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+  padding: 0.5rem 1rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.vams-card-grid {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @include media-breakpoint-up(sm) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include media-breakpoint-up(xxl) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card-appointment {
+  border-radius: 0.5rem;
+  border-color: $antique-white;
+  box-shadow: 0 0 6px rgba($color: $black, $alpha: 0.12);
+  transition: all 0.15s ease-in-out;
+
+  &:hover {
+    background-color: $floral-white;
+    border-color: rgba($color: $primary, $alpha: 0.5);
+    transition: all 0.15s ease-in-out;
+
+    .card-footer {
+      border-top-color: rgba($color: $primary, $alpha: 0.5);
+      transition: all 0.15s ease-in-out;
+    }
+  }
+
+  .card-body {
+    padding: 0.75rem;
+  }
+
+  .card-footer {
+    min-height: 2.75rem;
+    background-color: transparent;
+    padding: 0.375rem 0.75rem;
+    border-top-color: $border-color;
+    transition: all 0.15s ease-in-out;
+
+    &:last-child {
+      border-radius: 0 0 calc(0.5rem - 1px) calc(0.5rem - 1px);
+    }
+  }
+}
+
+.appointment-log {
+  color: rgba($color: $black, $alpha: 0.65);
+}
+
+
+#printPDFPopup { display:none; 
+  position: absolute;
+  top:100px; left:calc(50% - 100px);
+  width:200px;
+}
+#printPDFPopup.active {
+  display: block;
+}
+// .pdf-viewer {
+//   height: 100vh;
+//   width: 80vw;
+//   display: block;
+//   margin: 0 auto;
+// }
+.cardDlScanImg {
+  height: fit-content;
+  margin: 2px 0 0;
+}

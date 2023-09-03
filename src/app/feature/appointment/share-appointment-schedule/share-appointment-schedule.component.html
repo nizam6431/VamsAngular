@@ -1,0 +1,196 @@
+<!-- TODO: Question for visitors should be configurable -->
+<div class="card mw-tile w-100 flex-1 border-0 mx-auto shadow-sm rounded-4 scroll-y">
+    <div class="card-header bg-transparent border-bottom-0 px-3 py-4">
+        <div class="text-center">
+            <img [src]="logoUrl" alt="VAMS" height="64px" />
+        </div>
+    </div>
+
+    <div class="card-body d-flex flex-column flex-1 p-0 scroll-y">
+        <h4 class="card-title fw-bold text-center mb-4 pt-3 px-3" *ngIf="!invalidToken && !isApptScheduled">
+            {{'ShareScheduleAppointment.CreateAppointment'|translate}}
+        </h4>
+        <!-- Form for Excel User -->
+        <form class="d-flex flex-column flex-1 border-top scroll-y"
+            *ngIf="(isEmailValid || isPhoneVaild ) && !isApptScheduled" [formGroup]="formCompanyforExcel" novalidate
+            autocomplete="off">
+            <ng-container *ngIf="1 === currentSlide">
+                <div class="flex-1 pt-4 pb-3 px-3 scroll-y">
+                    <h6 class="card-subtitle fw-semi-bold mb-4">
+                        {{ "Schedule.VisitorDetails" | translate }}
+                    </h6>
+                    <div class="row mb-3">
+                        <label for="feFirstName" class="col-md-3 col-form-label">
+                            {{ "Schedule.FirstName" | translate }}
+                            <span class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-9">
+                            <input type="text" maxlength="50" class="form-control text-capitalize" id="feFirstName"
+                                placeholder="{{ 'Schedule.FirstNamePlaceholder' | translate }}"
+                                formControlName="firstName" />
+                            <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feLastName" class="col-md-3 col-form-label">
+                            {{ "Schedule.LastName" | translate }}
+                            <span class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-9">
+                            <input type="text" maxlength="50" class="form-control text-capitalize" id="feLastName"
+                                placeholder="{{ 'Schedule.LastNamePlaceholder' | translate }}"
+                                formControlName="lastName" />
+                            <mat-error *ngFor="let message of showValidationMessages('lastName')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feFirstName" class="col-md-3 col-form-label">
+                            {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-9">
+                            <input [readonly]="isEmailValid" type="text" class="form-control" maxlength="150"
+                                placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}"
+                                formControlName="emailId" />
+                            <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feTimeZone" class="col-md-3 col-form-label">
+                            {{ "Schedule.CellNumber" | translate }}
+                        </label>
+                        <div class="col-md-9">
+                            <p *ngIf="!isPhoneVaild">
+                                <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                    [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                    [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                    [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                    [separateDialCode]="separateDialCode" [preferredCountries]="['gb']"
+                                    [selectedCountryISO]="selectedCountry" [phoneValidation]="phoneValidation"
+                                    name="phone" formControlName="visitorMobileNumber"
+                                    (countryChange)="checkNumber($event)">
+                                </ngx-intl-tel-input>
+                                <mat-error
+                                    *ngIf="formCompanyforExcel.get('visitorMobileNumber').hasError('validatePhoneNumber')">
+                                    {{ "Schedule.CellNumberValid" | translate }}
+                                </mat-error>
+                            </p>
+
+                            <p *ngIf="isPhoneVaild" class="form-control">
+                                <span class="flag-icon me-2" [ngClass]="flagClass"></span>
+                                <span>+{{
+                                    visitorPhoneIsd + " " + formatCellNumber(visitorPhone)
+                                    }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="feCompany" class="col-md-3 col-form-label">{{ "Schedule.Company" | translate }}
+                        </label>
+                        <div class="col-md-9">
+                            <input type="text" maxlength="100" id="feCompany"
+                                placeholder="{{ 'Schedule.CompanyPlaceholder' | translate }}"
+                                class="form-control text-capitalize" formControlName="company" />
+                            <mat-error *ngFor="let message of showValidationMessages('company')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center border-top p-3">
+                    <button type="button" class="btn btn-sm btn-primary-dark px-3"
+                        (click)="goToNextSlide(currentSlide)">
+                        {{ "Schedule.Next" | translate }}
+                    </button>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="currentSlide == 2">
+                <div class="flex-1 pt-4 pb-3 px-3 scroll-y">
+                    <h6 class="card-subtitle fw-semi-bold mb-4">
+                        {{ "Schedule.AppointmentDetails" | translate }}
+                    </h6>
+                    <div class="row mb-3">
+                        <label for="feStartDateandTime" class="col-md-3 col-form-label">
+                            {{ "Schedule.AddDate" | translate
+                            }}<span class="mendatory">*</span></label>
+                        <div class="col-md-9">
+                            <div class="input-group input-datepicker">
+                                <input (dateInput)="onDate($event.value)" [min]="todayDate" type="text"
+                                    placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}"
+                                    class="form-control" theme="dp-material" [matDatepicker]="picker"
+                                    name="appointmentStartDate" formControlName="appointmentStartDate">
+                                <div class="datepicker-toggle">
+                                    <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                                </div>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                            <mat-error *ngFor="
+                  let message of showValidationMessages('appointmentStartDate')
+                ">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                    
+
+                    <div class="row mb-3">
+                        <label for="feStartDateandTime" class="col-md-3 col-form-label">{{ "Schedule.FromTime" |
+                            translate
+                            }}<span class="mendatory">*</span></label>
+                        <div class="col-md-9">
+                            <app-time-picker
+                                [value]="{time:this.formCompanyforExcel.value.appointmentStartTime,callFrom:this.callFrom}"
+                                (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+                                [defaultTime]="this.formCompanyforExcel.value.appointmentStartTime"
+                                screen="shareAppointment" type="from"></app-time-picker>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feEndDateandTime" class="col-md-3 col-form-label">{{ "Schedule.ToTime" | translate
+                            }}
+                            <span class="mendatory">*</span></label>
+                        <div class="col-md-9">
+                            <app-time-picker
+                                [value]="{time:this.formCompanyforExcel.value.appointmentEndTime,callTo:this.callTo}"
+                                (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+                                [defaultTime]="this.formCompanyforExcel.value.appointmentEndTime"
+                                screen="shareAppointment" type="to"></app-time-picker>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="d-flex align-items-center gap-3 border-top p-3">
+                    <button (click)="onSubmit()" class="btn btn-sm btn-primary-dark px-3">
+                        {{ "Schedule.Save" | translate }}
+                    </button>
+                    <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlide(currentSlide)">
+                        {{ "Schedule.Back" | translate }}
+                    </button>
+                    <!-- <button (click)="formReset()" class="btn btn-sm btn-white  px-3">Reset</button> -->
+                </div>
+            </ng-container>
+        </form>
+
+        <div class="message-tile d-flex flex-column justify-content-center align-items-center flex-1"
+            *ngIf="invalidToken && !isApptScheduled">
+            <app-link-error [showPage]="true"></app-link-error>
+        </div>
+
+        <div class="message-tile d-flex flex-column justify-content-center align-items-center flex-1"
+            *ngIf="isApptScheduled">
+            <div class="img-wrapper text-center">
+                <i class="material-icons display-5 fw-medium text-success">check_circle_outline</i>
+            </div>
+            <p class="fw-medium opacity-75 mb-0">
+                {{'ShareScheduleAppointment.ScheduleStatus'|translate}}
+            </p>
+        </div>
+    </div>
+</div>

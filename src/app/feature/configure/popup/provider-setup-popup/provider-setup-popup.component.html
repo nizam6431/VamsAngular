@@ -1,0 +1,387 @@
+<!-- Add/Edit Provider -->
+<div class="d-flex flex-column flex-1 scroll-y"  *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'edit' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "provider_setup.editTitle" | translate }}</span>
+            <span *ngIf="formData.mode == 'add' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "provider_setup.addTitle" | translate }}</span>
+        </div>
+    </div>
+     <form class="popup-form" [formGroup]="providerSetupForm" novalidate>
+        <div class="popup-content">
+            <!-- adding location  -->
+            <div class="row mb-3" *ngIf="formData.mode == 'edit' && productType ==ProductType.Commercial">
+                <label for="buildingName" class="col-md-4 col-form-label">{{ "provider_setup.buildingName" |
+                    translate
+                    }}
+                </label>
+                <div class="col-md-8">
+                    <input maxlength="50" readonly type="text" class="form-control" id="name" formControlName="buildingName"
+                        placeholder="{{
+                                                                                        'provider_setup.buildingName' | translate
+                                                                                      }}" />
+                </div>
+            </div>
+            <div class="row mb-3" *ngIf="formData.mode == 'edit' && productType ==ProductType.Enterprise">
+                <label for="buildingName" class="col-md-4 col-form-label">{{ "provider_setup.locationName" |
+                    translate
+                    }}
+                </label>
+                <div class="col-md-8">
+                    <input maxlength="50" readonly type="text" class="form-control" id="name" formControlName="buildingName"
+                        placeholder="{{
+                                                                                                        'provider_setup.locationName' | translate
+                                                                                                      }}" />
+                </div>
+            </div>
+            <div class="row mb-3" *ngIf="formData.mode == 'add' && productType ==ProductType.Commercial">
+                <label for="buildingId" class="col-md-4 col-form-label">{{ "provider_setup.buildingName" |
+                    translate
+                    }}
+                </label>
+                <div class="col-md-8">
+                    <input type="text" placeholder="{{'Company.selectBuilding' | translate}}" formControlName="buildingName" aria-label="Number"
+                        matInput [matAutocomplete]="auto" class="form-control">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                        <mat-option (onSelectionChange)="selectedBuilding($event)" *ngFor="let bldg of buildingList" [value]="bldg" class="fs-sm" >
+                            {{ bldg.name }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="buildingValidFlag">
+                        {{'Company.validbuilding' | translate}}
+                    </mat-error>
+                    <!-- <mat-select (selectionChange)="selectedBuilding($event.value)" disableOptionCentering class="form-control"
+                        formControlName="buildingName" placeholder="{{
+                                                            'provider_setup.buildingName' | translate
+                                                        }}">
+                        <mat-option *ngFor="let building of  buildingList " [value]="building['id']">
+                            {{building["name"]}}
+                        </mat-option>
+                    </mat-select> -->
+                </div>
+            </div>
+            <div class="row mb-3" *ngIf="formData.mode == 'add' && productType ==ProductType.Enterprise">
+                <label for="buildingId" class="col-md-4 col-form-label">{{ "provider_setup.locationName" |
+                    translate
+                    }}
+                </label>
+                <div class="col-md-8">
+                    <input type="text" placeholder="{{'provider_setup.locationName' | translate}}" formControlName="buildingName"
+                        aria-label="Number" matInput [matAutocomplete]="auto" class="form-control">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                        <mat-option (onSelectionChange)="selectedBuilding($event)" *ngFor="let bldg of buildingList" [value]="bldg"
+                            class="fs-sm">
+                            {{ bldg.name }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="buildingValidFlag">
+                        {{
+                        'Location.validLocation' | translate
+                        }}
+                    </mat-error>
+                    <!-- <mat-select (selectionChange)="selectedBuilding($event.value)" disableOptionCentering class="form-control"
+                        formControlName="buildingName" placeholder="{{
+                                                                            'provider_setup.locationName' | translate
+                                                                        }}">
+                        <mat-option *ngFor="let building of  buildingList " [value]="building['id']">
+                            {{building["name"]}}
+                        </mat-option>
+                    </mat-select> -->
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="name" class="col-md-4 col-form-label">{{ "provider_setup.provider_name" |
+                    translate
+                    }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-md-8" *ngIf="formData.mode == 'add' ">
+                    <mat-select  disableOptionCentering class="form-control"   (selectionChange)="selectedProvider($event)"
+                        formControlName="name" placeholder="{{
+                                'provider_setup.provider_name_placeholder' | translate
+                              }}">
+                        <mat-option *ngFor="let provider of providerList" [value]="provider['id']">
+                            {{provider["providerName"]}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngFor="let message of showValidationMessages('name')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+                <div class="col-md-8" *ngIf="formData.mode == 'edit'">
+                    <input maxlength="50" readonly *ngIf="formData.mode == 'edit'"  type="text" class="form-control" id="name"
+                        formControlName="name" placeholder="{{
+                                                    'provider_setup.provider_name_placeholder' | translate
+                                                  }}" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="url" class="col-md-4 col-form-label">{{ "provider_setup.url" | translate
+                    }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <input maxlength="50" *ngIf="formData.mode == 'edit'"  type="text" class="form-control" id="url" formControlName="url"
+                        placeholder="{{
+                                'provider_setup.url_placeholder' | translate
+                              }}" />
+                    <input maxlength="50" *ngIf="formData.mode == 'add'"  type="text" class="form-control" id="url"
+                                formControlName="url" placeholder="{{
+                                                            'provider_setup.url_placeholder' | translate
+                                                          }}" />
+                    <mat-error *ngFor="let message of showValidationMessages('url')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="token" class="col-md-4 col-form-label">{{ "provider_setup.token" | translate
+                    }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-8">
+                    <input *ngIf="formData.mode == 'edit'"  type="text" class="form-control" id="token" formControlName="token"
+                        placeholder="{{
+                  'provider_setup.token_placeholder' | translate
+                }}" />
+                <input  *ngIf="formData.mode == 'add'"  type="text" class="form-control" id="token"
+                    formControlName="token" placeholder="{{
+                                  'provider_setup.token_placeholder' | translate
+                                }}" />
+                    <mat-error *ngFor="let message of showValidationMessages('token')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div> 
+            
+            <div class="row mb-3" *ngIf="selectedProviderName !='kantech' && selectedProviderId != gallagherId ">
+                <label for="apiVersion" class="col-md-4 col-form-label">{{ "provider_setup.version" |
+                    translate
+                    }}
+                    <!-- <span class="mendatory">*</span> -->
+                </label>
+                <div class="col-md-8" *ngIf="formData.mode == 'add' || formData.mode == 'edit'">
+                    <mat-select  disableOptionCentering class="form-control" 
+                        formControlName="apiVersion" placeholder="{{
+                                            'provider_setup.version_placeholder' | translate
+                                          }}">
+                        <mat-option *ngFor="let versionName of versionList" [value]="versionName['name']">
+                            {{versionName["name"]}}
+                        </mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngFor="let message of showValidationMessages('apiVersion')">
+                        {{ message }}
+                    </mat-error> -->
+                </div>
+                <div class="col-md-8" *ngIf="formData.mode == 'edit1'">
+                    <input maxlength="50"   type="text" class="form-control" id="apiVersion" formControlName="apiVersion"
+                        placeholder="{{
+                                                      'provider_setup.version_placeholder' | translate
+                                                    }}" />
+                </div>
+            </div>
+            <div class="row mb-3" *ngIf="selectedProviderId == gallagherId && !providerSetupForm.get('token').invalid  && !providerSetupForm.get('url').invalid">
+                <label for="apiVersion" class="col-md-4 col-form-label">{{ "provider_setup.cardType" |
+                    translate
+                    }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-8" *ngIf="formData.mode == 'add'">
+                    <button class="btn btn-link fs-sm p-0" *ngIf="!cardTyeAccess" (click)="getCardTypeAccss()">Get Card Types</button>
+                    <mat-select *ngIf="cardTyeAccess" (selectionChange)="selectCardType($event.value)" disableOptionCentering class="form-control" formControlName="cardType" placeholder="{{
+                                                        'provider_setup.cardType' | translate
+                                                      }}">
+                        <mat-option *ngFor="let type of cardTypeList" [value]="type['name']">
+                            {{type["name"]}}
+                        </mat-option>
+                    </mat-select>
+                </div>
+                <div class="col-md-8" *ngIf="formData.mode == 'edit'">
+                    <input readonly maxlength="50"  type="text" class="form-control" id="cardType"
+                                formControlName="cardType" placeholder="{{'provider_setup.cardType' | translate }}" />
+                </div>
+       
+            </div>
+            <div class="row mb-3" *ngIf="selectedProviderId == gallagherId">
+                <label for="apiVersion" class="col-md-4 col-form-label">{{ "provider_setup.emailMendatory" |
+                    translate
+                    }}
+                </label>
+                <div class="col-md-8" >
+                    <mat-checkbox [disabled]="false" formControlName="IsEmailRequired">
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div  *ngIf="selectedProviderName =='kantech' ">
+            <div class="row mb-3">
+                <label for="userId" class="col-md-4 col-form-label">{{ "provider_setup.userId" | translate
+                    }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <input maxlength="50" *ngIf="formData.mode == 'add'" type="text" class="form-control" id="userId"
+                        formControlName="userId" placeholder="{{
+                                                                        'provider_setup.userId' | translate
+                                                                      }}" />
+                    <!-- <mat-error *ngFor="let message of showValidationMessages('userId')">
+                        {{ message }}
+                    </mat-error> -->
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="password" class="col-md-4 col-form-label">{{ "provider_setup.password" | translate
+                    }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <!-- <input maxlength="50" *ngIf="formData.mode == 'add'" type="password" class="form-control" id="password"
+                        formControlName="password" placeholder="{{
+                                                                                    'provider_setup.password' | translate
+                                                                                  }}" /> -->
+                    <div class="input-group" >
+                        <input class="form-control" tabindex="2"  #passwordField type="password" formControlName="password" name="password" placeholder="********"
+                             />
+                        <button class="btn btn-sm btn-outline-light" *ngIf="showPassword" type="button" (click)="toggleShow()">
+                            <i class="fas fa-eye fs-sm"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-light" *ngIf="!showPassword" type="button" (click)="toggleShow()">
+                            <i class="fas fa-eye-slash fs-sm"></i>
+                        </button>
+                    </div>
+                    <!-- <mat-error *ngFor="let message of showValidationMessages('password')">
+                        {{ message }}
+                    </mat-error> -->
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="IsEncrypted " class="col-md-4 col-form-label">{{ "provider_setup.IsEncrypted" | translate
+                    }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <!-- <input maxlength="50" *ngIf="formData.mode == 'add'" type="text" class="form-control" id="IsEncrypted "
+                        formControlName="IsEncrypted" placeholder="{{
+                                                                                    'provider_setup.IsEncrypted' | translate
+                                                                                  }}" /> -->
+                    <mat-slide-toggle [checked]="true" class="mat-slide-toggle-sm-4"
+                        (change)="onChange($event.source.checked)">
+                    </mat-slide-toggle>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="connectedProgram" class="col-md-4 col-form-label">{{ "provider_setup.connectedProgram" | translate
+                    }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <input maxlength="50" *ngIf="formData.mode == 'add'" type="text" class="form-control" id="connectedProgram"
+                        formControlName="connectedProgram" placeholder="{{
+                                                                                    'provider_setup.connectedProgram' | translate
+                                                                                  }}" />
+                    <!-- <mat-error *ngFor="let message of showValidationMessages('connectedProgram')">
+                        {{ message }}
+                    </mat-error> -->
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'add'"  [disabled]="!providerSetupForm.valid || buildingValidFlag" (click)="onSubmit()">
+                {{ "CommonToken.Add" | translate }}
+            </button>
+            <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'edit'" [disabled]="!providerSetupForm.valid " (click)="onSubmit()">
+                {{ "CommonToken.Save" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'edit'" (click)="cancel()">
+                {{ "CommonToken.Cancel" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'add'" (click)="resetForm()">
+                {{ "CommonToken.Clear" | translate }}
+            </button>
+        </div>
+    </form> 
+</div>
+<!-- show provider list -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode =='show' ">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                {{
+                "provider_setup.showTitle" | translate }}</span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="row mb-3" *ngIf="productType ==ProductType.Commercial">
+            <label for="providerName" class="col-md-4 col-form-label">{{
+                "provider_setup.buildingName" | translate
+                }}</label>
+            <div class="col-md-8">
+                <input type="text" readonly class="form-control-plaintext" id="providerName"
+                    value="{{ formData?.data?.buildingName }}" />
+            </div>
+        </div>
+        <div class="row mb-3" *ngIf="productType ==ProductType.Enterprise">
+            <label for="providerName" class="col-md-4 col-form-label">{{
+                "provider_setup.locationName" | translate
+                }}</label>
+            <div class="col-md-8">
+                <input type="text" readonly class="form-control-plaintext" id="providerName"
+                    value="{{ formData?.data?.buildingName }}" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="name" class="col-md-4 col-form-label">{{
+                "provider_setup.provider_name" | translate
+                }}</label>
+            <div class="col-md-8">
+                <input type="text" readonly class="form-control-plaintext" id="name"
+                    value="{{ formData.data.name }}" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="url" class="col-md-4 col-form-label">{{
+                "provider_setup.url" | translate
+                }}</label>
+            <div class="col-md-8">
+                <input type="text" readonly class="form-control-plaintext" id="url"
+                    value="{{ formData.data.url }}" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="token" class="col-md-4 col-form-label">{{
+                "provider_setup.token" | translate
+                }}</label>
+            <div class="col-md-8">
+                <input type="text" readonly class="form-control-plaintext" id="token"
+                    value="{{ formData.data.token }}" />
+            </div>
+        </div> 
+        <div class="row mb-3" *ngIf="formData?.data?.name !='Gallagher' ">
+            <label for="version" class="col-md-4 col-form-label">{{
+                "provider_setup.version" | translate
+                }}</label>
+            <div class="col-md-8">
+                <input type="text" readonly class="form-control-plaintext" id="version"
+                    value="{{ formData.data.apiVersion }}" />
+            </div>
+        </div>
+        <div class="row mb-3" *ngIf="formData?.data?.name =='Gallagher' ">
+            <label for="version" class="col-md-4 col-form-label">{{
+                "provider_setup.cardType" | translate
+                }}</label>
+            <div class="col-md-8">
+                <input type="text" readonly class="form-control-plaintext" id="version"
+                    value="{{ formData?.data?.cardTypeAccess }}" />
+            </div>
+        </div>
+    </div>
+
+   
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="updateForm()" [disabled]="false">
+            {{ "CommonToken.Edit"  | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div> 

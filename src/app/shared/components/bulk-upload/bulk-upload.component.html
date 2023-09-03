@@ -1,0 +1,30 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "BulkUpload.Bulk_Upload" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="bulkUploadForm" novalidate>
+        <div class="popup-content">
+            <div class="mb-3">
+                <label for="file" class="form-label">{{ "BulkUpload.Bulk_Upload" | translate }}</label>
+                <input id="file" name="file"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,.csv"
+                    onclick="this.value = null" formControlName="bulkDataFile" class="form-control" type="file"
+                    (change)="onFileChange($event)" />
+                <div id="fileUploadHelpBlock" class="form-text">{{'BulkUpload.FileCriteria'|translate}}</div>
+                <mat-error *ngFor="let message of showValidationMessages('bulkDataFile')">
+                    {{message}}
+                </mat-error>
+            </div>
+        </div>
+        <footer class="popup-footer d-flex align-items-center gap-3">
+            <button (click)="onSubmit()"
+                class="btn btn-sm btn-primary-dark px-3">{{'BulkUpload.Upload'|translate}}</button>
+            <button class="btn btn-sm btn-white px-3"
+                (click)="downloadTemplate()">{{'BulkUpload.DownloadTemplate'|translate}}</button>
+        </footer>
+    </form>
+</div>

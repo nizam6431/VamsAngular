@@ -1,0 +1,76 @@
+.addNewBuilding-spacing {
+    padding: 20px 50px;
+    display: inline-block;
+    width: 100%;
+}
+
+.addNewBuilding {
+    width: 100%;
+    float: left;
+    padding-bottom: var(--input-label-common-space);
+}
+
+.addNewBuilding-set1 {
+    width: 30%;
+    float: left;
+}
+
+.addNewBuilding-set1 label {
+    color: var(--label-color);
+    font-size: var(--label-font-size);
+    font-weight: var(--label-color);
+    padding-top: 4px;
+}
+
+.addNewBuilding-set2 {
+    width: 70%;
+    float: left;
+    position: relative;
+}
+
+.addNewBuilding-set2 input {
+    border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;
+}
+
+.addNewBuilding-set2 select {
+    border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;
+}
+
+.addNewBuilding-set2 .mat-error {
+    color: #f44336;
+    position: absolute;
+    left: 0px;
+    top: 36px;
+    font-size: 11px;
+    line-height: 14px;
+    font-style: italic;
+}
+
+.addNewBuilding-label {
+    width: 30%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--label-font-size) !important;
+    color: var(--label-color) !important;
+}
+
+.addNewBuilding-value {
+    width: 70%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--input-view-text-size) !important;
+    color: var(--input-view-color) !important;
+    font-weight: var(--input-font-weight);
+}

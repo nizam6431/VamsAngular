@@ -1,0 +1,19 @@
+
+  <div id="chart" *ngIf="!noDataFound">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [plotOptions]="chartOptions.plotOptions"
+      [xaxis]="chartOptions.xaxis"
+      [stroke]="chartOptions.stroke"
+      [title]="chartOptions.title"
+      [colors]="chartOptions.colors"
+      [legend]="chartOptions.legend"
+      [yaxis]="chartOptions.yaxis"
+    ></apx-chart>
+  </div>
+<!--    [fill]="chartOptions.fill"  Will Use once the lengend is availbale -->
+  <div id="chart" *ngIf="noDataFound">
+    Data Not Found
+  </div>

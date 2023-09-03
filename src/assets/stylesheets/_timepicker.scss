@@ -1,0 +1,41 @@
+.timepicker__header,
+.clock-face__number > span.active,
+.clock-face__clock-hand {
+  background-color: $primary !important;
+}
+
+.timepicker-dial__control_editable:focus {
+  color: $primary !important;
+}
+
+.clock-face__clock-hand_minute:before {
+  border-color: $primary !important;
+}
+
+.timepicker-overlay {
+  z-index: 1061 !important;
+}
+
+.timepicker-backdrop-overlay {
+  z-index: 1060 !important;
+}
+
+// NGX Timepicker
+.ngx-timepicker {
+  background-color: $white;
+  border-radius: 0.5rem;
+  border: 0 none !important;
+  box-shadow: $vams-input-shadow;
+}
+
+.ngx-timepicker-control__input, .period-control__button {
+  font-size: 0.875rem !important;
+}
+
+.ngx-timepicker-control--active:after {
+  display: none !important;
+}
+
+.period-control__button:not(.period-control__button--disabled):focus:after {
+  display: none !important;
+}

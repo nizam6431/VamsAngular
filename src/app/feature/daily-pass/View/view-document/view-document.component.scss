@@ -1,0 +1,23 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+    @extend .host;
+}
+
+.dialg-popup-content {
+    overflow: auto;
+    min-height: 150px;
+    max-height: 500px;
+    max-width: 400px;
+}
+
+.pdf-hide-image .view-document-pdf+.view-document-image {
+    display: none;
+}
+
+.dialog-Pdf-content{
+    overflow: hidden;
+}
+.dialog-Pdf-content2{
+    overflow:auto;
+}

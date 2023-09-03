@@ -1,0 +1,118 @@
+<h5 class="card-title fw-semi-bold text-primary-dark text-center mb-3">
+  {{ "Login.Welcome_Back" | translate }}
+</h5>
+<form (ngSubmit)="login()" #form="ngForm" [formGroup]="loginForm" autocomplete="off" novalidate >
+  <div class="mb-3">
+    <label class="form-label">{{ "Login.Username" | translate }}</label>
+    <input type="email"
+      class="form-control"
+      tabindex="1"
+      [ngClass]="{
+        'is-invalid':
+          (isExcel &&
+            email?.invalid &&
+            form?.submitted &&
+            email?.errors?.required) ||
+          (isExcel &&
+            email?.invalid &&
+            email?.touched &&
+            email?.errors?.required)
+      }"
+      formControlName="email"
+      name="email"
+      placeholder="{{ 'Login.Email_Placeholder' | translate }}"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="
+        (isExcel &&
+          email?.invalid &&
+          form?.submitted &&
+          email?.errors?.required) ||
+        (isExcel && email?.invalid && email?.touched && email?.errors?.required)
+      "
+    >
+      {{ "Login.Username_Is_Required" | translate }}
+    </div>
+  </div>
+  <div class="mb-2">
+    <label class="form-label">{{ "Login.Password" | translate }}</label>
+    <div
+      class="input-group"
+      [ngClass]="{
+        'is-invalid':
+          (password?.invalid &&
+            form?.submitted &&
+            password?.errors?.required) ||
+          (password?.invalid && password?.touched && password?.errors?.required)
+      }"
+    >
+      <input
+        class="form-control"
+        tabindex="2"
+        [ngClass]="{
+          'is-invalid':
+            (password?.invalid &&
+              form?.submitted &&
+              password?.errors?.required) ||
+            (password?.invalid &&
+              password?.touched &&
+              password?.errors?.required)
+        }"
+        #passwordField
+        type="password"
+        formControlName="password"
+        name="password"
+        placeholder="********"
+        oncopy="return false"
+        onpaste="return false"
+      />
+      <button
+        class="btn btn-sm btn-outline-light"
+        *ngIf="showPassword"
+        type="button"
+        (click)="toggleShow()"
+      >
+        <i class="fas fa-eye fs-sm"></i>
+      </button>
+      <button
+        class="btn btn-sm btn-outline-light"
+        *ngIf="!showPassword"
+        type="button"
+        (click)="toggleShow()"
+      >
+        <i class="fas fa-eye-slash fs-sm"></i>
+      </button>
+    </div>
+    <div
+      class="invalid-feedback"
+      *ngIf="
+        (password?.invalid && form?.submitted && password?.errors?.required) ||
+        (password?.invalid && password?.touched && password?.errors?.required)
+      "
+    >
+      {{ "Login.Password_Is_Required" | translate }}
+    </div>
+  </div>
+  <div class="mb-3 text-end" *ngIf="isForgotPassword">
+    <a [routerLink]="['../forgot-password']" class="fs-xs text-secondary">{{
+      "Login.Forgot_Password" | translate
+    }}</a>
+  </div>
+  <div class="mb-3">
+    <div class="text-center" *ngIf="errors.length">
+      <div class="invalid-feedback d-block mb-2" *ngFor="let error of errors">
+        {{ error }}
+      </div>
+    </div>
+  </div>
+  <div class="text-center pt-4 mb-2">
+    <button type="submit" class="btn btn-sm btn-primary-dark px-3" tabindex="3">
+      {{ "Login.Sign_In" | translate }}
+    </button>
+  </div>
+</form>
+
+
+
+

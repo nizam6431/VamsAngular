@@ -1,0 +1,178 @@
+<!-- <qr-code value="https://www.npmjs.com/package/ng-qrcode" size="300" errorCorrectionLevel="M" centerImageSrc="undefined" centerImageSize="undefined">
+</qr-code> -->
+<div class="row" *ngIf="currentSlide==1">
+    <h1>{{'CheckIn.CheckInWithQrCode' | translate}}</h1>
+    <div class="text-center screen-outside">
+        <zxing-scanner #scanner (scanSuccess)="scanSuccessHandler($event)">
+        </zxing-scanner>
+    </div>
+    <div class="row sample">
+        {{'CheckIn.OR' | translate}}
+    </div>
+    <div>
+        <form [formGroup]="preScheduleForm">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="feFirstName">{{'CheckIn.EnterOrCode' | translate}}<span
+                                    class="mendatory">*</span></label>
+                            <input type="text" class="form-control" id="feFirstName" formControlName="qrCode">
+                        </div>
+                        <div class="row">
+                            <mat-error *ngFor="let message of showValidationMessageForQrCode('qrCode')">
+                                {{message}}<br>
+                            </mat-error>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="button-bg-popup">
+                                    <button class="common-popup-button mr-20" [disabled]="preScheduleForm.invalid" mat-raised-button (click)="scanSuccessHandler(null)">{{'CommonToken.Next' |
+                                        translate}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="currentSlide==2">
+    <h1>{{'VisitorsDetails.VisitorsDetails' | translate}}</h1>
+    <div class="screen-outside">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.FirstName' | translate}} </div>
+                <div class="dilogbox-value">{{visitorData?.firstName}}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.FirstName' | translate}} </div>
+                <div class="dilogbox-value">{{visitorData?.lastName}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.CellNumber' | translate}}</div>
+                <div class="dilogbox-value">
+                    <span *ngIf="visitorData?.phone">{{visitorData?.phone}}</span>
+                    <span *ngIf="!visitorData?.phone">----</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.Email' | translate}}</div>
+                <div class="dilogbox-value">{{visitorData?.email}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.Company' | translate}}</div>
+                <div class="dilogbox-value">{{visitorData?.visitorCompany}}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.HostName' | translate}}</div>
+                <div class="dilogbox-value">{{visitorData?.hostName}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.PurposeOfVisit' | translate}}</div>
+                <div class="dilogbox-value">{{visitorData?.purposeOfVisit}}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.Date' | translate}}</div>
+                <div class="dilogbox-value">{{visitorData?.appointmentDate}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.From' | translate}}</div>
+                <div class="dilogbox-value">{{visitorData?.startTime}}</div>
+            </div>
+            <div class="col-md-6">
+                <div class="dilogbox-label">{{'VisitorsDetails.To' | translate}}</div>
+                <div class="dilogbox-value">{{visitorData?.endTime}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="button-bg-popup">
+                    <button class="common-popup-button mr-20" mat-raised-button (click)="next()">{{'CommonToken.Next' |
+                        translate}}</button>
+                    <button class="secondry-button" mat-raised-button (click)="back()">{{'CommonToken.Back' |
+                        translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="currentSlide==3">
+    <h1>{{'CheckIn.CheckIn' | translate}}</h1>
+    <div class="row screen-outside ">
+        <form (ngSubmit)="validateOTP()" #thirdform="ngForm" [formGroup]="checkinForm" autocomplete="off" novalidate>
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{'CheckIn.BypassPin' | translate}}
+            </div>
+            <input id="codeBox1" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+            <input id="codeBox2" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+            <input id="codeBox3" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+            <input id="codeBox4" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+            <input id="codeBox4" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+            <input id="codeBox5" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(5, $event, 6)" />
+            <!-- <div class="text-center">
+                <label *ngIf="isResent" class="success-color fontSize-10">{{'CheckIn.OTPSent' | translate}}</label>
+                <label *ngIf="(pin?.invalid && pin?.errors?.required)
+                        ||(pin?.invalid && pin?.touched && pin?.errors?.required)" class="error-color fontSize-10">{{'CheckIn.OTPRequired' | translate}}</label>
+
+                <label *ngIf="(pin?.invalid && thirdform?.submitted && pin?.errors?.pattern)
+                         ||(pin?.invalid && pin?.touched && pin?.errors?.pattern)" class="error-color fontSize-10">{{'CheckIn.OTPMaxlength' | translate}}</label>
+            </div> -->
+            <div class="button-bg-popup">
+                <button class="common-popup-button mr-20" mat-raised-button (click)="next()">{{'CommonToken.Next' |
+                    translate}}</button>
+                <button class="secondry-button" mat-raised-button (click)="back()" *ngIf="!fromCardCheckIn">{{'CommonToken.Back' |
+                    translate}}</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="currentSlide==4">
+    <h1>{{'CheckIn.CapturePhoto' | translate |titlecase}}</h1>
+    <div class="row screen-outside ">
+        <div class="pb-20 text-center" *ngIf="!showWebcam">
+            <img height="260" width="270" [src]="webcamImage?.imageAsDataUrl" src="assets/images/capture-photo.png">
+        </div>
+        <div class="row text-center">
+            <webcam [height]="260" [width]="270" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam" [switchCamera]="nextWebcamObservable"></webcam>
+        </div>
+        <div *ngIf="errors.length > 0">
+            <h4>{{ 'CheckIn.ErrorMessages' | translate}}</h4>
+            <ul *ngFor="let error of errors">
+                <li>{{ error | json }}</li>
+            </ul>
+        </div>
+        <label *ngIf="isPhotoCaptured==false" class="error-color fontSize-10">
+            {{'CheckIn.UploadError' | translate}}</label>
+        <div class="text-center">
+            <a href="javascript:void(0)" *ngIf="!isPhotoCaptured" class="walk-in-button fontSize-14 Weight-regular mt-10" (click)="takeSnapshot()">{{
+                'CheckIn.CapturePhoto' | translate}}</a>
+            <a href="javascript:void(0)" *ngIf="isPhotoCaptured" class="walk-in-button fontSize-14 Weight-regular mt-10" (click)="showWebcam = true; webcamImage=undefined; isPhotoCaptured = undefined">{{
+                'CheckIn.CaptureAgain' |
+                translate}}</a>
+        </div>
+    </div>
+    <div class="button-bg-popup">
+        <button class="common-popup-button mr-20" mat-raised-button (click)="next()" [disabled]="!isPhotoCaptured">{{'CommonToken.Next' |
+            translate}}</button>
+        <button class="secondry-button" mat-raised-button (click)="back()">{{'CommonToken.Back' |
+            translate}}</button>
+    </div>
+</div>
+<div *ngIf="currentSlide==5">
+    <h1>{{'CheckIn.PrintPass' | translate }}</h1>
+    <div class="button-bg-popup">
+        <button class="common-popup-button mr-20" mat-raised-button>{{'CheckIn.Print' |
+            translate}}</button>
+        <button class="secondry-button" mat-raised-button (click)="back()">{{'CommonToken.Back' |
+            translate}}</button>
+    </div>
+</div>

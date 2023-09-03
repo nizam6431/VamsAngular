@@ -1,0 +1,103 @@
+<ng-container class="d-flex flex-column flex-1 scroll-y"
+    *ngIf="contractorData && profileImage && QRCodeImage && logoImage">
+    <div class="popup-content">
+        <!-- Contractor Pass Vertical Starts -->
+        <div class="d-flex justify-content-center align-items-center flex-1">
+            <div class="card-contractor">
+                <div class="card-body p-1">
+                    <div class="contractor-pass">
+                        <div class="logo-box">
+                            <img [src]="logoImage" alt="VAMS" />
+                        </div>
+                        <img src="assets/images/contractor@2x.png" alt="C" class="img-contractor">
+                        <div class="img-group">
+                            <div class="img-box">
+                                <img [src]="profileImage" alt="Contractor">
+                            </div>
+                            <div class="img-box code-box">
+                                <img [src]="QRCodeImage" alt="Code" class="img-code">
+                            </div>
+                        </div>
+                        <div class="contractor-info">
+                            <h5 class="name">{{contractorData.name}}</h5>
+                            <p class="company">{{contractorData.company}}</p>
+                            <p class="designation">{{contractorData.designation}}</p>
+                            <p class="date-range">{{contractorData.dateRange}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Contractor Pass Vertical Ends -->
+
+        <!-- TODO: Remove hr tag if we are using only one Contractor Pass -->
+
+
+
+        <!-- Contractor Pass Horizontal Starts -->
+        <!-- <div class="d-flex justify-content-center align-items-center flex-1">
+            <div class="card-contractor -horizontal">
+                <div class="card-body p-1">
+                    <div class="contractor-pass">
+                        <div class="img-group">
+                            <img src="assets/images/contractor@2x.png" alt="C" class="img-contractor">
+                            <div class="logo-box">
+                                <img [src]="logoImage" alt="VAMS" />
+                            </div>
+                            <div class="img-box code-box">
+                                <img [src]="QRCodeImage" alt="Code" class="img-code">
+                            </div>
+                        </div>
+                        <div class="contractor-details">
+                            <div class="img-box">
+                                <img [src]="profileImage" alt="Contractor">
+                            </div>
+                            <div class="contractor-info">
+                                <h5 class="name">{{contractorData.name}}</h5>
+                                <p class="company">{{contractorData.company}}</p>
+                                <p class="designation">{{contractorData.designation}}</p>
+                                <p class="date-range">{{contractorData.dateRange}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- Contractor Pass Horizontal Ends -->
+
+
+
+
+        <!-- TODO: Need for image preview-->
+        <!-- <div class="row mb-4">
+            <div class="vams-photo overflow-hidden rounded-4">
+                <img [src]="profileImage" class="img-fluid" />
+            </div>
+        </div> -->
+        <!-- <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">{{
+                        "EmployeeForm.FirstName"|translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ contractorData.firstName }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-4">
+                    <label for="firstName" class="col-sm-3 col-form-label">{{
+                        "EmployeeForm.LastName"|translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ contractorData.lastName }}" />
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- TODO: Remove commented code if no longer needed -->
+    </div>
+</ng-container>

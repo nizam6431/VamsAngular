@@ -1,0 +1,231 @@
+<!-- vams-button-toggle-group-primary -->
+<mat-button-toggle-group class="vams-button-toggle-group vams-button-toggle-group-primary bg-floral-white"
+  name="fontStyle" aria-label="Font Style" (change)="onToggleCardAndTableView($event.value)" [(ngModel)]="toggleView">
+  <mat-button-toggle value="card" [disabled]="selectedStatus == 'INCHECKOUT'">
+    <i class="icon-card fs-4 me-2"></i>
+    <span>{{
+      "AppointmentDetails.CardView" | translate
+      }}</span>
+  </mat-button-toggle>
+  <mat-button-toggle value="grid">
+    <i class="icon-table fs-6 me-2"></i>
+    <span>{{
+      "AppointmentDetails.TableView" | translate
+      }}</span>
+  </mat-button-toggle>
+  <button
+    class="btn btn-link p-0 fw-medium text-success ms-auto text-decoration-none border-0 d-flex align-items-center"
+    (click)="this.onChangeTimeFilter(timeFilter, selectedStatus, searchKey)">
+    <i class="icon-refresh fs-sm me-1"></i>
+    <span class="fs-xs">{{
+      "AppointmentDetails.Refresh" | translate
+      }}</span>
+  </button>
+</mat-button-toggle-group>
+
+<!-- Appointment Filters -->
+<div class="vams-grid-filters d-flex gap-3">
+  <div class="d-flex gap-3">
+    <div class="status-select-control-wrap bg-linen d-flex align-items-center" >
+      <div class="addon-wrap d-flex align-items-center justify-content-center">
+        <i class="icon-filter text-primary"></i>
+      </div>
+      <mat-select disableOptionCentering placeholder="{{'AppointmentDetails.add_filter' | translate}}"
+        class="form-control status-select-control bg-linen shadow-none" [(ngModel)]="showStatus" name="status">
+        <mat-option class="mat-option-with-close" (click)="onSelectEvent()" *ngFor="let status of statusFilter"
+          [value]="status.value">
+          <span class="me-2">{{ status.viewValue }}</span>
+          <i *ngIf="showStatus == status.value" class="icon-cros-icon fs-xs ms-auto"></i>
+        </mat-option>
+      </mat-select>
+    </div>
+    <div class="d-flex gap-2" *ngIf="selectedStatus != 'INCHECKOUT'">
+      <ng-container *ngIf="this.isL1Roles && !SeepzWorkFlow">
+        <button (click)="openBuildingFilterDialog()" class="btn btn-sm btn-white px-3" *ngIf="productType == ProductType.Commercial">
+          <!-- {{buildingButtonText}}  -->
+          {{'labels.select_buildings' | translate}}
+        </button>
+        <button (click)="openBuildingFilterDialog()" class="btn btn-sm btn-white px-3" *ngIf="productType == ProductType.Enterprise">
+          {{'labels.select_Locations' | translate}}
+        </button>
+        
+      </ng-container>
+      <ng-container *ngIf="(this.isL1Roles) && showButton">
+        <!-- <button class="btn btn-link d-flex align-items-center justify-content-center text-decoration-none ms-3 p-0"
+          (click)="removeSelectedBuilding();onChangeTimeFilter('today', selectedStatus,searchKey)">
+          <i class="icon-cros-icon fs-xs"></i>
+        </button> -->
+        <button (click)="removeSelectedBuilding();onChangeTimeFilter('today', selectedStatus,searchKey)"
+          class="btn btn-sm btn-white d-flex align-items-center justify-content-center text-decoration-none">
+          <i class="icon-cros-icon fs-xs"></i>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+
+  <div *ngIf="selectedStatus != 'INCHECKOUT'" class="d-flex justify-content-center align-items-center">
+    <!-- vams-button-toggle-group-secondary -->
+    <mat-button-toggle-group class="vams-button-toggle-group vams-button-toggle-group-secondary"
+      [(ngModel)]="timeFilter" name="fontStyle" (change)="onChangeTimeFilter($event.value, selectedStatus,searchKey)">
+      <mat-button-toggle value="all">{{ "AppointmentScheduleView.All" | translate }}
+      </mat-button-toggle>
+      <mat-button-toggle value="today">{{ "AppointmentScheduleView.Today" | translate }}
+      </mat-button-toggle>
+      <mat-button-toggle value="week">{{ "AppointmentScheduleView.Week" | translate }}
+      </mat-button-toggle>
+      <mat-button-toggle value="month">{{ "AppointmentScheduleView.Month" | translate }}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <div [hidden]="openDateFilter">
+      <button class="btn btn-sm btn-link btn-clean text-decoration-none ms-1" (click)="openDateRangeDialog()">
+        <i class="fa fa-ellipsis-v"></i>
+      </button>
+    </div>
+    <div [hidden]="!openDateFilter">
+      <div class="date-rang-filter d-flex align-items-center bg-floral-white px-3 py-2 border border-primary ms-3">
+        <p class="fs-xs fw-medium mb-0">{{startDate}} - {{endDate}}</p>
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [min]="minDateForRange" [formGroup]="dateRange" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" (dateChange)="onChangeTimeFilter('range', selectedStatus,searchKey)"
+              placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker (closed)="onDatePickerChanges('close')"></mat-date-range-picker>
+          <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field> -->
+        <button class="btn btn-link d-flex align-items-center justify-content-center text-decoration-none ms-3 p-0"
+          (click)="onDateFilterClose();onChangeTimeFilter('today', selectedStatus,searchKey)">
+          <i class="icon-cros-icon fs-xs"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="input-group search-group">
+    <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+      class="form-control form-control-sm" />
+    <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+      (click)="cleanSearchBox(input)">
+      <i class="icon-cros-icon"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+      <i class="icon-search-icon"></i>
+    </button>
+  </div>
+</div>
+<!-- <div class="col-md-1">
+  <button mat-icon-button class="mat-tab-label-content" aria-label="Example icon-button with a heart icon">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+</div> --> 
+<!-- <div style="position:absolute;z-index:-1111;">{{appointmentScheduleDetails | json  }}</div> -->
+<ng-container [ngSwitch]="appointmentDataShowType" *ngIf="appointmentScheduleDetails">
+  <div class="vams-page-body d-flex flex-column flex-1 p-0 scroll-y" *ngSwitchCase="'card'">
+    <app-card [sendNDAs]="sendNDA" [isAccessControlEnabled]="isAccessControlEnabled"
+      [activateDLScanScheduledAppointment]="activateDLScanScheduledAppointment" [visitorSettings]="visitorSettings"
+      [appointmentScheduleDetails]="appointmentScheduleDetails" [getAppointmentRequest]="getAppointmentRequest"
+      (updateView)="refreshView()" (ShowMoreInCard)="loadData($event)"></app-card>
+  </div>
+  <div class="vams-grid-wrapper" *ngSwitchCase="'grid'">
+    <app-grid [sendNDAs]="sendNDA" [visitorSettings]="visitorSettings" #appointmentTable [activateDLScanScheduledAppointment]="activateDLScanScheduledAppointment"
+      [mainObj]="{totalData:totalData,getAppointmentRequest:getAppointmentRequest,displayedColumns:displayedColumns,dataSource:appointmentScheduleDetails.data.list,changeTime:changeTime}"
+      [totalData]="totalData" [getAppointmentRequest]="getAppointmentRequest" [displayedColumns]="displayedColumns"
+      [dataSource]="appointmentScheduleDetails.data.list" (onDataChange)="onDataChange($event)"
+      (updateView)="refreshView()"></app-grid>
+  </div>
+</ng-container>
+<footer class="vams-page-footer d-flex align-items-center gap-3 mt-auto bg-floral-white">
+  <div *isPermissible="permissionKeyObj.SCHEDULE" class="d-flex align-items-center gap-3 me-auto">
+    <ng-container *ngIf="selectedStatus == 'INCHECKOUT'">
+      <button *isPermissible="permissionKeyObj.CHECKOUT" class="btn btn-sm btn-primary-dark px-3"
+        (click)="openConfirmationDialog($event)">
+        {{'cardView.BulkCheckOut' | translate}}
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="selectedStatus != 'INCHECKOUT'">
+      <button (click)="openScheduleDialog()"
+        class="btn btn-link btn-plus p-0 d-flex align-items-center text-decoration-none">
+        <span class="icon-box bg-primary p-3">
+          <i class="icon-plus text-white fw-bold"></i>
+        </span>
+        <span class="text-dark ms-2">{{
+          "AppointmentDetails.Schedule" | translate
+          }}</span>
+      </button>
+    <ng-container *ngIf="productType != ProductType.Hospital && productType != ProductType.Enterprise">
+      <ng-container *isPermissible="permissionKeyObj.SCHEDULE">
+        <button (click)="openDialogForBulk()" class="btn btn-sm btn-white px-3">{{"buttons.bulk_upload" | translate}}
+        </button>
+      </ng-container>
+   </ng-container>
+    </ng-container>
+    <!-- hide this button as per nilesh sir told -->
+    <!-- <ng-container *ngIf="!isAccessControlEnabled && isLevel1Admin()">
+      <button class="btn btn-sm btn-white px-3" (click)="appointmentSync()">{{"buttons.appointment_sync" | translate}}
+      </button>
+    </ng-container> -->
+
+    <!-- <a class="functional-button mr-10">
+      {{"buttons.bulk_upload" | translate}}
+      <span class="icon-top-arrow pl-10"></span>
+    </a> -->
+    <!-- TODO need to add permission for this reauthnticate button -->
+    <!-- <a (click)="reAuthenticate()" class="functional-button mr-10">Re-Authenticate<span
+        class="icon-key pl-10"></span></a> -->
+  </div>
+
+  <ng-container *ngIf="selectedStatus == 'INCHECKOUT'">
+    <button *isPermissible="permissionKeyObj.CHECKOUT" class="btn btn-sm btn-primary-dark px-3"
+      (click)="openConfirmationDialog($event)">
+      {{'cardView.BulkCheckOut' | translate}}
+    </button>
+  </ng-container>
+  
+  <div class="d-flex align-items-center gap-3">
+    <ng-container *ngIf="selectedStatus != 'INCHECKOUT'">
+      <!-- TODO : Hide for now , -->
+      <pdf-viewer [src]="printPassDocu"
+      [render-text]="true"
+      [original-size]="false" (after-load-complete)="onLoaded($event)"
+      style="width:100%; height:300px;position:absolute;top:-100000000px;left:-100000000px;" id="printThis"
+></pdf-viewer>
+      <button *isPermissible="permissionKeyObj.CREATEWALKIN" (click)="openWalkinDialog()"
+        class="btn btn-sm btn-primary-dark px-3">
+        {{
+        "AppointmentDetails.WalkIn" | translate
+        }}
+      </button>
+      <!-- <div *ngIf="productType == ProductType.Commercial"> -->
+      <ng-container *ngIf="!isAccessControlEnabled && !activateDLScanScheduledAppointment">
+        <div *isPermissible="permissionKeyObj.CHECKIN" class="share-app-form">
+          <button (click)="scanQrCode()" class="btn btn-sm btn-white px-3">
+            {{ "buttons.scan_qr_code" | translate }} </button>
+        </div>
+      </ng-container>
+     <!-- </div> -->
+      <ng-container>
+        <div *isPermissible="permissionKeyObj.TIMEINOUT" class="share-app-form">
+          <button (click)="timeInOut()" class="btn btn-sm btn-white px-3">
+            {{ "buttons.time_in_out_with_qr" | translate }} </button>
+        </div>
+      </ng-container>
+      <!-- <a *isPermissible="permissionKeyObj.CHECKIN" href="javascript:void(0)" (click)="checkIn()" class="secondry-button mr-10">{{ "buttons.checkin_with_qr" | translate }}</a> -->
+      <!-- <button *isPermissible="permissionKeyObj.CHECKOUT" (click)="checkout()"
+        class="btn btn-sm btn-white px-3 pointer-event-none">
+        {{
+        "AppointmentDetails.CheckoutWithQR" | translate
+        }} </button> -->
+      <ng-container *ngIf="productType != ProductType.Hospital && productType!=ProductType.Enterprise ">
+      <div *isPermissible="permissionKeyObj.SCHEDULE" class="share-app-form">
+          <button (click)="shareAppointment()" class="btn btn-sm btn-white px-3">
+            {{ "buttons.share_appointment" | translate }} </button>
+        </div>
+    </ng-container>
+    </ng-container>
+    <!-- <div class="footer-walkin" *ngIf="hasPermission('share')"></div> -->
+  </div>
+</footer>

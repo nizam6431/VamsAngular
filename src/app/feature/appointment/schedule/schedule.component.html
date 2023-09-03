@@ -1,0 +1,1015 @@
+<!-- TODO: Question for visitors should be configurable -->
+<div class="d-flex flex-column flex-1 scroll-y">
+  <div class="popup-header">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+    <div class="popup-title-wrapper d-flex align-items-center">
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+        {{"ShareScheduleAppointment.CreateAppointment"|translate}}
+      </span>
+    </div>
+  </div>
+ 
+
+  <!-- Form for Excel User -->
+  <form class="popup-form" [formGroup]="formCompanyforExcel" novalidate autocomplete="off">
+    <div class="popup-content" *ngIf="1 === currentSlide && !enterPrise">
+      <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+        {{ "Schedule.VisitorDetails" | translate }}
+      </h6>
+     
+      <div class="row mb-3" *ngIf="this.data.visitorSettings.visitorCheckinAtBuilding && isL1Roles && !enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label">
+          {{"configure_email_server.building_name_placeholder" | translate }}<span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+            placeholder="{{'configure_email_server.building_name_placeholder' | translate }}">
+            <mat-option *ngFor="let building of this.data.buildingList" (click)="onSelectEvent()" [value]="building">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{building.name}}</span>
+                <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('level2Id')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="feFirstName" class="col-md-4 col-form-label">
+          {{ "Schedule.FirstName" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="50" class="form-control text-capitalize" id="feFirstName"
+            placeholder="{{ 'Schedule.FirstNamePlaceholder' | translate }}" formControlName="firstName" />
+          <mat-error *ngFor="let message of showValidationMessages('firstName')">
+            {{ message | titlecase }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feLastName" class="col-md-4 col-form-label">
+          {{ "Schedule.LastName" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="50" class="form-control text-capitalize" id="feLastName"
+            placeholder="{{ 'Schedule.LastNamePlaceholder' | translate }}" formControlName="lastName" />
+          <mat-error *ngFor="let message of showValidationMessages('lastName')">
+            {{ message | titlecase }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="!enterPrise">
+        <label for="feFirstName" class="col-md-4 col-form-label">
+          {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" maxlength="150"
+            placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" />
+          <mat-error *ngFor="let message of showValidationMessages('emailId')">
+            {{ message | titlecase}}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="!enterPrise">
+        <label for="feTimeZone" class="col-md-4 col-form-label">
+          {{ "Schedule.CellNumber" | translate }}
+        </label>
+        <div class="col-md-8">
+          <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+            [separateDialCode]="separateDialCode"  [selectedCountryISO]="selectedCountry"
+            [phoneValidation]="phoneValidation" name="phone" formControlName="visitorMobileNumber"
+            (countryChange)="checkNumber($event)" appMobileNumberFormat>
+          </ngx-intl-tel-input>
+          <mat-error *ngIf="formCompanyforExcel.get('visitorMobileNumber').hasError('validatePhoneNumber')
+                ">
+            {{ "Schedule.CellNumberValid" | translate }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feCompany" class="col-md-4 col-form-label">{{ "Schedule.Company" | translate }}
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="100" id="feCompany"
+            placeholder="{{ 'Schedule.CompanyPlaceholder' | translate }}" class="form-control text-capitalize"
+            formControlName="company" />
+          <mat-error *ngFor="let message of showValidationMessages('company')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 1 && !enterPrise">
+      <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlide(currentSlide)">
+        {{ "Schedule.Next" | translate }}
+      </button>
+    </div>
+
+    <div class="popup-content" *ngIf="currentSlide == 2 && !enterPrise">
+      <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+        {{ "Schedule.AppointmentDetails" | translate }}
+      </h6>
+
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-3 col-form-label text-break">
+          {{"configure_email_server.appointment_location" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-9">
+          <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+            placeholder="{{'configure_email_server.select_appointment_location' | translate }}">
+            <mat-option *ngFor="let building of this.data.buildingList" (click)="onSelectEvent()" [value]="building">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{building.name}}</span>
+                <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('level2Id')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+
+      <div *ngIf="isMultiDayApnt && maxEndDateCount" class="row mb-3">
+        <div class="col-md-9">
+          <mat-checkbox labelPosition="after" class="example-margin" (change)="checkAppointmentStatus($event)"
+            [checked]="isRecurreringAppointment" formControlName="isRecurreringAppointment" [disabled]="disabled">
+            <label for="feStartDateandTime" class="col-form-label">
+              {{ "Schedule.RecurringMeeting" | translate
+              }}</label>
+          </mat-checkbox>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label *ngIf="isRecurreringAppointment" for="feStartDateandTime" class="col-md-3 col-form-label">
+          {{ "Schedule.FromDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <label *ngIf="!isRecurreringAppointment" for="feStartDateandTime" class="col-md-3 col-form-label">
+          {{ "Schedule.AddDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-9">
+          <div class="input-group input-datepicker">
+            <input (dateInput)="onDate($event.value)" [min]="todayDate" type="text"
+              placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}" class="form-control"
+              theme="dp-material" [matDatepicker]="picker" name="appointmentStartDate"
+              formControlName="appointmentStartDate">
+            <div class="datepicker-toggle">
+              <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+            </div>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+          <mat-error *ngFor="
+                let message of showValidationMessages('appointmentStartDate')
+              ">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isRecurreringAppointment && maxEndDateCount">
+        <label for="feStartDateandTime" class="col-md-3 col-form-label">
+          {{ "Schedule.ToDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-9">
+          <div class="input-group input-datepicker">
+            <input matInput [min]="minEndDate" [max]="maxEndDate" type="text"
+              placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}" class="form-control"
+              theme="dp-material" [matDatepicker]="picker" name="appointmentEndDate"
+              formControlName="appointmentEndDate">
+            <div class="datepicker-toggle">
+              <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+            </div>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+          <mat-error *ngFor="
+                let message of showValidationMessages('appointmentEndDate')
+              ">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+
+      <!-- <div class="ngx-timepicker-field-example"> 
+              <label for="feStartDateandTime" class="col-md-3 col-form-label">{{ "Schedule.FromTime" | translate}}<span 
+                      class="mendatory">*</span></label> 
+              <ngx-timepicker-field [controlOnly]="true"  (keyup)="onEnter($event,'appointmentStartTime')" #input1  [format]="timeFormatForTimePicker" [defaultTime]="this.formCompanyforExcel.value.appointmentStartTime" 
+              class="form-control" name="appointmentStartTime" type="text" autocomplete="off" name="appointmentStartTime"  formControlName="appointmentStartTime" name="start" (timeChanged) ="setTimeValue($event,'startTime')"> </ngx-timepicker-field>
+              <label for="feStartDateandTime" class="col-md-3 col-form-label">{{ "Schedule.ToTime" | translate }}<span 
+                      class="mendatory">*</span></label> 
+              <ngx-timepicker-field [controlOnly]="true" (keyup)="onEnter($event,'appointmentStartTime')" #input2  [format] ="timeFormatForTimePicker" [defaultTime]="this.formCompanyforExcel.value.appointmentEndTime" class="form-control"  name="appointmentEndTime" type="text" autocomplete="off" formControlName="appointmentEndTime"> 
+              </ngx-timepicker-field> 
+          </div>  -->
+
+      <!-- New Time Picker -->
+      <div class="row mb-3">
+        <label for="feStartDateandTime" class="col-md-3 col-form-label">{{ "Schedule.FromTime" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-9">
+          <app-time-picker [value]="{time:this.formCompanyforExcel.value.appointmentStartTime,callFrom:this.callFrom}"
+            (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+            [defaultTime]="this.formCompanyforExcel.value.appointmentStartTime" screen="scheduled" type="from">
+          </app-time-picker>
+          <mat-error *ngIf="this.formCompanyforExcel.valid && isApptFromTimeInvalid">
+            Please enter valid time format.
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feEndDateandTime" class="col-md-3 col-form-label">{{ "Schedule.ToTime" | translate }}
+          <span class="mendatory">*</span></label>
+        <div class="col-md-9">
+          <app-time-picker [value]="{time:this.formCompanyforExcel.value.appointmentEndTime,callTo:this.callTo}"
+            (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+            [defaultTime]="this.formCompanyforExcel.value.appointmentEndTime" screen="scheduled" type="to">
+          </app-time-picker>
+          <mat-error *ngIf="this.formCompanyforExcel.valid && isApptToTimeInvalid">
+            Please enter valid time format.
+          </mat-error>
+        </div>
+      </div>
+
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-3 col-form-label">
+          {{"Reschedule.TypeOfVisitor" |translate}} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-9">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="typeOfVisitor"
+            placeholder=" {{'Reschedule.TypeOfVisitorPlaceholder'|translate}} ">
+            <mat-option *ngFor="let item of visitorTypeData" [value]="item.id">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{item.name}}</span>
+                <!-- <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>  -->
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('typeOfVisitor')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-3 col-form-label">
+          {{ "Schedule.PurposeofVisit" | translate }} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-9">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="purposeOfVisit"
+            placeholder=" {{ 'Schedule.PurposeOfVisitPlaceholder' | translate }}">
+            <mat-option *ngFor="let item of purposeOfVisitorData" [value]="item.id">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{item.purpose}}</span>
+                <!-- <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>  -->
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('purposeOfVisit')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="meeting_notes" class="col-md-3 col-form-label">
+          {{"Reschedule.MeetingNotes" |translate}}
+        </label>
+        <div class="col-md-9">
+          <textarea maxlength="250" placeholder=" {{'Reschedule.PleaseEnterMeetingNotes' |translate}}"
+            class="form-control text-capitalize" id="meeting_notes" formControlName="meetingNotes" maxlength="250">
+            </textarea>
+        </div>
+      </div>
+
+
+      <!-- Old Time Picker Comment  -->
+
+      <!-- <div class="row mb-3">
+                <label for="feStartDateandTime" class="col-md-3 col-form-label">{{ "Schedule.FromTime" | translate
+        }}<span class="mendatory">*</span></label>
+                <div class="col-md-9">
+
+                 
+                    <input (keyup)="onEnter($event,'appointmentStartTime')" #input1 [ngxTimepicker]="darkPickerForStartTime" [min]="fromMinTimeAppt" [format]="timeFormatForTimePicker" [value]="this.formCompanyforExcel.value.appointmentStartTime" placeholder="{{ 'Reschedule.FromTime' | translate}}"
+                        class="form-control" name="appointmentStartTime" type="text" autocomplete="off" name="appointmentStartTime" formControlName="appointmentStartTime">
+                    <ngx-material-timepicker [enableKeyboardInput]="true" [confirmBtnTmpl]="confirmBtn" [cancelBtnTmpl]="cancelBtn" #time1 #appendedToInput [appendToInput]="false" #darkPickerForStartTime (closed)="setTimeValue('startTime')" [defaultTime]="(this.formCompanyforExcel.get('appointmentStartTime').value)?(this.formCompanyforExcel.get('appointmentStartTime').value):defaultTime"
+                        [theme]="darkTheme">
+                    </ngx-material-timepicker>
+                    <ng-template #confirmBtn>
+                        <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' | translate}}</button>
+                    </ng-template>
+                    <ng-template #cancelBtn>
+                        <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' | translate}}</button>
+                    </ng-template>
+                    <mat-error *ngIf="this.formCompanyforExcel.valid && isApptFromTimeInvalid">
+                        Please enter valid time format.
+                    </mat-error>
+                   
+                    <mat-error *ngFor="
+            let message of showValidationMessages('appointmentStartTime')
+          ">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feEndDateandTime" class="col-md-3 col-form-label">{{ "Schedule.ToTime" | translate }}
+        <span class="mendatory">*</span>
+      </label>
+                <div class="col-md-9">
+                 
+                    <input (keyup)="onEnter($event,'appointmentEndTime')" #input2 [ngxTimepicker]="darkPickerFormEndTime" [min]="toMinTime" [format]="timeFormatForTimePicker" [value]="this.formCompanyforExcel.value.appointmentEndTime" placeholder="{{ 'Reschedule.ToTime' | translate}}"
+                        class="form-control" name="appointmentEndTime" type="text" autocomplete="off" formControlName="appointmentEndTime">
+                    <ngx-material-timepicker [enableKeyboardInput]="true" [confirmBtnTmpl]="confirmBtn" [cancelBtnTmpl]="cancelBtn" #time2 #appendedToInput [appendToInput]="false" #darkPickerFormEndTime (closed)="setTimeValue('toTime')" [defaultTime]="(this.formCompanyforExcel.get('appointmentStartTime').value)?(this.formCompanyforExcel.get('appointmentEndTime').value):defaultTime"
+                        [theme]="darkTheme"></ngx-material-timepicker>
+                    <ng-template #confirmBtn>
+                        <button class="btn btn-sm btn-primary-dark px-4 ms-3">{{'Reschedule.Ok' | translate}}</button>
+                    </ng-template>
+                    <ng-template #cancelBtn>
+                        <button class="btn btn-sm btn-white px-4 ms-3">{{'Reschedule.Cancel' | translate}}</button>
+                    </ng-template>
+                  
+                    <mat-error *ngFor="let message of showValidationMessages('appointmentEndTime')">
+                        {{ message }}
+                    </mat-error>
+                    <mat-error *ngIf="this.formCompanyforExcel.valid && isApptToTimeInvalid">
+                        Please enter valid time format.
+                    </mat-error>
+                </div>
+            </div> -->
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 2 && !enterPrise">
+      <button (click)="confirmVisitorRestrictionStatus()" class="btn btn-sm btn-primary-dark px-3">
+        {{ "Schedule.Save" | translate }}
+      </button>
+      <button type="button" *ngIf="currentSlide == 2" class="btn btn-sm btn-white px-3"
+        (click)="goToPreviousSlide(currentSlide)">
+        {{ "Schedule.Back" | translate }}
+      </button>
+    </div>
+ 
+   <!-- Enterprise schedule with Authetiation is false -->
+
+    <div class="popup-content" *ngIf="1 === currentSlide && enterPrise && !isAuthentication">
+      <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+        {{ "Schedule.VisitorDetails" | translate }}
+      </h6>
+      <div class="card bg-floral-white mx-auto mb-3" *ngIf="enterPrise && visitorAutnticationType=='Both'">
+        <div class="card-body">
+          <div class="row mb-3" *ngIf="enterPrise && visitorAutnticationType=='Both'">
+            <label for="feFirstName" class="col-md-4 col-form-label">
+              {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+            </label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" maxlength="150"
+                placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" (keypress)="removeValidator('email')"/>
+              <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                {{ message | titlecase}}
+              </mat-error>
+            </div>
+          </div>
+          <p class="text-center mb-3" *ngIf="enterPrise && visitorAutnticationType=='Both'">OR</p>
+          <div class="row" *ngIf="enterPrise && visitorAutnticationType=='Both'">
+            <label for="feTimeZone" class="col-md-4 col-form-label">
+              {{ "Schedule.CellNumber" | translate }}  <span class="mendatory">*</span>
+            </label>
+            <div class="col-md-8">
+              <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                [separateDialCode]="separateDialCode" [preferredCountries]="['us']"
+                [selectedCountryISO]="selectedCountry" [phoneValidation]="phoneValidation" name="phone"
+                (keypress)="removeValidator('cell')"
+                formControlName="visitorMobileNumber" (countryChange)="checkNumber($event)" appMobileNumberFormat>
+              </ngx-intl-tel-input>
+              <mat-error *ngIf="formCompanyforExcel.get('visitorMobileNumber').hasError('validatePhoneNumber')
+                ">
+                {{ "Schedule.CellNumberValid" | translate }}
+              </mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise && visitorAutnticationType=='Email'">
+        <label for="feFirstName" class="col-md-4 col-form-label">
+          {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" maxlength="150"
+            placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" />
+          <mat-error *ngFor="let message of showValidationMessages('emailId')">
+            {{ message | titlecase}}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise && visitorAutnticationType=='Cell'">
+        <label for="feTimeZone" class="col-md-4 col-form-label">
+          {{ "Schedule.CellNumber" | translate }} <span class="mendatory" *ngIf="visitorAutnticationType=='Cell'">*</span>
+        </label>
+        <div class="col-md-8">
+          <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+            [separateDialCode]="separateDialCode" [preferredCountries]="['us']" [selectedCountryISO]="selectedCountry"
+            [phoneValidation]="phoneValidation" name="phone" formControlName="visitorMobileNumber"
+            (countryChange)="checkNumber($event)" appMobileNumberFormat>
+          </ngx-intl-tel-input>
+          <p *ngIf="submitted">
+            <mat-error *ngIf="!formCompanyforExcel.value.visitorMobileNumber">Enter Cell Number</mat-error>
+          </p>
+          <mat-error *ngIf="formCompanyforExcel.get('visitorMobileNumber').hasError('validatePhoneNumber')
+                ">
+            {{ "Schedule.CellNumberValid" | translate }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="this.data.visitorSettings.visitorCheckinAtBuilding && isL1Roles && !enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label">
+          {{"configure_email_server.building_name_placeholder" | translate }}<span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+            placeholder="{{'configure_email_server.building_name_placeholder' | translate }}">
+            <mat-option *ngFor="let building of this.data.buildingList" (click)="onSelectEvent()" [value]="building">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{building.name}}</span>
+                <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('level2Id')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <label for="feFirstName" class="col-md-4 col-form-label">
+          {{ "Schedule.FirstName" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="50" class="form-control text-capitalize" id="feFirstName"
+            placeholder="{{ 'Schedule.FirstNamePlaceholder' | translate }}" formControlName="firstName" />
+          <mat-error *ngFor="let message of showValidationMessages('firstName')">
+            {{ message | titlecase }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feLastName" class="col-md-4 col-form-label">
+          {{ "Schedule.LastName" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="50" class="form-control text-capitalize" id="feLastName"
+            placeholder="{{ 'Schedule.LastNamePlaceholder' | translate }}" formControlName="lastName" />
+          <mat-error *ngFor="let message of showValidationMessages('lastName')">
+            {{ message | titlecase }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="!enterPrise">
+        <label for="feFirstName" class="col-md-4 col-form-label">
+          {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" maxlength="150"
+            placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" />
+          <mat-error *ngFor="let message of showValidationMessages('emailId')">
+            {{ message | titlecase}}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="!enterPrise">
+        <label for="feTimeZone" class="col-md-4 col-form-label">
+          {{ "Schedule.CellNumber" | translate }}
+        </label>
+        <div class="col-md-8">
+          <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+            [separateDialCode]="separateDialCode" [preferredCountries]="['us']" [selectedCountryISO]="selectedCountry"
+            [phoneValidation]="phoneValidation" name="phone" formControlName="visitorMobileNumber"
+            (countryChange)="checkNumber($event)" appMobileNumberFormat>
+          </ngx-intl-tel-input>
+          <mat-error *ngIf="formCompanyforExcel.get('visitorMobileNumber').hasError('validatePhoneNumber')
+                ">
+            {{ "Schedule.CellNumberValid" | translate }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feCompany" class="col-md-4 col-form-label">{{ "Schedule.Company" | translate }}
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="100" id="feCompany"
+            placeholder="{{ 'Schedule.CompanyPlaceholder' | translate }}" class="form-control text-capitalize"
+            formControlName="company" />
+          <mat-error *ngFor="let message of showValidationMessages('company')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 1 && !isAuthentication && enterPrise">
+      <button class="btn btn-sm btn-white px-3"(click)="resetForm()">{{ "Walkin.reset" | translate }}</button>
+      <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlide(currentSlide)">
+        {{ "Schedule.Next" | translate }}
+      </button>
+    </div>
+
+    <div class="popup-content" *ngIf="currentSlide == 2 && !isAuthentication && enterPrise">
+      <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+        {{ "Schedule.AppointmentDetails" | translate }}
+      </h6>
+
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label text-break">
+          {{"configure_email_server.appointment_location" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+            placeholder="{{'configure_email_server.select_appointment_location' | translate }}">
+            <mat-option *ngFor="let building of this.data.buildingList" (click)="onSelectEvent()" [value]="building">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{building.name}}</span>
+                <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('level2Id')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+
+      <div *ngIf="isMultiDayApnt && maxEndDateCount" class="row mb-3">
+        <div class="col-md-9">
+          <mat-checkbox labelPosition="after" class="example-margin" (change)="checkAppointmentStatus($event)"
+            [checked]="isRecurreringAppointment" formControlName="isRecurreringAppointment" [disabled]="disabled">
+            <label for="feStartDateandTime" class="col-form-label">
+              {{ "Schedule.RecurringMeeting" | translate
+              }}</label>
+          </mat-checkbox>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label *ngIf="isRecurreringAppointment" for="feStartDateandTime" class="col-md-4 col-form-label">
+          {{ "Schedule.FromDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <label *ngIf="!isRecurreringAppointment" for="feStartDateandTime" class="col-md-4 col-form-label">
+          {{ "Schedule.AddDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <div class="input-group input-datepicker">
+            <input (dateInput)="onDate($event.value)" [min]="todayDate" type="text"
+              placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}" class="form-control"
+              theme="dp-material" [matDatepicker]="picker" name="appointmentStartDate"
+              formControlName="appointmentStartDate">
+            <div class="datepicker-toggle">
+              <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+            </div>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+          <mat-error *ngFor="
+                let message of showValidationMessages('appointmentStartDate')
+              ">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isRecurreringAppointment && maxEndDateCount">
+        <label for="feStartDateandTime" class="col-md-4 col-form-label">
+          {{ "Schedule.ToDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <div class="input-group input-datepicker">
+            <input matInput [min]="minEndDate" [max]="maxEndDate" type="text"
+              placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}" class="form-control"
+              theme="dp-material" [matDatepicker]="picker" name="appointmentEndDate"
+              formControlName="appointmentEndDate">
+            <div class="datepicker-toggle">
+              <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+            </div>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+          <mat-error *ngFor="
+                let message of showValidationMessages('appointmentEndDate')
+              ">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+
+      <!-- New Time Picker -->
+      <div class="row mb-3">
+        <label for="feStartDateandTime" class="col-md-4 col-form-label">{{ "Schedule.FromTime" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <app-time-picker [value]="{time:this.formCompanyforExcel.value.appointmentStartTime,callFrom:this.callFrom}"
+            (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+            [defaultTime]="this.formCompanyforExcel.value.appointmentStartTime" screen="scheduled" type="from">
+          </app-time-picker>
+          <mat-error *ngIf="this.formCompanyforExcel.valid && isApptFromTimeInvalid">
+            Please enter valid time format.
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feEndDateandTime" class="col-md-4 col-form-label">{{ "Schedule.ToTime" | translate }}
+          <span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <app-time-picker [value]="{time:this.formCompanyforExcel.value.appointmentEndTime,callTo:this.callTo}"
+            (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+            [defaultTime]="this.formCompanyforExcel.value.appointmentEndTime" screen="scheduled" type="to">
+          </app-time-picker>
+          <mat-error *ngIf="this.formCompanyforExcel.valid && isApptToTimeInvalid">
+            Please enter valid time format.
+          </mat-error>
+        </div>
+      </div>
+
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label">
+          {{"Reschedule.TypeOfVisitor" |translate}} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="typeOfVisitor"
+            placeholder=" {{'Reschedule.TypeOfVisitorPlaceholder'|translate}} ">
+            <mat-option *ngFor="let item of visitorTypeData" [value]="item.id">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{item.name}}</span>
+                <!-- <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>  -->
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('typeOfVisitor')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label">
+          {{ "Schedule.PurposeofVisit" | translate }} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="purposeOfVisit"
+            placeholder=" {{ 'Schedule.PurposeOfVisitPlaceholder' | translate }}">
+            <mat-option *ngFor="let item of purposeOfVisitorData" [value]="item.id">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{item.purpose}}</span>
+                <!-- <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>  -->
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('purposeOfVisit')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="meeting_notes" class="col-md-4 col-form-label">
+          {{"Reschedule.MeetingNotes" |translate}}
+        </label>
+        <div class="col-md-8">
+          <textarea maxlength="250" placeholder=" {{'Reschedule.PleaseEnterMeetingNotes' |translate}}"
+            class="form-control text-capitalize" id="meeting_notes" formControlName="meetingNotes" maxlength="250">
+            </textarea>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 2 && !isAuthentication && enterPrise">
+      <button type="button" *ngIf="currentSlide == 2" class="btn btn-sm btn-white px-3"
+      (click)="goToPreviousSlide(currentSlide)">
+      {{ "Schedule.Back" | translate }}
+    </button>
+      <button (click)="confirmVisitorRestrictionStatus()" class="btn btn-sm btn-primary-dark px-3">
+        {{ "Schedule.Save" | translate }}
+      </button>
+    </div>
+
+<!-- Enterprise schedule with Authetiation is true -->
+
+    <div class="popup-content" *ngIf="currentSlide == 1 && enterPrise && isAuthentication">
+      
+      <div class="card bg-floral-white mx-auto mb-3" *ngIf="enterPrise && visitorAutnticationType=='Both'">
+        <div class="card-body">
+          <div class="row mb-3" *ngIf="enterPrise && visitorAutnticationType=='Both'">
+            <label for="feFirstName" class="col-md-4 col-form-label">
+              {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+            </label>
+            <div class="col-md-8">
+              <input type="text" class="form-control" maxlength="150"
+                placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" (keypress)="removeValidator('email')" appAutoFocus/>
+              <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                {{ message | titlecase}}
+              </mat-error>
+            </div>
+          </div>
+          <p class="text-center mb-3" *ngIf="enterPrise && visitorAutnticationType=='Both'">OR</p>
+          <div class="row" *ngIf="enterPrise && visitorAutnticationType=='Both'">
+            <label for="feTimeZone" class="col-md-4 col-form-label">
+              {{ "Schedule.CellNumber" | translate }}  <span class="mendatory">*</span>
+            </label>
+            <div class="col-md-8">
+              <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                [separateDialCode]="separateDialCode" [preferredCountries]="['us']"
+                [selectedCountryISO]="selectedCountry" [phoneValidation]="phoneValidation" name="phone" [maxLength]="'19'"
+                (keypress)="removeValidator('cell')"
+                formControlName="visitorMobileNumber" (countryChange)="checkNumber($event)" appMobileNumberFormat>
+              </ngx-intl-tel-input>
+              <mat-error *ngIf="formCompanyforExcel.get('visitorMobileNumber').hasError('validatePhoneNumber')
+                ">
+                {{ "Schedule.CellNumberValid" | translate }}
+              </mat-error>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise && visitorAutnticationType=='Email'">
+        <label for="feFirstName" class="col-md-4 col-form-label">
+          {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" class="form-control" maxlength="150"
+            placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" />
+          <mat-error *ngFor="let message of showValidationMessages('emailId')">
+            {{ message | titlecase}}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise && visitorAutnticationType=='Cell'">
+        <label for="feTimeZone" class="col-md-4 col-form-label">
+          {{ "Schedule.CellNumber" | translate }} <span class="mendatory" *ngIf="visitorAutnticationType=='Cell'">*</span>
+        </label>
+        <div class="col-md-8">
+          <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+            [separateDialCode]="separateDialCode" [preferredCountries]="['us']" [selectedCountryISO]="selectedCountry"
+            [phoneValidation]="phoneValidation" name="phone" formControlName="visitorMobileNumber" [maxLength]="'15'"
+            (countryChange)="checkNumber($event)" appMobileNumberFormat>
+          </ngx-intl-tel-input>
+          <p *ngIf="submitted">
+            <mat-error *ngIf="!formCompanyforExcel.value.visitorMobileNumber">Enter Cell Number</mat-error>
+          </p>
+          <mat-error *ngIf="formCompanyforExcel.get('visitorMobileNumber').hasError('validatePhoneNumber') && (formCompanyforExcel.get('visitorMobileNumber').value!=null)
+                ">
+            {{ "Schedule.CellNumberValid" | translate }}
+          </mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 1 && isAuthentication && enterPrise">
+      <button class="btn btn-sm btn-white px-3"(click)="resetForm()">{{ "Walkin.reset" | translate }}</button>
+      <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlideEnterprise(currentSlide)">
+        {{ "Schedule.Next" | translate }}
+      </button>
+    </div>
+
+    <div class="popup-content" *ngIf="currentSlide == 2 && isAuthentication && enterPrise">
+      <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+        {{ "Schedule.VisitorDetails" | translate }}
+      </h6>
+      <div class="row mb-4 slide2Photo" *ngIf="!secndEditableBool">
+        <div class="picture d-flex align-items-center justify-content-center p-1 overflow-hidden">
+            <img (error)="handleIamge(scheduleData.photoUrl)"  formControlName="visitorPhotoUrl"
+              [src]="scheduleData.photoUrl ? scheduleData.photoUrl : 'assets/images/profile-pic.png' " />
+          </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feFirstName" class="col-md-4 col-form-label">
+          {{ "Schedule.FirstName" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="50" class="form-control text-capitalize" id="feFirstName" [readonly]="registeredUser"
+            placeholder="{{ 'Schedule.FirstNamePlaceholder' | translate }}" formControlName="firstName" [ngClass]="secndEditableBool ? '' : 'nonEditCl'"/>
+          <mat-error *ngFor="let message of showValidationMessages('firstName')">
+            {{ message | titlecase }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feLastName" class="col-md-4 col-form-label">
+          {{ "Schedule.LastName" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="50" class="form-control text-capitalize" id="feLastName" [readonly]="registeredUser"
+            placeholder="{{ 'Schedule.LastNamePlaceholder' | translate }}" formControlName="lastName" [ngClass]="secndEditableBool ? '' : 'nonEditCl'"/>
+          <mat-error *ngFor="let message of showValidationMessages('lastName')">
+            {{ message | titlecase }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feCompany" class="col-md-4 col-form-label">{{ "Schedule.Company" | translate }}
+        </label>
+        <div class="col-md-8">
+          <input type="text" maxlength="100" id="feCompany" [readonly]="registeredUser"
+            placeholder="{{ 'Schedule.CompanyPlaceholder' | translate }}" class="form-control text-capitalize"
+            formControlName="company" />
+          <mat-error *ngFor="let message of showValidationMessages('company')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 2 && isAuthentication && enterPrise">
+      <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlide1(currentSlide)">
+        {{ "Schedule.Back" | translate }}
+    </button>
+      <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlideEnterprise(currentSlide)">
+        {{ "Schedule.Next" | translate }}
+      </button>
+      
+    </div>
+
+    <div class="popup-content" *ngIf="currentSlide == 3 && isAuthentication && enterPrise">
+      <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+        {{ "Schedule.AppointmentDetails" | translate }}
+      </h6>
+
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label text-break">
+          {{"configure_email_server.appointment_location" | translate }}
+          <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+          <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+            placeholder="{{'configure_email_server.select_appointment_location' | translate }}">
+            <mat-option *ngFor="let building of this.data.buildingList" (click)="onSelectEvent()" [value]="building">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{building.name}}</span>
+                <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('level2Id')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+
+      <div *ngIf="isMultiDayApnt && maxEndDateCount" class="row mb-3">
+        <div class="col-md-9">
+          <mat-checkbox labelPosition="after" class="example-margin" (change)="checkAppointmentStatus($event)"
+            [checked]="isRecurreringAppointment" formControlName="isRecurreringAppointment" [disabled]="disabled">
+            <label for="feStartDateandTime" class="col-form-label">
+              {{ "Schedule.RecurringMeeting" | translate
+              }}</label>
+          </mat-checkbox>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label *ngIf="isRecurreringAppointment" for="feStartDateandTime" class="col-md-4 col-form-label">
+          {{ "Schedule.FromDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <label *ngIf="!isRecurreringAppointment" for="feStartDateandTime" class="col-md-4 col-form-label">
+          {{ "Schedule.AddDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <div class="input-group input-datepicker">
+            <input (dateInput)="onDate($event.value)" [min]="todayDate" type="text"
+              placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}" class="form-control"
+              theme="dp-material" [matDatepicker]="picker" name="appointmentStartDate"
+              formControlName="appointmentStartDate">
+            <div class="datepicker-toggle">
+              <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+            </div>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+          <mat-error *ngFor="
+                let message of showValidationMessages('appointmentStartDate')
+              ">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isRecurreringAppointment && maxEndDateCount">
+        <label for="feStartDateandTime" class="col-md-4 col-form-label">
+          {{ "Schedule.ToDate" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <div class="input-group input-datepicker">
+            <input matInput [min]="minEndDate" [max]="maxEndDate" type="text"
+              placeholder="{{ 'Reschedule.PleaseSelectAppointmentDate' | translate}}" class="form-control"
+              theme="dp-material" [matDatepicker]="picker" name="appointmentEndDate"
+              formControlName="appointmentEndDate">
+            <div class="datepicker-toggle">
+              <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+            </div>
+            <mat-datepicker #picker></mat-datepicker>
+          </div>
+          <mat-error *ngFor="
+                let message of showValidationMessages('appointmentEndDate')
+              ">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <!-- New Time Picker -->
+      <div class="row mb-3">
+        <label for="feStartDateandTime" class="col-md-4 col-form-label">{{ "Schedule.FromTime" | translate
+          }}<span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <app-time-picker [value]="{time:this.formCompanyforExcel.value.appointmentStartTime,callFrom:this.callFrom}"
+            (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+            [defaultTime]="this.formCompanyforExcel.value.appointmentStartTime" screen="scheduled" type="from">
+          </app-time-picker>
+          <mat-error *ngIf="this.formCompanyforExcel.valid && isApptFromTimeInvalid">
+            Please enter valid time format.
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="feEndDateandTime" class="col-md-4 col-form-label">{{ "Schedule.ToTime" | translate }}
+          <span class="mendatory">*</span></label>
+        <div class="col-md-8">
+          <app-time-picker [value]="{time:this.formCompanyforExcel.value.appointmentEndTime,callTo:this.callTo}"
+            (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+            [defaultTime]="this.formCompanyforExcel.value.appointmentEndTime" screen="scheduled" type="to">
+          </app-time-picker>
+          <mat-error *ngIf="this.formCompanyforExcel.valid && isApptToTimeInvalid">
+            Please enter valid time format.
+          </mat-error>
+        </div>
+      </div>
+
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label">
+          {{"Reschedule.TypeOfVisitor" |translate}} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="typeOfVisitor"
+            placeholder=" {{'Reschedule.TypeOfVisitorPlaceholder'|translate}} ">
+            <mat-option *ngFor="let item of visitorTypeData" [value]="item.id">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{item.name}}</span>
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('typeOfVisitor')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="feBuildingList" class="col-md-4 col-form-label">
+          {{ "Schedule.PurposeofVisit" | translate }} <span class="mendatory">*</span>
+        </label>
+        <div class="col-md-8">
+
+          <mat-select disableOptionCentering class="form-control" formControlName="purposeOfVisit"
+            placeholder=" {{ 'Schedule.PurposeOfVisitPlaceholder' | translate }}">
+            <mat-option *ngFor="let item of purposeOfVisitorData" [value]="item.id">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{item.purpose}}</span>
+              </p>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('purposeOfVisit')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="enterPrise">
+        <label for="meeting_notes" class="col-md-4 col-form-label">
+          {{"Reschedule.MeetingNotes" |translate}}
+        </label>
+        <div class="col-md-8">
+          <textarea maxlength="250" placeholder=" {{'Reschedule.PleaseEnterMeetingNotes' |translate}}"
+            class="form-control text-capitalize" id="meeting_notes" formControlName="meetingNotes" maxlength="250">
+            </textarea>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 3 && isAuthentication && enterPrise">
+      <button type="button" *ngIf="currentSlide == 3" class="btn btn-sm btn-white px-3"
+      (click)="goToEnterprisePreviousSlide(currentSlide)">
+      {{ "Schedule.Back" | translate }}
+    </button>
+      <button (click)="confirmVisitorRestrictionStatus()" class="btn btn-sm btn-primary-dark px-3">
+        {{ "Schedule.Save" | translate }}
+      </button>
+     
+    </div>
+
+
+  </form>
+</div>

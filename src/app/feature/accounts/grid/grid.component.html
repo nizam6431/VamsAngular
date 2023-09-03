@@ -1,0 +1,62 @@
+<ng-container *ngIf="displayGrid == 'complex_list'">
+    <div class="vams-table-wrapper vams-table-responsive">
+        <table mat-table [dataSource]="dataSource" class="mat-table-hover">
+            <ng-container *ngFor="let colName of columns; let i = index" [matColumnDef]="columns[i].key">
+                <th mat-header-cell *matHeaderCellDef> {{colName.value | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                    <div *ngIf=" colName.key && colName.key == 'actions'; else itIsData ">
+                        <!-- <div class="d-inline-block">
+                            <button class="btn btn-mini btn-white">resend Link </button>
+                        </div> -->
+                        <div class="d-inline-block">
+                            <button class="btn btn-mini btn-white" (click)="updatePermissions(element)">Update
+                                Permissions</button>
+                        </div>
+                        <!-- <button class="btn btn-mini btn-white">dummy button </button> -->
+                    </div>
+                    <ng-template #itIsData>
+                        {{element[colName.key] ? element[colName.key] : '-'}}
+                    </ng-template>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnKeys;"></tr>
+        </table>
+    </div>
+    <mat-paginator class="pagination-fix-place" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"
+        [length]="totalCount" (page)="getPaginationData($event)" aria-label="Select page of users"></mat-paginator>
+</ng-container>
+
+<div class="vams-table-wrapper vams-table-responsive mt-0" *ngIf="displayGrid == 'dynamic_permission'">
+    <table mat-table [dataSource]="dataSource">
+        <ng-container class="text-center" *ngFor="let colName of columns; let i = index"
+            [matColumnDef]="columns[i].key">
+            <th mat-header-cell *matHeaderCellDef [ngClass]="{'text-center': colName.key != 'key'}"> {{colName.value |
+                translate}} </th>
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="colName.key == 'key'">
+                    {{element.permissionName}}
+                </div>
+                <div class="text-center">
+                    <ng-container *ngIf="colName.key == 'isHidden'">
+                        <mat-slide-toggle [checked]="element.isHidden" class="mat-slide-toggle-sm"
+                            (change)="onChange(element.permissionKey,colName.key, element, $event.source.checked)">
+                        </mat-slide-toggle>
+                    </ng-container>
+                    <ng-container *ngIf="colName.key == 'isDisabled'">
+                        <mat-slide-toggle [checked]="element.isDisabled" class="mat-slide-toggle-sm"
+                            (change)="onChange(element.permissionKey,colName.key, element, $event.source.checked)">
+                        </mat-slide-toggle>
+                    </ng-container>
+                    <ng-container *ngIf="colName.key == 'isPermissible'">
+                        <mat-slide-toggle [checked]="element.isPermissible" class="mat-slide-toggle-sm"
+                            (change)="onChange(element.permissionKey,colName.key, element, $event.source.checked)">
+                        </mat-slide-toggle>
+                    </ng-container>
+                </div>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnKeys;"></tr>
+    </table>
+</div>

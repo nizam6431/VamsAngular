@@ -1,0 +1,303 @@
+<div class="report-filter-popup d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{"report_common.filter"
+                | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" novalidate [formGroup]="filterForm">
+        <div class="popup-content d-flex flex-column flex-1 p-0 scroll-y">
+            <div class="d-grid px-5 py-4 gap-4">
+                <div class="vams-grid-filters d-flex gap-3 p-0">
+                    <div class="d-flex flex-1 align-items-center">
+                        <div class="d-flex align-items-center gap-4 me-auto" *ngIf="checkWalkin()">
+                            <mat-checkbox [disabled]="isNoShow || this.data.filters.noShow" formControlName="walkIn">
+                                {{'report_common.walk_in' | translate}}
+                            </mat-checkbox>
+                            <mat-checkbox [disabled]="isNoShow || this.data.filters.noShow" formControlName="scheduled">
+                                {{'report_common.Scheduled' | translate}}
+                            </mat-checkbox>
+                            <!-- <mat-checkbox *ngIf="isOnlyAppointment" (change)="hideFilterOptions($event)"
+                                formControlName="noShow">
+                                {{ 'report_common.noShow' | translate }}
+                            </mat-checkbox> -->
+                            <mat-error
+                                *ngIf="!this.filterForm.get('walkIn').value && !this.filterForm.get('scheduled').value && !this.filterForm.get('noShow').value">
+                                {{'report_common.SelectAtLeastOne' | translate}}
+                            </mat-error>
+                        </div>
+                        <mat-button-toggle-group
+                            class="vams-button-toggle-group vams-button-toggle-group-secondary ms-auto" name="fontStyle"
+                            formControlName="timeRange">
+                            <mat-button-toggle value="today">{{ "reportFilterView.today" | translate }}
+                            </mat-button-toggle>
+                            <mat-button-toggle value="this_month">{{ "reportFilterView.this_month" | translate }}
+                            </mat-button-toggle>
+                            <mat-button-toggle value="last_month">{{ "reportFilterView.last_month" | translate }}
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                        <div *ngIf="!openDateFilter">
+                            <button type="button" class="btn btn-sm btn-link btn-clean text-decoration-none ms-1"
+                                (click)="openDateRangeDialog($event)">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="openDateFilter">
+                            <div class="date-rang-filter d-flex align-items-center bg-floral-white px-3 py-2 border border-primary ms-3"
+                                *ngIf="this.filterForm.get('timeRange').value === 'custom'">
+                                <p class="fs-xs fw-medium mb-0">{{startDate}} - {{endDate}}</p>
+                                <button
+                                    class="btn btn-link d-flex align-items-center justify-content-center text-decoration-none ms-3 p-0"
+                                    (click)="onDateFilterClose()">
+                                    <i class="icon-cros-icon fs-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" *ngIf="data.selectedReport!='first_password'">
+                        <div class="d-flex align-items-center gap-3">
+                        <label class="form-label fw-semi-bold mb-0">{{'report_common.status' |
+                        translate}}</label>
+                        <div class="status-select-control-wrap bg-linen d-inline-flex align-items-center">
+                            <div class="addon-wrap d-flex align-items-center justify-content-center">
+                                <i class="icon-filter text-primary"></i>
+                            </div>
+                            <mat-select #statusSelect disableOptionCentering
+                                placeholder="{{'AppointmentDetails.add_filter' | translate}}"
+                                class="form-control status-select-control bg-linen shadow-none" name="status"
+                                formControlName="status" [(ngModel)]="selectedStatus"
+                                *ngIf="data.selectedReport!='first_password'">
+                                <mat-option class="mat-option-with-close" (click)="onSelectEvent(status.value)"
+                                    *ngFor="let status of statusFilter | keyvalue" [value]="status.value">
+                                    <span class="me-2">{{ 'report_status.'+status.key |translate|titlecase}}</span>
+                                    <i *ngIf="selectedStatus == status.value" class="icon-cros-icon fs-xs ms-auto"
+                                        (click)="clearStatus($event)"></i>
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="form-label fw-semi-bold mb-0"
+                                *ngIf="data.selectedReport != 'first_password'">{{'report_common.Host' |
+                                translate}}</label>
+                            <label class="form-label fw-semi-bold mb-0"
+                                *ngIf="data.selectedReport == 'first_password'">{{'report_common.employee' |
+                                translate}}</label>
+                            <div class="input-group search-group mw-100">
+                                <input placeholder="{{'placeholders.host_name' | translate}}" #input1
+                                    class="form-control form-control-sm" formControlName="searchQueryByHost" />
+                                <button class="btn btn-sm btn-outline-light d-flex align-items-center">
+                                    <!-- <i class="icon-search-icon"></i> -->
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-text text-end fs-xs">
+                            {{'report_common.host_text'|translate}}
+                        </div>
+                    </div>
+                    <div class="col-md-4" *ngIf="data.selectedReport!='first_password'">
+                        <div class="d-flex align-items-center gap-3" *ngIf="data.selectedReport != 'email_report'">
+                            <label class="form-label fw-semi-bold mb-0">{{'report_common.Visitor' | translate}}</label>
+                            <div class="input-group search-group mw-100">
+                                <input placeholder="{{'placeholders.Search' | translate}}" #input2
+                                    class="form-control form-control-sm" formControlName="searchQueryByVisitor" />
+                                <button class="btn btn-sm btn-outline-light d-flex align-items-center">
+                                    <!-- <i class="icon-search-icon"></i> -->
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-text text-end fs-xs" *ngIf="data.selectedReport != 'email_report'">
+                            {{'report_common.visitor_text'|translate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column flex-1 gap-3 px-5 py-4 bg-floral-white scroll-y">
+                <div class="d-flex align-items-start gap-5" *ngIf="productType == productTypeList.Commercial">
+                    <ng-container *ngIf="!isLevel3">
+                        <mat-checkbox class="example-margin" (change)="showOnlyComplexLevel($event)"
+                            formControlName="showOnlyComplexVisitor" *ngIf="isComplexVisitor">
+                            {{checkVistorOrEmployee(1) |translate}}
+                        </mat-checkbox>
+                    </ng-container>
+                    <mat-slide-toggle class="align-self-start" formControlName="includeComplexVisitor"
+                        *ngIf="!this.filterForm.get('showOnlyComplexVisitor').value && isComplexVisitor && !isLevel3">
+                        {{checkVistorOrEmployee(2) |translate}}
+                    </mat-slide-toggle>
+                    <!-- <div class="d-grid">
+                        <mat-slide-toggle formControlName="includeVisitorPhoto">{{'report_common.include_visitor_photo' | translate}}
+                        </mat-slide-toggle>
+                        <div class="form-text fs-xs">{{'report_common.include_visitor_photo_warning' | translate}}</div>
+                    </div> -->
+                </div>
+                <ng-container *ngIf="!isLevel3 && buildingWithCompanyList">
+                    <div class="row flex-nowrap flex-1 overflow-hidden"
+                        *ngIf="!this.filterForm.get('showOnlyComplexVisitor').value && !isLevel3">
+                        <div class="col-md-6 d-flex flex-column scroll-y">
+                            <div class="d-flex align-items-center gap-3 mb-1">
+                                <label *ngIf="productType == productTypeList.Commercial"
+                                    class="form-label fw-semi-bold mb-0">{{'placeholders.select_building' |
+                                    translate}}
+                                </label>
+                                <label *ngIf="productType == productTypeList.Enterprise"
+                                    class="form-label fw-semi-bold mb-0">{{'placeholders.select_location' |
+                                    translate}}
+                                </label>
+                               
+                                    <mat-checkbox *ngIf="showList && !isLevel3 && buildingWithCompanyList && buildingWithCompanyList.length>0" class="ms-auto"
+                                        (change)="selectAll($event,'building')" formControlName="selectAllBuilding"
+                                        [checked]="this.filterForm.get('selectAllBuilding').value">
+                                        {{'report_common.select_all' | translate}}
+                                    </mat-checkbox>
+                                
+                            </div>
+                            <mat-select *ngIf="!showList" disableOptionCentering class="form-control" formControlName="selectedBuilding" >
+                                <mat-option *ngFor="let building of buildingWithCompanyList" [value]="building.name">
+                                    {{building["name"]}}
+                                </mat-option>
+                            </mat-select>
+
+                            <div *ngIf="showList">
+                            <input (keyup)="searchBuildingAndCompanies('building',$event,input3.value)"
+                                placeholder="{{'placeholders.Search' | translate}}" #input3
+                                class="form-control form-control-sm mb-2">
+                            <div class="card card-selection-list mh-100 scroll-y"
+                                *ngIf="!isLevel3 && buildingWithCompanyList && buildingWithCompanyList.length>0 else noBuilding">
+                                <div class="card-body p-0 scroll-y">
+                                    <mat-selection-list (selectionChange)="selectionChange($event.option,'building')"
+                                        class="vams-checklist pt-0" name="status" formControlName="selectedBuildings">
+                                        <mat-list-option
+                                            *ngFor="let building of buildingWithCompanyList;let  index = index"
+                                            [value]="building" [selected]="building?.checked"
+                                            class="vams-checklist-item">
+                                            <ng-container *ngIf="building && building['name']">{{building['name']}}
+                                            </ng-container>
+                                        </mat-list-option>
+                                    </mat-selection-list>
+                                </div>
+                            </div>
+                            <ng-template #noBuilding>
+                                <p class="text-muted fs-xs p-2 mb-0" *ngIf="productType == productTypeList.Commercial">
+                                    {{'report_common.BuildingNotFound' | translate}}
+                                </p>
+                                <p class="text-muted fs-xs p-2 mb-0" *ngIf="productType == productTypeList.Enterprise">
+                                    {{'report_common.noLocationFound' | translate}}
+                                </p>
+                            </ng-template>
+                            </div>
+                        </div>
+                        <ng-container
+                            *ngIf="visitorPurposeObject && visitorsTypeObject && productType == productTypeList.Enterprise">
+                            <div class="col-md-6 d-flex flex-column gap-3 pt-2 scroll-y">
+                                <div class="d-grid">
+                                    <label class="form-label fw-semi-bold mb-1">
+                                        {{'report_common.visitPurpose' | translate}}
+                                    </label>
+                                    <mat-select disableOptionCentering class="form-control"
+                                        formControlName="visitorPurposeId"
+                                        placeholder="{{'report_common.selectVisitPurpose' | translate }}">
+                                        <mat-option *ngFor="let visitorPurpose of this.visitorPurposeObject.data"
+                                            (click)="onVisitorPurposeSelectEvent()" [value]="visitorPurpose.id">
+                                            <p class="d-flex align-items-center mb-0">
+                                                <span class="me-auto">{{visitorPurpose.purpose}}</span>
+                                                <i *ngIf="showVisitorPurposeStatus === visitorPurpose.id"
+                                                    class="icon-cros-icon fs-xs ms-auto"></i>
+                                            </p>
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                                <div class="d-grid">
+                                    <label class="form-label fw-semi-bold mb-1">
+                                        {{'report_common.visitorType' | translate}}
+                                    </label>
+                                    <mat-select disableOptionCentering class="form-control"
+                                        formControlName="VisitorTypeId"
+                                        placeholder="{{'report_common.selectVisitorType' | translate }}">
+                                        <mat-option *ngFor="let visitorsType of this.visitorsTypeObject.data"
+                                            (click)="onVisitorTypeSelectEvent()" [value]="visitorsType.id">
+                                            <p class="d-flex align-items-center mb-0">
+                                                <span class="me-auto">{{visitorsType.name}}</span>
+                                                <i *ngIf="showVisitorTypeStatus === visitorsType.id"
+                                                    class="icon-cros-icon fs-xs ms-auto"></i>
+                                            </p>
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="showCompanyList && productType == productTypeList.Commercial">
+                            <div class="col-md-6 d-flex flex-column scroll-y">
+                                <div class="d-flex align-items-center gap-3 mb-1">
+                                    <label class="form-label fw-semi-bold mb-0">{{'placeholders.select_company' |
+                                        translate}}
+                                    </label>
+                                    <mat-checkbox
+                                        *ngIf="!isLevel3 && buildingWithCompanyList && buildingWithCompanyList.length>0"
+                                        class="ms-auto" (change)="selectAll($event,'company')"
+                                        formControlName="selectAllCompany"
+                                        [checked]="filterForm.get('selectAllCompany').value">
+                                        {{'report_common.select_all' | translate}}
+                                    </mat-checkbox>
+                                </div>
+                                <input (keyup)="searchBuildingAndCompanies('company',$event,input4.value)"
+                                    placeholder="{{'placeholders.Search' | translate}}" #input4
+                                    class="form-control form-control-sm mb-2">
+                                <ng-container
+                                    *ngIf="!isLevel3 && buildingWithCompanyList && buildingWithCompanyList.length>0 else noCompnies">
+                                    <ng-container *ngIf="getAllCompanyCount() else noCompnies">
+                                        <div class="card card-selection-list mh-100 scroll-y">
+                                            <div class="card-body p-0 scroll-y">
+                                                <mat-selection-list
+                                                    (selectionChange)="selectionChange($event.option,'company')"
+                                                    class="vams-checklist pt-0" name="status"
+                                                    formControlName="selectedCompany">
+                                                    <ng-container *ngFor="let building of buildingWithCompanyList">
+                                                        <ng-container *ngIf="building && building['checked']">
+                                                            <mat-list-option
+                                                                *ngFor="let company of building['companies'];let  index = index"
+                                                                [value]="company" [selected]="company?.checked"
+                                                                class="vams-checklist-item">
+                                                                <ng-container
+                                                                    *ngIf="company && company['name'] && company['shortName']">
+                                                                    {{company['name']+" | "+company['shortName']}}
+                                                                </ng-container>
+                                                            </mat-list-option>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </mat-selection-list>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #noCompnies>
+                                        <p class="text-muted fs-xs p-2 mb-0">
+                                            {{'report_common.CompanyNotFound' | translate}}
+                                        </p>
+                                    </ng-template>
+                                </ng-container>
+                                <ng-template #noCompnies>
+                                    <p class="text-muted fs-xs p-2 mb-0">
+                                        {{'report_common.CompanyNotFound' | translate}}
+                                    </p>
+                                </ng-template>
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="applyFilter()"
+            [disabled]="!this.filterForm.get('walkIn').value && !this.filterForm.get('scheduled').value && !this.filterForm.get('noShow').value">
+            {{ "report_common.apply_filter" | translate }}</button>
+        <button class="btn btn-sm btn-white px-3" (click)="clearFilter()">
+            {{ "report_common.clear_filter" | translate }}</button>
+    </div>
+</div>

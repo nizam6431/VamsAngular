@@ -1,0 +1,17 @@
+<div class="vams-table-wrapper vams-table-responsive">
+    <table mat-table [dataSource]="dataSource" class="mat-table-hover">
+      <ng-container *ngFor="let colName of columns; let i = index" [matColumnDef]="columns[i].key">
+        <th mat-header-cell  *matHeaderCellDef> {{colName.value | translate}} </th>
+        <td mat-cell  *matCellDef="let element ; let j = index"  >
+          <!-- <ng-container class="mat-cell-sm" *ngIf="columns[i].key === 'srNo'">
+            {{j + 1}}
+          </ng-container> -->
+          <ng-container class="mat-cell-sm">
+            {{element[colName.key]}}
+          </ng-container>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnKeys;"></tr>
+    </table>
+  </div>

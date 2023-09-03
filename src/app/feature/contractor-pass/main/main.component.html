@@ -1,0 +1,81 @@
+<div class="vams-grid-filters d-flex gap-3">
+    <div class="d-flex gap-3">
+        <div class="status-select-control-wrap bg-linen d-flex align-items-center">
+            <div class="addon-wrap d-flex align-items-center justify-content-center">
+                <i class="icon-filter text-primary"></i>
+            </div>
+            <mat-select disableOptionCentering [(ngModel)]="showStatus"
+                placeholder="{{'AppointmentDetails.add_filter' | translate}}"
+                class="form-control status-select-control bg-linen shadow-none" name="status">
+                <mat-option class="mat-option-with-close" (click)="onSelectEvent()" *ngFor="let status of statusFilter"
+                    [value]="status.value">
+                    <span class="me-2">{{ status.viewValue }}</span>
+                    <i *ngIf="showStatus == status.value" class="icon-cros-icon fs-xs ms-auto"></i>
+                </mat-option>
+            </mat-select>
+        </div>
+    </div>
+
+
+    <div class="d-flex justify-content-center align-items-center">
+        <!-- vams-button-toggle-group-secondary -->
+        <mat-button-toggle-group class="vams-button-toggle-group vams-button-toggle-group-secondary" name="fontStyle"
+            [(ngModel)]="timeFilter" (change)="onChangeTimeFilter($event.value, selectedStatus,searchKey)">
+            <mat-button-toggle value="all">{{ "AppointmentScheduleView.All" | translate }}
+            </mat-button-toggle>
+            <mat-button-toggle value="today">{{ "AppointmentScheduleView.Today" | translate }}
+            </mat-button-toggle>
+            <mat-button-toggle value="week">{{ "AppointmentScheduleView.Week" | translate }}
+            </mat-button-toggle>
+            <mat-button-toggle value="month">{{ "AppointmentScheduleView.Month" | translate }}
+            </mat-button-toggle>
+        </mat-button-toggle-group>
+        <div [hidden]="openDateFilter">
+            <button class="btn btn-sm btn-link btn-clean text-decoration-none ms-1" (click)="openDateRangeDialog()">
+                <i class="fa fa-ellipsis-v"></i>
+            </button>
+        </div>
+        <div [hidden]="!openDateFilter">
+            <div
+                class="date-rang-filter d-flex align-items-center bg-floral-white px-3 py-2 border border-primary ms-3">
+                <p class="fs-xs fw-medium mb-0">{{startDate}} - {{endDate}}</p>
+                <button
+                    class="btn btn-link d-flex align-items-center justify-content-center text-decoration-none ms-3 p-0"
+                    (click)="onDateFilterClose();onChangeTimeFilter('today', selectedStatus,searchKey)">
+                    <i class="icon-cros-icon fs-xs"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="input-group search-group">
+        <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+            class="form-control form-control-sm" />
+        <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+            (click)="cleanSearchBox(input)">
+            <i class="icon-cros-icon"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+            <i class="icon-search-icon"></i>
+        </button>
+    </div>
+</div>
+<ng-container>
+    <app-grid-view [dataSource]="dataSource" [columns]="columns" (onDataChange)="emailChange($event)"
+        (rowData)="rowData($event)" (modeEmmiter)="changeMode($event)" [totalCount]="totalCount"
+        [pageSizeCount]="pageSize"></app-grid-view>
+</ng-container>
+
+<footer class="vams-page-footer d-flex align-items-center gap-3 mt-auto bg-floral-white">
+    <div class="d-flex align-items-center gap-3 me-auto">
+        <div class="d-flex align-items-center gap-3 me-auto" *isPermissible="permissionKeyObj.CHECKIN">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="openDialog('IN')">
+                {{'ContractorPass.buttons.check_in' | translate}}
+            </button>
+        </div>
+        <div class="d-flex align-items-center gap-3 me-auto" *isPermissible="permissionKeyObj.CHECKOUT">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="openDialog('OUT')">
+                {{'ContractorPass.buttons.check_out' | translate}}
+            </button>
+        </div>
+    </div>
+</footer>

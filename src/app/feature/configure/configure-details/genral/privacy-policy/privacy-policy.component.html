@@ -1,0 +1,19 @@
+<div class="vams-page-preview d-flex flex-column flex-1 scroll-y">
+    <div class="form-group mb-3" [formGroup]="uploadFileForm">
+        <button class="btn btn-sm btn-white px-3 " onclick="document.getElementById('selectFile').click()">{{'nda.uploadButton' | translate}}</button>
+
+        <label *ngIf="fileName" for="file" class="m-2 form-label">{{fileName}}</label>
+      
+        <input id="selectFile" #inputFile name="file" accept="application/pdf" onclick="this.value = null" formControlName="pdf_file"
+            class="form-control" type="file" (change)="onFileChange($event)" style="display:none"/>
+        <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"pdfUpload.file_criteria" | translate}}</p>
+        <mat-error *ngFor="let message of showValidationMessages('pdf_file')">
+            {{message}}
+        </mat-error>
+    </div>
+    <div id="outerContainer" class="card-pdf-viewer d-grid flex-1 scroll-y">
+        <pdf-viewer [src]="doc" [rotation]="0" [original-size]="false" [show-all]="true" [fit-to-page]="false"
+            [zoom]="1" [zoom-scale]="'page-width'" [stick-to-page]="false" [render-text]="true"
+            [external-link-target]="'blank'" [autoresize]="true" [show-borders]="false"></pdf-viewer>
+    </div>
+</div>

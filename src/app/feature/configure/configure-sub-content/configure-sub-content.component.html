@@ -1,0 +1,10 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="type == 'HSQ_screening_questionnaire'">
+    <mat-tab-group class="vams-tab-group-sub-primary flex-1 scroll-y" animationDuration="0ms">
+        <mat-tab label="{{'configure_sub_contents.for_visitors' | translate}}">
+            <ng-template matTabContent>
+                <app-hsq-config [type]="type" [hsqQuestionAdd]="hsqQuestionAdd">
+                </app-hsq-config>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+</div>

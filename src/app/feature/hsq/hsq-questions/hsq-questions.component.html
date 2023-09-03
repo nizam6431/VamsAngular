@@ -1,0 +1,65 @@
+<div class="card mw-tile w-100 flex-1 border-0 mx-auto shadow-sm rounded-4 scroll-y" *ngIf="questionnaire">
+    <div class="card-header bg-transparent border-bottom-0 px-3 py-4">
+        <div class="text-center">
+            <img [src]="logoUrl" alt="VAMS" height="64px" />
+        </div>
+    </div>
+    <div class="card-body d-flex flex-column flex-1 p-0 scroll-y">
+        <div class="d-grid p-3">
+            <h4 class="card-title fw-bold">
+                {{'HSQ.health_question' | translate}}
+            </h4>
+            <h6 class="card-subtitle fw-semi-bold mb-0">{{'HSQ.answer_req_str' | translate}}</h6>
+        </div>
+        <hr class="my-0">
+        <form class="d-flex flex-column flex-1 scroll-y" *ngIf="HSQForm" (ngSubmit)="openDialogForConfirm()"
+            [formGroup]="HSQForm" autocomplete="off" novalidate>
+            <div class="flex-1 px-3 scroll-y" *ngIf="HSQForm.get('HSQArray')" formArrayName="HSQArray">
+                <ul class="list-unstyled d-grid gap-4 py-3 mb-0">
+                    <li *ngFor="let question of HSQForm.get('HSQArray')['controls']; let i=index">
+                        <p class="fs-sm fw-semi-bold mb-2">{{question.get('question').value}}</p>
+                        <div [formGroupName]="i">
+                            <div [ngSwitch]="question.get('ansType').value">
+                                <div class="btn-group" role="group" *ngSwitchCase="'boolean'">
+                                    <input id="{{ 'btnRadioYes' + i }}" class="btn-check" type="radio" value="Yes"
+                                        formControlName="answer">
+                                    <label class="btn btn-outline-primary btn-sm px-4"
+                                        for="{{ 'btnRadioYes' + i }}">{{'HSQ.Yes'|
+                                        translate}}</label>
+                                    <input id="{{ 'btnRadioNo' + i }}" class="btn-check" type="radio" value="No"
+                                        formControlName="answer">
+                                    <label class="btn btn-outline-primary btn-sm px-4"
+                                        for="{{ 'btnRadioNo' + i }}">{{'HSQ.No'|
+                                        translate}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <hr class="my-0">
+            <div class="d-flex align-items-center gap-3 p-3">
+                <button type="submit" class="btn btn-sm btn-primary-dark px-3">{{'HSQ.submit' |
+                    translate}}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mw-tile w-100 flex-1 border-0 mx-auto shadow-sm rounded-4" *ngIf="HsqSuccess">
+    <div class="card-header bg-transparent border-bottom-0 px-3 py-4">
+        <div class="text-center">
+            <img [src]="logoUrl" alt="VAMS" height="64px" />
+        </div>
+    </div>
+    <div class="card-body d-flex justify-content-center align-items-center">
+        <div class="message-tile d-flex flex-column justify-content-center align-items-center">
+            <i class="material-icons display-5 fw-medium text-success">check_circle_outline</i>
+            <p class="fw-medium mb-0">{{'HSQ.successfull_msg' | translate}}</p>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="HSQError">
+    <app-link-error [showPage]="true"></app-link-error>
+</ng-container>

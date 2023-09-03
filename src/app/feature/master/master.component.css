@@ -1,0 +1,149 @@
+.main-content{
+    padding-left: 76px;   
+}
+.modal.right .modal-dialog{
+    position: fixed;
+    margin: auto;
+    width: 70vw;
+    height: 100%;
+    transform: translate3d(0%, 0, 0);
+  }
+
+  .modal.right .modal-dialog .closeBtn{
+    margin-right: 8px;
+    color: #d9534f;
+    padding: 5px;
+  }
+  
+  .modal.right .modal-content {
+    height: 100%;
+    overflow-y: auto;
+    border-radius: 10px 0px 0px 10px;
+    
+  }
+
+  modal.right .modal-content .assignbrands{
+    max-height: 64vh;
+    overflow-y: auto;
+    animation: brandsSKUView 0.3s ease-in forwards;
+  }
+  
+  modal.right .modal-content .addBrandsFooter{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    background: #eff1f4;
+    padding: 8px 8px;
+    height: 15vh;
+  }
+  label{
+    margin-bottom: 3px;
+    font-weight: 500;
+  }
+
+  .modal.right .modal-body {
+    padding: 15px 15px 80px;
+  }
+  
+  /*Right*/
+      .modal.right.fade .modal-dialog {
+          right: -320px;
+          animation: rightToLeft 0.3s ease-in forwards;
+      }
+    @keyframes rightToLeft {
+      from {
+        right: -320px;
+      }
+  
+      to {
+        right: 0;
+      }
+    }
+
+:host::ng-deep .mat-tab-header {
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    border-bottom: 0px solid rgba(0,0,0,.12);
+
+  }
+
+  :host::ng-deep  .tab-header {
+    border-bottom: 0px solid rgba(0,0,0,.12);
+}
+
+/*Chetan 24 November 2021*/
+
+.company-level{}
+
+::ng-deep .master-tabs{
+  height: 29px !important;
+ /*background:#FBF8F3 url("../../../../images/shadow.png");*/
+ background:var(--header-bg);     
+}
+
+::ng-deep .master-tabs .mat-tab-labels{
+  padding-left: 46px;
+  font-family: open sans !important;
+}
+
+::ng-deep .master-tabs .mat-tab-label:hover{
+  /* border-bottom: solid 3px #F78958;  */
+  font-weight: 400 !important;
+  color: #F78958 !important;
+}
+
+::ng-deep .master-tabs .mat-tab-label{
+  height: 28px !important;
+  min-width: auto;
+  margin-right: 20px;
+  padding: 0 20px;
+  font-weight: 400;
+  font-size: 12px !important;
+  border-bottom: solid 3px transparent;
+  color: var(--tab-text-color) !important;
+  opacity: 1 !important; 
+}
+
+
+::ng-deep .master-tabs .mat-ink-bar{
+  display: none;
+}
+
+
+
+::ng-deep .master-tabs .mat-tab-label-active{
+  border-bottom: solid 3px #F78958; 
+  font-weight: 600 !important;
+  color: #F78958 !important;
+  pointer-events:none; 
+}
+
+::ng-deep .mat-ripple-element{display: none !important;}
+
+.back-button-company{
+  font-size: 14px;
+  color: #333333;
+  background: transparent;
+  border:0px ;
+  margin-left: 62px;
+}
+.back-button-company:before{
+  content: '\f053';
+  font-family: "Font Awesome 5 Free";
+  font-weight: 600; 
+  font-size: 12px;
+  padding-right: 6px; 
+}
+
+.company-title{ 
+  color: #131523;
+  font-size: 14px !important;
+  display: inline-block;
+  padding: 0 15px;
+  position: relative;
+  font-weight: bold !important;
+  border-left: solid 2px #DF9885;
+  margin-left: 12px;
+}

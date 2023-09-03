@@ -1,0 +1,17 @@
+<div>
+    <div class="col-md-12">
+    <div class="col-md-2">
+        <button mat-raised-button  >All</button>
+        </div>
+        <div class="col-md-2">
+        <button mat-raised-button >Today</button>
+        </div>
+        <div class="col-md-2">
+        <button mat-raised-button  >Week</button>
+        </div>
+        <div class="col-md-2">
+        <button mat-raised-button >Month</button>
+        </div>
+    </div>
+    <app-grid [dataSource]="dataSource"  [displayedColumns]="displayedColumns"></app-grid>
+</div>

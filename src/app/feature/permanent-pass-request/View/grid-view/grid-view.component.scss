@@ -1,0 +1,18 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+.image{
+  height: 2.5rem;
+  width: 3.5rem;
+}
+.c1{
+  text-align: center;
+}
+.textwrap{
+  white-space: normal;
+  width: 10rem;
+  word-wrap: break-word;
+  // word-break: break-word;
+}

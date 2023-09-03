@@ -1,0 +1,25 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Menus.MyAccessQrCode" | translate }}</span>
+        </div>
+    </div>
+    <div class="popup-content d-flex justify-content-center align-items-start">
+        <div class="qr-wrapper p-3 rounded shadow" *ngIf="isQrCode else noQrCode">
+            <img #img [src]="url" class="img-fluid">
+        </div>
+        <ng-template #noQrCode>
+            <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                <i class="material-icons display-5 fw-medium text-danger">error_outline</i>
+                <p class="fw-medium mb-0">{{"Menus.NoQrCode"|translate}}</p>
+            </div>
+        </ng-template>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button [disabled]="!isQrCode" (click)="downloadImage()" class="btn btn-sm btn-primary-dark px-3">
+            {{ "CommonToken.Download" | translate }}
+        </button>
+    </div>
+</div>

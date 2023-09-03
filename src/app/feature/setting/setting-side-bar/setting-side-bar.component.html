@@ -1,0 +1,6 @@
+<nav class="nav vams-aside-nav flex-column py-3">
+    <ng-container *ngFor="let element of sideBarMenu;let index = index">
+        <button class="btn btn-link btn-sm text-decoration-none" [class.active]="index == selectedIndex"
+            (click)="goToMenu(element.key,index)">{{"setting_side_menu."+element.key | translate}}</button>
+    </ng-container>
+</nav>

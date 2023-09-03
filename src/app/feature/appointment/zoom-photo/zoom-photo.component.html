@@ -1,0 +1,12 @@
+<div class="popup-box">
+    <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+    <div style="width: 295px;height: 320px;">
+        <img #thumbnail src="{{thumbnailUrl}}" style="width: 100%;height: 100%;">
+    </div>
+    <button (click)="zoomin()" class="primary-button mt-20"><i class="fa fa-plus pb-0 color"
+            aria-hidden="true"></i></button>
+    <button (click)="reset()" class="primary-button mt-20"><i class="fa fa-refresh  pb-0 color"
+            aria-hidden="true"></i></button>
+    <button (click)="zoomout()" class="primary-button mt-20"><i class="fa fa-minus  pb-0 color"
+            aria-hidden="true"></i></button>
+</div>

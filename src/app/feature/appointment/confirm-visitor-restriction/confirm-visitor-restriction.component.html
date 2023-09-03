@@ -1,0 +1,25 @@
+<div class="dialog-content d-grid gap-4">
+    <div class="dialog-body d-grid gap-4">
+        <!-- TODO need to handle string wrt language  -->
+        <h6 class="fw-bold text-center">
+            {{ "Schedule.Confirm_Restrict_title" | translate }}
+        </h6>
+        <div class="img-wrapper text-center">
+            <i class="material-icons display-1 fw-medium text-danger">{{"toster_message.warning_text" | translate}}</i>
+        </div>
+        <div class="d-grid text-center">
+            <p class="mb-0">
+                {{ "Schedule.Confirm_Restrict_message_with_name" | translate: fullnameTranslate }}
+            </p>
+            <p class="mb-0">
+                {{visitorData}} 
+            </p>
+            <p class="mb-0">{{ "Schedule.Confirm_Restrict_message" | translate: resheduleTranslate }}?</p>
+        </div>
+    </div>
+    <div class="dialog-actions gap-3">
+        <button class="btn btn-sm btn-white px-3" (click)="close(false)">{{ "CommonToken.No" | translate}}</button>
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="close(true)">{{ "CommonToken.Yes" | translate}}</button>
+       
+    </div>
+</div>

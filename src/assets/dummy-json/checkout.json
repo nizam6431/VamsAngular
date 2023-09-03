@@ -1,0 +1,14 @@
+{
+    "firstName": "Rohit",
+    "lastName": "Bhate",
+    "email": "rohit.bhate@joshsoftware.com",
+    "cell": "9898989898",
+    "company": "JOSH",
+    "hostName": "Host Sample Name",
+    "purpose": "Interview",
+    "date": "20/11/2021",
+    "from": "08:30am",
+    "to": "10:30am",
+    "personToMeet": "Sameer Tilok",
+    "building": "L1"
+}

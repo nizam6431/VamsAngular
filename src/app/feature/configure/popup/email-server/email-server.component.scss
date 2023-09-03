@@ -1,0 +1,9 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.disabledClass {
+  pointer-events: none;
+}

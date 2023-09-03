@@ -1,0 +1,17 @@
+<h6 class="vams-page-sub-title fw-bold mb-0 pt-4 px-3">
+    {{"setting_side_menu.employee_setting" | translate }}
+</h6>
+<form [formGroup]="EmployeeSettingForm" class="mt-3 scroll-y">
+    <mat-list class="vams-list pt-0">
+        <mat-list-item>
+            <div class="row flex-1">
+                <label class="col-md-4 col-form-label">{{"employee-setting.send_employee_creation_alert_to_employee" |
+                    translate}} </label>
+                <div class="col-md-8">
+                    <mat-slide-toggle formControlName="employeeCreationAlert">
+                    </mat-slide-toggle>
+                </div>
+            </div>
+        </mat-list-item>
+    </mat-list>
+</form>

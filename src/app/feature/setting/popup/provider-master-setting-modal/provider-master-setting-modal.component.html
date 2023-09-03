@@ -1,0 +1,115 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+  <!-- <div class="d-flex flex-column flex-1 scroll-y" *ngIf = > -->
+  <div class="popup-header">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+    <div class="popup-title-wrapper d-flex align-items-center">
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative"
+        *ngIf="!formData?.data">{{ "provider_master.add_provider_master" | translate }}</span>
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative"
+        *ngIf="formData?.data">{{ "provider_master.edit_provider_master" | translate }}</span>
+    </div>
+  </div>
+
+  <form class="popup-form" [formGroup]="providerMasterForm" novalidate>
+    <div class="popup-content">
+      <div class="row mb-3">
+        <label for="deptName" class="col-sm-4 col-form-label">{{ "provider_master.provider_name" | translate }}
+          <span *ngIf="formData.mode == 'add'" class="mendatory">*</span></label>
+        <div class="col-sm-8">
+          <input type="text" [readonly]="formData.mode == 'edit'"
+            [ngClass]="{'form-control-plaintext': formData.mode == 'edit', 'form-control' : formData.mode == 'add' }"
+            id="providername" formControlName="providername" maxlength="50"
+            placeholder="{{ 'provider_master.provider_name_placeholder' | translate }}" />
+          <mat-error *ngFor="let message of showValidationMessages('providername')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="deptName" class="col-sm-4 col-form-label">{{ "provider_master.shortcode" | translate }}
+          <span *ngIf="formData.mode == 'add'" class="mendatory">*</span></label>
+        <div class="col-sm-8">
+          <input type="text" [readonly]="formData.mode == 'edit'"
+            [ngClass]="{'form-control-plaintext': formData.mode == 'edit', 'form-control' : formData.mode == 'add' }"
+            class="form-control-plaintext" id="shortcode" formControlName="shortcode" maxlength="20"
+            placeholder="{{ 'provider_master.shortcode_placeholder' | translate }}" />
+          <mat-error *ngFor="let message of showValidationMessages('shortcode')">
+            {{ message }}
+          </mat-error>
+        </div>
+      </div>
+      <div *ngIf="formData.mode == 'edit'" class="row mb-3">
+        <label for="feLastName" class="col-sm-4 col-form-label">
+          {{ "Department.Status" | translate }}
+          <span class="mendatory">*</span></label>
+        <div class="col-sm-8">
+          <mat-select class="form-control" formControlName="status">
+            <mat-option selected *ngFor="let name of statusList" [value]="name">{{ name }}</mat-option>
+          </mat-select>
+          <mat-error *ngFor="let message of showValidationMessages('status')">
+            {{ message }}<br />
+          </mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+      <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'add'" (click)="onSubmit()">
+        {{ "CommonToken.Add" | translate }}
+      </button>
+      <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'edit'" (click)="onSubmit()"> {{
+        "CommonToken.Save" | translate }} </button>
+      <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'edit'" (click)="cancel()">{{
+        "CommonToken.Cancel" | translate }}</button>
+      <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'add'" (click)="resetForm()"> {{
+        "CommonToken.Clear" | translate }}
+      </button>
+    </div>
+  </form>
+</div>
+
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode =='show' ">
+  <div class="popup-header">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+    <div class="popup-title-wrapper d-flex align-items-center">
+      <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+        {{
+        "provider_master.provider_master_details" | translate }}</span>
+    </div>
+  </div>
+
+
+  <div class="popup-content">
+    <div class="row mb-3">
+      <label class="col-md-4 col-form-label">{{ "provider_master.provider_name" | translate }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="employeeFirstName"
+          value="{{ formData.data.providerName }}" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-md-4 col-form-label">{{ "provider_master.shortcode" | translate }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="employeeFirstName"
+          value="{{ formData.data.shortCode }}" />
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-md-4 col-form-label"> {{ "Department.Status" | translate }}</label>
+      <div class="col-md-8">
+        <input type="text" readonly class="form-control-plaintext" id="employeeFirstName"
+          value="{{ formData.data.status }}" />
+      </div>
+    </div>
+  </div>
+
+
+  <div class="popup-footer d-flex align-items-center gap-3">
+    <button class="btn btn-sm btn-primary-dark px-3" (click)="formData.mode = 'edit'">
+      {{ "CommonToken.Edit" | translate }}
+    </button>
+    <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+      {{ "CommonToken.Cancel" | translate }}
+    </button>
+  </div>
+</div>

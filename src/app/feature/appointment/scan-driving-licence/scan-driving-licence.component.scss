@@ -1,0 +1,13 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.img-wrapper, .vams-webcam-wrapper {
+  width: 26rem;
+
+  img, video {
+    object-fit: contain;
+  }
+}

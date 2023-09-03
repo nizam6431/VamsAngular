@@ -1,0 +1,35 @@
+<div class="vams-grid-filters d-flex">
+    <div class="input-group search-group ms-auto">
+        <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+            class="form-control form-control-sm" />
+        <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+            (click)="cleanSearchBox(input)">
+            <i class="icon-cros-icon"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+            <i class="icon-search-icon"></i>
+        </button>
+    </div>
+</div>
+<div class="vams-table-wrapper">
+    <table mat-table [dataSource]="companyUnitData" matSort>
+        <ng-container *ngFor="let colName of displayedColumns; let i = index" [matColumnDef]="displayedColumns[i].key"
+            [stickyEnd]="isSticky(colName.key)">
+            <ng-container *ngIf="colName.value !== ''; else noSort">
+                <th mat-header-cell (click)="sortData(colName.key)" *matHeaderCellDef mat-sort-header>
+                    {{ colName.value |translate}}
+                </th>
+            </ng-container>
+            <td mat-cell *matCellDef="let element">
+                {{ element.name }}
+            </td>
+            <ng-template #noSort>
+                <th mat-header-cell *matHeaderCellDef>{{ colName.value }}</th>
+            </ng-template>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns" (click)="getRowData(row, type)"></tr>
+    </table>
+</div>
+<mat-paginator class="pagination-fix-place" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"
+    [length]="totalData" (page)="getPaginationData($event)" aria-label="Select page of users"></mat-paginator>

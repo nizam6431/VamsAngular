@@ -1,0 +1,16 @@
+<!-- <p>view-document works!</p> -->
+<!-- 
+<div class="vams-page-preview d-flex flex-column flex-1 scroll-y">
+<div  class="email-banner p-1 border rounded-4">
+    <img _ngcontent-lde-c178="" [src]="documentsPhoto" class="img-fluid" alt="Document" />
+</div>
+</div> -->
+
+
+<div class="dialog-content d-grid">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100 view-popup-close" style="position: fixed;"></button>
+    <div class="email-banner p-1 border rounded-4">
+    <img (error)="handleIamge(documentsPhoto)" [src]="documentsPhoto">
+    <!-- <img id="blobImg" class="img-fluid"  [src]="documentsPhoto" /> -->
+    </div>
+</div>

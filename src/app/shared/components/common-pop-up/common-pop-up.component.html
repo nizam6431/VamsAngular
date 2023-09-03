@@ -1,0 +1,68 @@
+<div class="dialog-content d-grid">
+    <div class="dialog-body d-grid gap-4">
+        <h6 *ngIf="title" class="fw-bold text-center">
+            <p class="text-break mb-0" [innerHTML]="title">
+        </h6>
+        <div *ngIf="icon" class="img-wrapper text-center">
+            <img [src]="icon" [alt]="alt_string" width="48px" />
+        </div>
+        <div *ngIf="message && this.data.pop_up_type!='contractor_config' else contractor_config"
+            class="d-grid text-center gap-3">
+            <p class="text-break mb-0" [innerHTML]="message">
+            </p>
+        </div>
+        <ng-template #contractor_config>
+            {{ "pop_up.contractor_company.message" | translate: configDetails}}
+        </ng-template>
+
+        <!-- </ng-container> -->
+        <ng-container *ngIf="messages">
+            <div class="d-grid text-center gap-3" *ngFor="let message of messages">
+                <p class="text-break mb-0" [innerHTML]="message">
+                </p>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="inputText">
+            <form class="popup-form" [formGroup]="reasonForm" novalidate autocomplete="off">
+                <label for="feRemark" class="mb-0">
+                    {{ "restricted_Visitor.remark" | translate }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-12">
+                    <textarea class="form-control text-capitalize" maxlength="250" formControlName="remark" rows="3"
+                        placeholder="{{ 'restricted_Visitor.remark_Placeholder' | translate }}">
+                    </textarea>
+                    <ng-container *ngIf="reasonForm.controls['remark'].touched || reasonForm.controls['remark'].dirty">
+                        <mat-error
+                            *ngIf="reasonForm.controls['remark'].errors && reasonForm.controls['remark'].errors.whitespace">
+                            {{ "restricted_Visitor.remark_Error_Message" | translate }}
+                        </mat-error>
+                        <mat-error
+                            *ngIf="reasonForm.controls['remark'].errors && reasonForm.controls['remark'].errors.pattern">
+                            {{ "restricted_Visitor.remark_Error_Pattern_Message" | translate }}
+                        </mat-error>
+                    </ng-container>
+                </div>
+            </form>
+        </ng-container>
+        <!-- Multiday reschedule confirmation -->
+        <mat-radio-group *ngIf="isMultiDayReschedule" [(ngModel)]="isRescheduleMultiDay" class="d-grid gap-2"
+            aria-label="Select an option">
+            <mat-radio-button value="false"> {{ "pop_up.multiday_cancel_and_reschedule.option1" | translate }}
+            </mat-radio-button>
+            <mat-radio-button value="true">{{ "pop_up.multiday_cancel_and_reschedule.option2" | translate }}
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+
+
+    <div class="dialog-actions gap-3" *ngIf="data?.pop_up_type !='SOS' ">
+        <ng-container *ngIf="ok_button else with_yes_button">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="close(false)">{{ok_buttonText}}</button>
+        </ng-container>
+        <ng-template #with_yes_button >
+            <button class="btn btn-sm btn-white px-3" (click)="close(false)">{{no_button}}</button>
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="close(true)">{{yes_button}}</button>
+        </ng-template>
+    </div>
+</div>

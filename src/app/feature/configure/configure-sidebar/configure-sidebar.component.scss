@@ -1,0 +1,8 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  width: 16rem;
+  box-shadow: 0 0 0.75rem rgba($color: $gray-20, $alpha: 0.2);
+  z-index: 2;
+  @extend .scroll-y;
+}

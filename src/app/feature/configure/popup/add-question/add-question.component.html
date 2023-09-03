@@ -1,0 +1,134 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.data"
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "hsq_questions.editTitle" | translate }}</span>
+            <span *ngIf="!formData.data"
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "hsq_questions.addTitle" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="questionForm" novalidate>
+        <div class="popup-content">
+            <div class="row mb-3">
+                <label for="out_port" class="col-md-4 col-form-label">{{ "hsq_questions.question" | translate}}
+                    <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <textarea class="form-control" maxlength="256" rows="3" formControlName="question"
+                        placeholder="{{ 'hsq_questions.questions_placeholder' | translate }}"></textarea>
+                    <mat-error *ngFor="let message of showValidationMessages('question')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-md-4 col-form-label" for="">{{ "hsq_questions.expected_answer" | translate}} <span
+                        class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <mat-radio-group class="d-flex align-items-center gap-3" formControlName="expectedAnswer"
+                        aria-label="Select an option" labelPosition="after">
+                        <mat-radio-button value="Yes">
+                            <label class="form-label mb-0">{{"buttons.yes" | translate}}</label>
+                        </mat-radio-button>
+                        <mat-radio-button value="No">
+                            <label class="form-label mb-0">{{"buttons.no" | translate}}</label>
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-error *ngFor="let message of showValidationMessages('expectedAnswer')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-md-4 col-form-label" for="">{{ "hsq_questions.vaccination_que" | translate}} <span
+                        class="mendatory">*</span></label>
+                <div class="col-md-8">
+
+                    <div class="col-md-8">
+                        <mat-slide-toggle class="align-self-start"  formControlName="nonStandardTag" >
+                        </mat-slide-toggle>
+                    </div>
+
+                    <!-- <mat-slide-toggle formControlName = "nonStandardTag"
+                        (change)="isVaccinatedChanged($event)"> </mat-slide-toggle> -->
+
+                    <!-- <mat-radio-group class="d-flex align-items-center gap-3" formControlName = "nonStandardTag" aria-label="Select an option" labelPosition="after">
+                        <mat-radio-button value="Yes">
+                            <label class="form-label mb-0">{{"buttons.yes" | translate}}</label>
+                        </mat-radio-button>
+                        <mat-radio-button value="No">
+                            <label class="form-label mb-0">{{"buttons.no" | translate}}</label>
+                        </mat-radio-button>
+                    </mat-radio-group> -->
+                    <mat-error *ngFor="let message of showValidationMessages('nonStandardTag')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'add'" (click)="onSubmit()">
+                {{ "CommonToken.Add" | translate }}
+            </button>
+            <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'edit'" (click)="onSubmit()">
+                {{ "CommonToken.Save" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'edit'" (click)="cancel()">
+                {{ "CommonToken.Cancel" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'add'" (click)="resetForm()">
+                {{ "CommonToken.Clear" | translate }}
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode =='show' ">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                {{"hsq_questions.show_title" | translate }}</span>
+        </div>
+    </div>
+
+    <div class="popup-content" *ngIf="formData.mode =='show' ">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">{{"hsq_questions.question" | translate}}</label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext flex-wrap text-break">{{ questionForm.value.question }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">{{"hsq_questions.expected_answer" | translate}}</label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext">{{ questionForm.value.expectedAnswer }}</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">{{"hsq_questions.vaccination_que" | translate}}</label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext">{{ questionForm.value.nonStandardTag }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="popup-footer d-flex align-items-center gap-3" *ngIf="formData.mode =='show' ">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="formData.mode = 'edit'">
+            {{ "CommonToken.Edit" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>

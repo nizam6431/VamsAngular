@@ -1,0 +1,305 @@
+
+<div class="d-flex flex-1 scroll-y" *ngIf="!SeepzWorkFlow">
+    <!-- <div class="card card-body card-shadow rounded-4">
+        <app-mixed-chart [timeChange]="currentValue"></app-mixed-chart>
+    </div> -->
+    <div class="chart-column d-flex flex-column pt-4 pb-3 ps-3 pe-2 scroll-y">
+        <div class="card card-body card-shadow rounded-4 p-0 scroll-y">
+            <!-- pie chart goes here -->
+            <div class="chart-box piechart-box pt-3 px-3 pb-2">
+                <p class="fs-sm mb-0 me-auto">
+                    <span class="fw-bold">{{"dashboard.pieChart"| translate}}</span>
+                </p>
+                <app-pie-chart [timeChange]="currentValue" [locationId]="locationId" [locationEventEmitter]="locationEventEmitter"></app-pie-chart>
+            </div>
+             <!-- bar chart goes here -->
+            <div class="chart-box flex-1 pt-2 px-3 pb-3 scroll-y">
+                <p class="fs-sm mb-0 me-auto">
+                    <span class="fw-bold">{{"dashboard.barChart"| translate}}</span>
+                </p>
+                <app-bar-chart [timeChange]="currentValue" [locationId]="locationId" [locationEventEmitter]="locationEventEmitter"></app-bar-chart>
+            </div>
+        </div>
+    </div>
+    <div class="map-column d-flex flex-column flex-1 pt-4 pb-3 ps-2 pe-3 gap-3 scroll-y">
+        <!-- Heap Map goes here -->
+        <div class="card card-body card-shadow rounded-4">
+            <div class="d-flex gap-3 mb-3">
+                <p class="fs-sm mb-0 me-auto">
+                    <span class="fw-medium me-1">{{"dashboard.visitor" | translate}}
+                    </span>
+                    <span class="fw-bold">{{"dashboard.heapmap"| translate}}</span>
+                </p>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fs-sm fw-medium">0</span>
+                    <div class="color-bar border rounded-pill"></div>
+                    <span class="fs-sm fw-medium">100</span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center flex-1">
+                <app-heapmap [timeChange]="currentValue" [locationId]="locationId" [locationEventEmitter]="locationEventEmitter" [locationListId]="locationListId"></app-heapmap>
+            </div>
+        </div>
+        <div class="d-flex gap-3">
+            <div class="card card-body card-shadow rounded-4" *ngIf="this.productType != 'Enterprise'">
+                <p class="fs-sm fw-bold mb-3">{{"dashboard.visitor" | translate}}</p>
+                <div class="d-grid gap-2">
+                    <div class="d-flex align-items-center flex-1 gap-3">
+                        <div class="vams-progress-bar-legend d-flex align-items-center gap-3">
+                            <p class="fs-sm fw-semi-bold lh-sm mb-0">{{checktimeStatus()}}</p>
+                            <p class="vams-progress-bar-legend-value current fs-5 fw-bold text-truncate mb-0 ms-auto">
+                                {{vistorData?.count}}
+                            </p>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="convartIntoPrecentage(vistorData?.count)"
+                            class="vams-progress-bar current flex-1">
+                        </mat-progress-bar>
+                    </div>
+                    <div class="d-flex align-items-center flex-1 gap-3">
+                        <div class="vams-progress-bar-legend d-flex align-items-center gap-3">
+                            <div class="d-grid">
+                                <p class="fs-sm fw-semi-bold lh-sm mb-0">{{"dashboard.higest" | translate}}</p>
+                                <small class="fs-mini fw-bold">{{"dashboard.in_single" | translate}}
+                                    {{checkHighest()}}</small>
+                            </div>
+                            <p class="vams-progress-bar-legend-value highest fs-5 fw-bold text-truncate mb-0 ms-auto">
+                                {{vistorData?.maxCount}}
+                            </p>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="convartIntoPrecentage(vistorData?.maxCount)"
+                            class="vams-progress-bar highest flex-1">
+                        </mat-progress-bar>
+                    </div>
+                    <div class="d-flex align-items-center flex-1 gap-3">
+                        <div class="vams-progress-bar-legend d-flex align-items-center gap-3">
+                            <div class="d-grid">
+                                <p class="fs-sm fw-semi-bold lh-sm mb-0">{{"dashboard.average" |translate}}</p>
+                                <small class="fs-mini fw-bold">{{"dashboard.in_single" | translate}}
+                                    {{checkHighest()}}</small>
+                            </div>
+                            <p class="vams-progress-bar-legend-value average fs-5 fw-bold text-truncate mb-0 ms-auto">
+                                {{vistorData?.averageCount}}</p>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="convartIntoPrecentage(vistorData?.averageCount)"
+                            class="vams-progress-bar average flex-1">
+                        </mat-progress-bar>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-body card-shadow rounded-4" *ngIf="this.productType == 'Enterprise' && !noDataFound">
+                <p class="fs-sm fw-bold mb-3">{{"dashboard.visitor" | translate}}</p>
+                <div class="d-grid gap-2">
+                    <div class="d-flex align-items-center flex-1 gap-3">
+                        <div class="vams-progress-bar-legend d-flex align-items-center gap-3">
+                            <p class="fs-sm fw-semi-bold lh-sm mb-0">{{checktimeStatusEnterprise()}}</p>
+                            <p class="vams-progress-bar-legend-value current fs-5 fw-bold text-truncate mb-0 ms-auto">
+                                {{vistorData?.count}}
+                            </p>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="convartIntoPrecentageEnterprise(vistorData?.count)"
+                            class="vams-progress-bar current flex-1">
+                        </mat-progress-bar>
+                    </div>
+                    <div class="d-flex align-items-center flex-1 gap-3">
+                        <div class="vams-progress-bar-legend d-flex align-items-center gap-3">
+                            <div class="d-grid">
+                                <p class="fs-sm fw-semi-bold lh-sm mb-0">{{"dashboard.higest" | translate}}</p>
+                                <small class="fs-mini fw-bold">{{"dashboard.in_single" | translate}}
+                                    {{checkHighestEnterprise()}}</small>
+                            </div>
+                            <p class="vams-progress-bar-legend-value highest fs-5 fw-bold text-truncate mb-0 ms-auto">
+                                {{vistorData?.highest}}
+                            </p>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="convartIntoPrecentageEnterprise(vistorData?.highest)"
+                            class="vams-progress-bar highest flex-1">
+                        </mat-progress-bar>
+                    </div>
+                    <div class="d-flex align-items-center flex-1 gap-3">
+                        <div class="vams-progress-bar-legend d-flex align-items-center gap-3">
+                            <div class="d-grid">
+                                <p class="fs-sm fw-semi-bold lh-sm mb-0">{{"dashboard.average" |translate}}</p>
+                                <small class="fs-mini fw-bold">{{"dashboard.in_single" | translate}}
+                                    {{checkHighestEnterprise()}}</small>
+                            </div>
+                            <p class="vams-progress-bar-legend-value average fs-5 fw-bold text-truncate mb-0 ms-auto">
+                                {{vistorData?.average}}</p>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="convartIntoPrecentageEnterprise(vistorData?.average)"
+                            class="vams-progress-bar average flex-1">
+                        </mat-progress-bar>
+                    </div>
+                </div>
+            </div>
+          
+            <div id="chart" *ngIf="noDataFound && this.productType == 'Enterprise'">
+                No Data Found 
+             </div>
+
+            <div class="card card-count card-body card-shadow rounded-4 p-0" *ngIf="">
+                <div class="d-flex flex-column p-3">
+                    <p class="h4 fw-bold mb-0">1000</p>
+                    <p class="fs-sm fw-medium mb-0">Host</p>
+                </div>
+                <hr class="my-0">
+                <div class="p-3">
+                    <p class="fs-sm fw-bold lh-1 mb-0">App Downloaded Status</p>
+                </div>
+            </div>
+        </div> 
+        
+           <!-- Mixed Chart goes here -->
+        <div class="card card-body card-shadow rounded-4" *ngIf="this.productType == 'Enterprise'">
+            <p class="fs-sm mb-0 me-auto">
+                <span class="fw-bold">{{"dashboard.visitorHourTrend"| translate}}</span>
+            </p>
+            <app-mixed-chart [timeChange]="currentValue" [locationId]="locationId" [hoursWiseLocationId]="hoursWiseLocationId"
+                [locationEventEmitter]="locationEventEmitter"></app-mixed-chart>
+        </div>
+    
+    </div>  
+</div>
+<!-- 
+<div  class="d-flex flex-1 scroll-y" *ngIf="SeepzWorkFlow">
+    <div class="chart-column d-flex flex-column pt-4 pb-3 ps-3 pe-2">
+        <div class="card card-body card-shadow rounded-4 p-0">
+                <p class="fs-sm mb-0 me-auto" style="margin-left: 7rem;">
+                    <span class="fw-bold">{{"dashboard.daily_pass"| translate}}</span>
+                </p>
+                <app-pie-chart [timeChange]="currentValue" (flaggeEmitter)="flagged($event)" [refreshAppApi]="refreshAppApi"></app-pie-chart>
+                <hr style="margin-top: -5rem;">
+                <p class="fs-sm mb-0 me-auto" style="color: red;margin-left: 7rem;">
+                    <span class="fw-bold">{{"dashboard.flagged"| translate}} - {{flaggedCount}}</span>
+                </p>
+        </div>
+        <div class="card card-body card-shadow rounded-4 p-0 " >
+            <div class="chart-box piechart-box pt-3 px-3 pb-2">
+                <p class="fs-sm mb-0 me-auto" style="margin-left: 7rem;">
+                    <span class="fw-bold">{{"dashboard.permanent_pass"| translate}}</span>
+                </p>
+                <app-semi-donut [timeChange]="currentValue"></app-semi-donut>
+                <hr style="margin-top: -4rem;">
+                <p class="fs-sm mb-0 me-auto" style="color: red;margin-left: 7rem;">
+                    <span class="fw-bold">{{"dashboard.flagged"| translate}} - {{flaggedCount}}</span>
+                </p>
+            </div>
+        </div>
+        <div class="card card-body card-shadow rounded-4 p-0 ">
+            <div class="chart-box piechart-box pt-3 px-3 pb-2">
+                <p class="fs-sm mb-0 me-auto" style="margin-left: 7rem;">
+                    <span class="fw-bold">{{"dashboard.walk_in"| translate}}</span>
+                </p>
+                <app-walking-pie-chart [timeChange]="currentValue" ></app-walking-pie-chart>
+                <hr style="margin-top: -4rem;">
+            </div>
+        </div>
+    </div>
+
+    <div class="map-column d-flex flex-column flex-1 pt-4 pb-3 ps-2 pe-3 gap-3 scroll-y">
+        <div class="card card-body card-shadow rounded-4 p-0">
+            <p class="fs-sm mb-0 me-auto passName">
+                <span class="fw-bold">{{"dashboard.daily_pass"| translate}}</span>
+            </p>
+            <app-bar-chart [timeChange]="currentValue" [locationId]="locationId" [refreshAppApi]="refreshAppApi"></app-bar-chart>
+        </div>
+        <div class="card card-body card-shadow rounded-4 p-0">
+            <p class="fs-sm mb-0 me-auto passName">
+                <span class="fw-bold">{{"dashboard.permanent_pass"| translate}}</span>
+            </p>
+            <app-bar-chart-permanent-pass [timeChange]="currentValue" [locationId]="locationId"></app-bar-chart-permanent-pass>
+        </div>
+        <div class="card card-body card-shadow rounded-4 p-0 ">
+            <div class="row">
+                <div class="col-md-6">
+                <p class="fs-sm mb-0 me-auto passName">
+                    <span class="fw-bold">{{"dashboard.walkin_visitor_checkIn"| translate}}</span>
+                </p>
+                <app-walkin-visitor-checkin [dataSource]="dataSource"  [columns]="columns"></app-walkin-visitor-checkin>
+                </div>
+                <div class="col-md-6">
+                <p class="fs-sm mb-0 me-auto passName">
+                    <span class="fw-bold">{{"dashboard.walkin_visitor_checkout"| translate}}</span>
+                </p>
+                <app-walkin-visitor-checkout [dataSource]="dataSource1"  [columns]="columns1"></app-walkin-visitor-checkout>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<div style="display:flex; flex-wrap:wrap;" class="gap-1" *ngIf="SeepzWorkFlow">
+    <div class="row col-md-12"  style="margin-left: 0.4rem;">
+        <div class="row chart-column ">
+            <div class="card card-body col-md-4 card-shadow rounded-2 p-1 gap-1 box-pie-row">
+                <p class="fs-sm mb-0 me-auto" style="margin-left: 7rem;">
+                    <span class="fw-bold">{{"dashboard.daily_pass"| translate}}</span>
+                </p>
+                <app-pie-chart (flaggeEmitter)="flagged($event)" [refreshAppApi]="refreshAppApi" [locationEventEmitter]="locationEventEmitter" ></app-pie-chart>
+                <div class="flagg-box" *ngIf="flaggedCount">
+                    <hr style="margin-top: -6.5rem;">
+                    <p class="fs-sm mb-0 me-auto" style="color: red;margin-left: 7rem;">
+                        <span class="fw-bold">{{"dashboard.flagged"| translate}} - {{flaggedCount}}</span>
+                    </p>
+                 </div>
+            </div>
+            <div class="card card-body col-md-8 card-shadow rounded-4 p-0">
+                <p class="fs-sm mb-0 me-auto passName">
+                    <span class="fw-bold">{{"dashboard.daily_pass"| translate}}</span>
+                </p>
+                <app-bar-chart [refreshAppApi]="refreshAppApi" [locationEventEmitter]="locationEventEmitter"></app-bar-chart>
+            </div>
+        </div>
+    </div> 
+    <div class="row col-md-12 gap-1" style="margin-left: 0.4rem;">
+        <div class="row chart-column">
+            <div class="card card-body col-md-4 card-shadow rounded-2 p-0 box-pie-row">
+                    <p class="fs-sm mb-0 me-auto" style="margin-left: 7rem;">
+                        <span class="fw-bold">{{"dashboard.permanent_pass"| translate}}</span>
+                    </p>
+                    <app-semi-donut  (flaggeEmitter1)="flaggeEmitter1($event)" [refreshAppApi]="refreshAppApi" [locationEventEmitter]="locationEventEmitter" ></app-semi-donut>
+                    <div class="flagg-box" *ngIf="flaggedCount1">
+                    <hr style="margin-top: -6.3rem;">
+                    <p class="fs-sm mb-0 me-auto" style="color: red;margin-left: 7rem;">
+                        <span class="fw-bold">{{"dashboard.flagged"| translate}} - {{flaggedCount1}}</span>
+                    </p>
+                    </div>
+            </div>
+            <div class="card card-body col-md-8 card-shadow rounded-4 p-0">
+                <p class="fs-sm mb-0 me-auto passName">
+                    <span class="fw-bold">{{"dashboard.permanent_pass"| translate}}</span>
+                </p>
+                <app-bar-chart-permanent-pass  [refreshAppApi]="refreshAppApi" [locationEventEmitter]="locationEventEmitter"></app-bar-chart-permanent-pass>
+            </div>
+        </div>
+    </div> 
+    <div class="row col-md-12 gap-1" style="margin-left: 0.4rem;">
+        <div class="row chart-column">
+            <div class="card card-body col-md-4 card-shadow rounded-2 p-0">
+                    <p class="fs-sm mb-0 me-auto" style="margin-left: 7rem;">
+                        <span class="fw-bold">{{"dashboard.walk_in"| translate}}</span>
+                    </p>
+                    <app-walking-pie-chart [timeChange]="currentValue" [refreshAppApi]="refreshAppApi" [locationEventEmitter]="locationEventEmitter"></app-walking-pie-chart>
+                    <hr style="margin-top: -5rem;">
+            </div>
+            <div class="card card-body col-md-8 card-shadow rounded-4 p-0">
+                <div class="row">
+                    <div class="col-md-6">
+                    <p class="fs-sm mb-0 me-auto passName">
+                        <span class="fw-bold">{{"dashboard.walkin_visitor_checkIn"| translate}}</span>
+                    </p>
+                    <app-walkin-visitor-checkin [dataSource]="dataSource"  [columns]="columns"></app-walkin-visitor-checkin>
+                    </div>
+                    <div class="col-md-6">
+                    <p class="fs-sm mb-0 me-auto passName">
+                        <span class="fw-bold">{{"dashboard.walkin_visitor_checkout"| translate}}</span>
+                    </p>
+                    <app-walkin-visitor-checkout [dataSource]="dataSource1"  [columns]="columns1"></app-walkin-visitor-checkout>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+       
+</div>

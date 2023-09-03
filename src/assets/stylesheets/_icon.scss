@@ -1,0 +1,333 @@
+$vams-font-family: "vams-icons";
+$vams-font-path: "../fonts";
+$vams-font-code: "m6a40x";
+
+$icon-print: "\e916";
+$icon-key: "\e910";
+$icon-right-arrow: "\e914";
+$icon-top-arrow: "\e915";
+$icon-check: "\e90b";
+$icon-plus: "\e913";
+$icon-cros-icon: "\e911";
+$icon-search-icon: "\e912";
+$icon-information: "\e90a";
+$icon-envelope: "\e90c";
+$icon-scheduled: "\e90d";
+$icon-telephone: "\e90e";
+$icon-telephone2: "\e90f";
+$icon-delete: "\e908";
+$icon-edit: "\e909";
+$icon-bell-icon: "\e907";
+$icon-master: "\e902";
+$icon-configure: "\e903";
+$icon-reports: "\e904";
+$icon-setting: "\e905";
+$icon-visitors: "\e906";
+$icon-appointment: "\e901";
+$icon-dashboard: "\e900";
+$icon-walkin: "\e917";
+$icon-angle-down: "\e918";
+$icon-angle-up: "\e919";
+$icon-angle-right: "\e91a";
+$icon-angle-left: "\e91b";
+$icon-filter: "\e91c";
+$icon-table: "\e91d";
+$icon-card: "\e91e";
+$icon-refresh: "\e91f";
+$icon-location: "\e920";
+$icon-multiday-appt: "\e921";
+$icon-time-in: "\e922";
+$icon-time-out: "\e923";
+$icon-pass: "\e924";
+$icon-email-template: "\e925";
+$icon-sms-template: "\e926";
+$icon-show-list: "\e927";
+$icon-create-pass: "\e928";
+$icon-resend: "\e929";
+$icon-daily-pass: "\e92a";
+$icon-permanent-pass: "\e92b";
+$icon-walk-check-out: "\e92c";
+$icon-check-in: "\e92d";
+$icon-check-out: "\e92e";
+$icon-Permanent-pass-print: "\e92f";
+$icon-company-account-ledger: "\e930";
+
+@font-face {
+  font-family: "#{$vams-font-family}";
+  src: url("#{$vams-font-path}/#{$vams-font-family}.eot?#{$vams-font-code}");
+  src: url("#{$vams-font-path}/#{$vams-font-family}.eot?#{$vams-font-code}#iefix")
+      format("embedded-opentype"),
+    url("#{$vams-font-path}/#{$vams-font-family}.ttf?#{$vams-font-code}")
+      format("truetype"),
+    url("#{$vams-font-path}/#{$vams-font-family}.woff?#{$vams-font-code}")
+      format("woff"),
+    url("#{$vams-font-path}/#{$vams-font-family}.svg?#{$vams-font-code}##{$vams-font-family}")
+      format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "#{$vams-font-family}" !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-print {
+  &:before {
+    content: $icon-print;
+  }
+}
+.icon-key {
+  &:before {
+    content: $icon-key;
+  }
+}
+.icon-right-arrow {
+  &:before {
+    content: $icon-right-arrow;
+  }
+}
+.icon-top-arrow {
+  &:before {
+    content: $icon-top-arrow;
+  }
+}
+.icon-check {
+  &:before {
+    content: $icon-check;
+  }
+}
+.icon-plus {
+  &:before {
+    content: $icon-plus;
+  }
+}
+.icon-cros-icon {
+  &:before {
+    content: $icon-cros-icon;
+  }
+}
+.icon-search-icon {
+  &:before {
+    content: $icon-search-icon;
+  }
+}
+.icon-information {
+  &:before {
+    content: $icon-information;
+  }
+}
+.icon-envelope {
+  &:before {
+    content: $icon-envelope;
+  }
+}
+.icon-scheduled {
+  &:before {
+    content: $icon-scheduled;
+  }
+}
+.icon-telephone {
+  &:before {
+    content: $icon-telephone;
+  }
+}
+.icon-telephone2 {
+  &:before {
+    content: $icon-telephone2;
+  }
+}
+.icon-delete {
+  &:before {
+    content: $icon-delete;
+  }
+}
+.icon-edit {
+  &:before {
+    content: $icon-edit;
+  }
+}
+.icon-bell-icon {
+  &:before {
+    content: $icon-bell-icon;
+  }
+}
+.icon-master {
+  &:before {
+    content: $icon-master;
+  }
+}
+.icon-configure {
+  &:before {
+    content: $icon-configure;
+  }
+}
+.icon-reports {
+  &:before {
+    content: $icon-reports;
+  }
+}
+.icon-setting {
+  &:before {
+    content: $icon-setting;
+  }
+}
+.icon-visitors {
+  &:before {
+    content: $icon-visitors;
+  }
+}
+.icon-appointment {
+  &:before {
+    content: $icon-appointment;
+  }
+}
+.icon-dashboard {
+  &:before {
+    content: $icon-dashboard;
+  }
+}
+.icon-walkin {
+  &:before {
+    content: $icon-walkin;
+  }
+}
+.icon-angle-down {
+  &:before {
+    content: $icon-angle-down;
+  }
+}
+.icon-angle-up {
+  &:before {
+    content: $icon-angle-up;
+  }
+}
+.icon-angle-right {
+  &:before {
+    content: $icon-angle-right;
+  }
+}
+.icon-angle-left {
+  &:before {
+    content: $icon-angle-left;
+  }
+}
+.icon-filter {
+  &:before {
+    content: $icon-filter;
+  }
+}
+.icon-table {
+  &:before {
+    content: $icon-table;
+  }
+}
+.icon-card {
+  &:before {
+    content: $icon-card;
+  }
+}
+.icon-refresh {
+  &:before {
+    content: $icon-refresh;
+  }
+}
+.icon-location {
+  &:before {
+    content: $icon-location;
+  }
+}
+.icon-multiday-appt {
+  &:before {
+    content: $icon-multiday-appt;     
+    color: #f78958;
+  }
+}
+.icon-time-in {
+  &:before {
+    content: $icon-time-in;     
+    color: #68b657;
+  }
+}
+.icon-time-out {
+  &:before {
+    content: $icon-time-out;     
+    color: #c69309;
+  }
+}
+.icon-pass {
+  &:before {
+    content: $icon-pass;
+  }
+}
+.icon-email-template {
+  &:before {
+    content: $icon-email-template; 
+  }
+}
+.icon-sms-template {
+  &:before {
+    content: $icon-sms-template; 
+  }
+}
+.icon-show-list {
+  &:before {
+    content: $icon-show-list; 
+  }
+}
+.icon-create-pass {
+  &:before {
+    content: $icon-create-pass; 
+  }
+}
+.icon-resend {
+  &:before {
+    content: $icon-resend; 
+  }
+}
+.icon-Daily-Pass {
+  &:before {
+    content: $icon-daily-pass; 
+  }
+}
+.icon-Permanent-Pass {
+  &:before {
+    content: $icon-permanent-pass; 
+  }
+}
+.icon-walk-check-out {
+  &:before {
+    content: $icon-walk-check-out; 
+  }
+}
+.icon-check-in {
+  &:before {
+    content: $icon-check-in; 
+  }
+}
+.icon-check-out {
+  &:before {
+    content: $icon-check-out; 
+  }
+}
+.icon-Permanent-pass-print {
+  &:before {
+    content: $icon-Permanent-pass-print; 
+  }
+}
+.icon-company-account-ledger {
+  &:before {
+    content: $icon-company-account-ledger; 
+  }
+}

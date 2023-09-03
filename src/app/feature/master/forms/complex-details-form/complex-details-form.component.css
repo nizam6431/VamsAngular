@@ -1,0 +1,193 @@
+.comples-detail-left-box{
+	width: 25%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--label-font-size) !important;
+    color: var(--label-color) !important;   
+}
+.comples-detail-right-box{
+	width: 50%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--input-view-text-size) !important;
+    color: var(--input-view-color) !important;
+    font-weight:var(--input-font-weight);
+}
+
+/*Chetan 24-nov-2021*/
+.complex-detail-edit{
+	width: 100% !important;
+    margin-bottom: 15px;
+    float: left;
+    position: relative;
+}
+.complex-detail-edit-left{
+	width: 25% !important;
+	float: left !important;
+	
+}
+.complex-detail-edit-left label{
+	color: var(--label-color);
+	font-size: var(--label-font-size);
+	font-weight: normal;
+}
+.complex-detail-edit-right, .input-brouse, .time-zone{
+	width: 50% !important;
+	float: left !important;
+	position: relative;
+} 
+.form-group input{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	-moz-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	border: 0px;
+	height: 32px;
+	width: 100%;
+	position: relative;
+}
+.form-group textarea{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	-moz-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	border: 0px;
+	width: 100%;
+	position: relative;
+}
+.mr-10{
+	margin-right: 20px;
+}
+
+/*.input-brouse input{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	-moz-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	border: 0px;
+	height: 32px;
+	line-height: 25px;
+	width: 100%;
+	position: relative;
+	margin-bottom: 30px;
+}
+.input-brouse input:focus{
+	outline: none;
+}
+.input-brouse input::file-selector-button {
+	background: #FBF8F3 !important;
+	border-right: solid 1px #F78958;
+}
+
+
+.time-zone .mat-select{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	-moz-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	border: 0px;
+	height: 32px;
+	line-height: 25px;
+	width: 26% !important;
+	position: relative;
+	padding:5px 10px ;
+	float: left;
+}
+
+.time-zone input{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	-moz-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	border: 0px;
+	height: 32px;
+	line-height: 25px;
+	width: 70%;
+	position: relative;
+	float: right;
+}*/
+
+.input-info{
+	position: absolute;
+    top: 36px;
+    font-size: var(--input-info-text-size) !important;
+    line-height: 14px;
+    right: 0px;
+    font-weight: 400;
+    color: var(--input-info-color);
+}
+
+.form-group select{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	-moz-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	border: 0px;
+	height: 32px;
+	position: relative;
+}
+
+.form-group .mat-select{
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	-moz-box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	box-shadow: 1px 2px 5px 0px rgba(214,214,214,0.6);
+	border: 0px;
+	height: 32px;
+	line-height: 25px;
+	width: 100%;
+	position: relative;
+	padding:5px 10px ;
+	float: left;
+}
+
+
+
+::ng-deep .mat-error {
+    color: #f44336;
+    position: absolute;
+    left: 0px;
+    top: 36px;
+    font-size: 11px;
+    line-height: 14px;
+    font-style: italic;
+}
+
+
+
+@media only screen and (max-width: 980px) {
+
+.complex-detail-edit-left{
+	width: 100% !important;
+}
+.complex-detail-edit-right{
+	width: 100% !important;
+	position: relative;
+}
+::ng-deep .mat-error {
+    right: 0px;
+} 
+}
+
+
+.pb-100{
+	padding-bottom: 100px;
+}
+
+.position-relative{
+	position: relative;
+}

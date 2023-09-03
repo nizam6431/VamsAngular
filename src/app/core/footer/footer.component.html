@@ -1,0 +1,34 @@
+<!-- <div class="footer navbar-fixed-bottom">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-6 text-center pb-10 mt-20 image-rtl">
+                <a href="javascript:void(0)" (click)="scheduleAppointment()" class="primary-button"><i
+                    class="fas fa-plus"></i> schedule</a>
+            </div>
+            <div class="text-center mt-10">
+                <a href="javascript:void(0)" (click)="openChangeLanguage(changelanguage)" class="small-button" style="float: none;" >{{'ChangeLanguage.ChangeLanguage' | translate}}</a>
+            </div>
+            <div class="col-md-6 text-center pb-10 mt-20 image-rtl">
+                <img src="assets/images/poweredbyvams.png">
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<footer class="footer-sticky">
+    <!-- <div style="float: left;"><a (click)="scheduleAppointment()" href="javascript:void(0)" class="primary-button">schedule</a></div>		
+    <div class="footer-walkin" *ngIf="hasPermission('share')">
+        <img src="assets/images/walkin.png">  Walkin
+        <a href="#" class="plus-icon"><img src="assets/images/plus-icon.png"></a>
+    </div>
+    <div><a (click)="shareAppointment()" href="javascript:void(0)" class="primary-button">Share Appointment</a></div>		
+    <div style="float: right;"><a href="javascript:void(0)" (click)="preschedule()" class="primary-button">Preschedule</a></div>	 -->
+</footer>
+
+<ng-template #changelanguage>
+    <app-change-language></app-change-language>
+</ng-template>
+
+<ng-template #scheduleappointment>
+    <app-shedule-modal (appointmentScheduled)="appointmentScheduled($event)"></app-shedule-modal>
+</ng-template>

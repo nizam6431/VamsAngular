@@ -1,0 +1,55 @@
+<ng-container *ngIf="type == 'dynamic_permission'; else searchTab">
+  <div class="vams-page-sub-header d-flex align-items-center">
+    <button
+      class="btn btn-link d-flex align-items-center text-dark text-decoration-none fs-sm fw-medium border-0 ps-0 pe-3 py-0"
+      (click)="buttonClickEvent('back')">
+      <i class="icon-angle-left fw-bold fs-5"></i>
+      <span>{{ "Masters.Back" | translate }}</span>
+    </button>
+    <h6 class="vams-page-sub-title fw-bold border-start border-2 border-primary mb-0">
+      {{ selectedComplexName }}
+    </h6>
+  </div>
+</ng-container>
+
+<ng-template #searchTab>
+  <div class="vams-grid-filters d-flex">
+    <div class="input-group search-group ms-auto">
+      <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+        class="form-control form-control-sm" />
+      <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+        (click)="cleanSearchBox(input)">
+        <i class="icon-cros-icon"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+        <i class="icon-search-icon"></i>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<div class="vams-grid-wrapper">
+  <app-grid (type)="typeChanged($event)" (selectedComplex)="selectedComplex($event)" [buttonClickEvent]="buttonClicked"
+    [searchfilter]="searchfilter">
+  </app-grid>
+</div>
+
+<footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+  <ng-container [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'dynamic_permission'">
+      <button class="btn btn-sm btn-primary-dark px-3" (click)="buttonClickEvent('save')">
+        {{ "CommonToken.Save" | translate }}
+      </button>
+      <button class="btn btn-sm btn-white px-3" (click)="buttonClickEvent('reset')">
+        {{ "CommonToken.Reset" | translate }}
+      </button>
+    </ng-container>
+    <!-- <button class="btn btn-sm btn-primary-dark px-3" (click)="openDialog()">save</button>
+    <button class="btn btn-sm btn-primary-dark px-3" (click)="openDialog()">reset</button> -->
+    <ng-container *ngSwitchDefault>
+      <button class="btn btn-sm btn-primary-dark px-3" (click)="openDialog()">
+        Add Account
+      </button>
+    </ng-container>
+  </ng-container>
+</footer>

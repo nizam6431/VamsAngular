@@ -1,0 +1,55 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+    @extend .host;
+}
+
+.chart-column {
+    min-width: 24rem;
+}
+
+.card-count {
+    max-width: 8rem;
+}
+
+.color-bar {
+    width: 16rem;
+    height: 1rem;
+    background: transparent linear-gradient(270deg, #758FFC 0%, #758FFC00 100%) 0% 0% no-repeat padding-box;
+    // background: transparent linear-gradient(270deg, #758FFC 0%, #364376 25%, #5b3676 50%, #758FFC00 100%) 0% 0% no-repeat padding-box;
+    border-color: rgba($color: #758FFC, $alpha: 0.0625) !important;
+}
+
+.chart-box {
+    max-width: 22.375rem;
+}
+
+.piechart-box {
+    min-height: 8rem;
+}
+
+.passName{
+    margin-left: 1rem
+}
+
+.pieChartS{
+    height: 12rem;
+    overflow: hidden;
+}
+// .chart-columns{
+//     max-width: 17rem;
+// }
+
+// .apex-pie{
+//     position: absolute;
+//     left: 5px;
+// }
+.box-pie-row{
+    position: relative;
+}
+.flagg-box{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}

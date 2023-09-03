@@ -1,0 +1,482 @@
+<div class="popup-header">
+  <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+  <div class="popup-title-wrapper d-flex align-items-center">
+    <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+      "AppointmentCardOfVisitors.VisitorsDetails" | translate | translate
+      }}</span>
+  </div>
+</div>
+<div class="popup-content bg-floral-white p-0">
+  <div class="details-wrapper bg-white">
+    <div *ngIf="appointmentCardData.isMultiDayAppointment" class="fw-medium text-primary-dark mb-3 gap-1">
+      <div class="d-flex gap-2">
+        <mat-icon class="h5 mb-0">date_range</mat-icon>      
+        <div class="d-flex gap-1 fs-sm">
+          <p class="mb-0">
+            <ng-container>{{ "AppointmentCardOfVisitors.ShowMultiDayReschedule" | translate }}</ng-container>
+            <ng-container *ngIf="visitorData">
+              {{ "AppointmentCardOfVisitors.SmallFrom" | translate }} {{visitorData?.multiDayStartDate}} {{ "AppointmentCardOfVisitors.SmallTo" | translate }} {{visitorData?.multiDayEndDate}}.
+            </ng-container>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="picture picture-lg d-flex align-items-center justify-content-center p-1 overflow-hidden">
+          <img [src]="visitorImage" (error)="handleError()"
+            alt="{{ 'AppointmentCardOfVisitors.VisitorName' | translate }}" />
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="d-flex flex-column justify-content-center align-items-start">
+          <p class="status fs-xs fw-bold rounded-pill mb-2" *ngIf="appointmentCardData.status == 'INPROGRESS'">
+            {{ appointmentCardData.status }}
+          </p>
+          <p class="status fs-xs fw-bold rounded-pill mb-2" *ngIf="appointmentCardData.type == 'WALKIN' && appointmentCardData.status == 'APPROVED'">
+            {{ appointmentCardData.status }}
+          </p>
+          <p class="d-flex align-items-center gap-2 mb-0">
+            <i class="icon-{{
+                appointmentCardData.type.toLowerCase()
+              }} fs-5 text-info"></i>
+            <span class="fs-sm fw-medium">{{ appointmentCardData.type }}</span>
+          </p>
+          <p class="fs-sm fw-medium mb-0" *ngIf="appointmentCardData?.type === appointmentsStatus.scheduled">
+            From {{ appointmentCardData.startTime }} To {{ appointmentCardData.endTime }}, {{ appointmentCardData.date
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <label for="visitorName" class="col-md-3 col-form-label">
+        {{ "AppointmentCardOfVisitors.VisitorName" | translate }}
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break fw-bold mb-0">{{appointmentCardData.visitorFirstName + ' ' +
+          appointmentCardData.visitorLastName}}</p>
+      </div>
+    </div>
+    <ng-container *isPermissible="permissionKeyObj.VISITORCONTACTACTION">
+      <div class="row mb-2" *ngIf="appointmentCardData.visitorEmail">
+        <label for="visitorEmail" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.EmailId" | translate }}
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData.visitorEmail }}</p>
+        </div>
+      </div>
+      <div class="row mb-2" *ngIf="appointmentCardData.visitorPhone">
+        <label for="visitorPhone" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.ContactNumber" | translate }}
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{ '+'+ appointmentCardData.visitorIsd + '
+            '+formatCellNumber(appointmentCardData.visitorPhone)}}</p>
+        </div>
+      </div>
+    </ng-container>
+    <div class="row mb-2" *ngIf="appointmentCardData.visitCompany">
+      <label for="visitCompany" class="col-md-3 col-form-label">
+        {{ "AppointmentCardOfVisitors.Company" | translate }}
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData.visitCompany }}</p>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="dilogbox-label">
+          {{ "AppointmentCardOfVisitors.PurposeOfVisit" | translate }}
+        </div>
+        <div class="dilogbox-value">
+          {{ appointmentCardData.visitorPurpose }}
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <div class="dilogbox-label">
+          {{ "AppointmentCardOfVisitors.TypeOfVisitor" | translate }}
+        </div>
+        <div class="dilogbox-value">{{ appointmentCardData.visitorType }}</div>
+      </div>
+    </div> -->
+    <!-- <div class="row">
+      <div class="row">
+        {{ "AppointmentCardOfVisitors.Company" | translate | titlecase }}
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="dilogbox-label">
+            {{ "AppointmentCardOfVisitors.TimeIn" | translate | titlecase }}
+          </div>
+          <div class="dilogbox-value">12:00pm</div>
+        </div>
+        <div class="col-md-6">
+          <div class="dilogbox-label">
+            {{ "AppointmentCardOfVisitors.TimeOut" | translate | titlecase }}
+          </div>
+          <div class="dilogbox-value">02:00pm</div>
+        </div>
+      </div>
+    </div> -->
+    <!-- <div>
+      <div class="row">
+        {{ "AppointmentCardOfVisitors.Building" | translate | titlecase }}
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="dilogbox-label">
+            {{ "AppointmentCardOfVisitors.TimeIn" | translate | titlecase }}
+          </div>
+          <div class="dilogbox-value">12:00pm</div>
+        </div>
+        <div class="col-md-6">
+          <div class="dilogbox-label">
+            {{ "AppointmentCardOfVisitors.TimeOut" | translate | titlecase }}
+          </div>
+          <div class="dilogbox-value">02:00pm</div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div class="details-wrapper bg-white border-top" *ngIf="appointmentCardData?.checkInTime">
+    <div class="row mb-2" *ngIf="appointmentCardData?.checkInTime">
+      <div class="row col-md-12" *ngIf="!SeepzWorkFlow">
+        <label for="visitorCheckInTime" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.CheckIn" | translate | titlecase }} 
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">
+            <span *ngIf="visitorData?.buildingName">{{visitorData?.buildingName}}</span>
+          </p>
+        </div>
+      </div>
+      <label for="visitorCheckInTime" class="col-md-3 col-form-label">
+        <img alt="Time In" src="./assets/images/icon/Time-in.png"> 
+        {{ "AppointmentCardOfVisitors.CheckInTime" | translate | titlecase }}  
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break mb-0">
+          {{ appointmentCardData?.checkInTime }}
+        </p>
+      </div>
+    </div>
+    <!-- sprint 11 this is just hide for now start -->
+    <div class="row mb-2" *ngIf="visitorData?.timeIn.length>0">
+      <label class="col-md-3 col-form-label">
+        <img alt="Time In" src="./assets/images/icon/Time-in.png"> 
+        {{ "AppointmentCardOfVisitors.TimeIn" | translate | titlecase }}
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break mb-0">
+          {{visitorData.timeIn[visitorData.timeIn.length - 1]}}
+        </p>
+      </div>
+    </div>
+    <div class="row" *ngIf="visitorData?.timeOut.length>0">
+      <label class="col-md-3 col-form-label">
+        <img alt="Time Out" src="./assets/images/icon/Time-out.png"> 
+        {{ "AppointmentCardOfVisitors.TimeOut" | translate | titlecase }}
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break mb-0">
+          {{visitorData.timeOut[visitorData.timeOut.length - 1]}}
+        </p>
+      </div>
+    </div>
+    <!-- sprint 11 this is just hide for now end -->
+  </div>
+  <div class="details-wrapper border-top">
+    <p class="fs-sm fw-bold">
+      {{ "AppointmentCardOfVisitors.HostDetails" | translate }}
+    </p>
+    <div class="row mb-2" *ngIf="appointmentCardData?.type !== 'WALKIN'">
+      <label for="hostName" class="col-md-3 col-form-label">
+        {{ "AppointmentCardOfVisitors.HostName" | translate }}
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break mb-0">{{appointmentCardData.hostFirstName + ' ' +
+          appointmentCardData.hostLastName}}</p>
+      </div>
+    </div>
+    <ng-container *isPermissible="permissionKeyObj.HOSTCONTACTACTION">
+      <div class="row mb-2"
+        *ngIf="appointmentCardData.hostPhone && appointmentCardData?.type !== appointmentsStatus.walkin">
+        <label for="hostPhone" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.ContactNumber" | translate }}
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{'+'+ appointmentCardData.hostIsdCode + '
+            '+formatCellNumber(appointmentCardData.hostPhone)}}</p>
+        </div>
+      </div>
+      <div class="row mb-2"
+        *ngIf="appointmentCardData.hostEmail && appointmentCardData?.type !== appointmentsStatus.walkin">
+        <label for="hostEmail" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.EmailId" | translate }}
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData.hostEmail }}</p>
+        </div>
+      </div>
+    </ng-container>
+    <div class="row mb-2"
+      *ngIf="appointmentCardData?.hostCompany && appointmentCardData?.type !== appointmentsStatus.walkin">
+      <label for="visitorHostCompany" class="col-md-3 col-form-label">
+        {{ "AppointmentCardOfVisitors.Company" | translate | titlecase }}
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData?.hostCompany }}</p>
+      </div>
+    </div>
+    <div class="row mb-2" *ngIf="appointmentCardData.departmentName">
+      <label for="departmentName" class="col-md-3 col-form-label">
+        {{ "AppointmentCardOfVisitors.Department" | translate }}
+      </label>
+      <div class="col-md-9">
+        <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData.departmentName }}</p>
+      </div>
+    </div>
+    <ng-container *ngIf="appointmentCardData?.type === appointmentsStatus.walkin">
+      <div class="row mb-2" *ngIf="visitorData?.buildingName">
+        <label for="visitorHostCompany" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.Building" | translate | titlecase }}
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{ visitorData?.buildingName }}</p>
+        </div>
+      </div>
+      <div class="row mb-2" *ngIf="appointmentCardData?.hostCompany && userDetails?.feature?.workFlow!='SEEPZ'">
+        <label for="visitorHostCompany" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.Company" | translate | titlecase }}
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData?.hostCompany }}</p>
+        </div>
+      </div>
+      <div class="row mb-2" *ngIf="appointmentCardData?.hostFullName && userDetails?.feature?.workFlow=='SEEPZ'">
+        <label for="visitorHostCompany" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.HostName" | translate | titlecase }}
+        </label>
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData?.hostFullName }}</p>
+        </div>
+        <!--  -->
+      </div>
+      <div *isPermissible="permissionKeyObj.HOSTCONTACTACTION">
+      <div class="row mb-2" *ngIf="appointmentCardData?.hostFullName && userDetails?.feature?.workFlow=='SEEPZ'">
+        <label for="visitorHostCompany" class="col-md-3 col-form-label">
+          {{ "AppointmentCardOfVisitors.hostEmail" | translate | titlecase }}
+        </label>  
+        <div class="col-md-9">
+          <p class="form-control-plaintext text-break mb-0">{{ appointmentCardData?.hostEmail }}</p>
+        </div>
+        <!--  -->
+      </div>
+      </div>
+      <div *isPermissible="permissionKeyObj.HOSTCONTACTACTION">
+        <div class="row mb-2" *ngIf="appointmentCardData.hostPhone">
+          <label for="hostPhone" class="col-md-3 col-form-label">
+            {{ "AppointmentCardOfVisitors.Contact_Number" | translate }}
+          </label>
+          <div class="col-md-9">
+            <p class="form-control-plaintext text-break mb-0">{{'+'+ appointmentCardData.hostIsdCode + '
+              '+formatCellNumber(appointmentCardData.hostPhone)}}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<footer class="popup-footer d-flex align-items-center gap-3">
+  <!-- <button class="btn btn-sm btn-primary-dark px-3" (click)="openRestrictDialog()">
+  {{ "AppointmentCardOfVisitors.restrictVisitor" | translate }}
+</button> -->
+<!-- *ngIf="visitorData?.timeIn.length != visitorData?.timeOut.length && 
+visitorData?.checkInTime != null" -->
+<!-- sprint 11 part just hide for now start -->
+  <!-- <ng-container *ngIf="isl3frontDesk">
+    <button class="btn btn-sm btn-white px-3" 
+    *ngIf="appointmentCardData?.isTimeIn && 
+    appointmentCardData?.checkOutTime == null"
+    (click)="timeInTimeOut(visitorData.appointmentId, 'in')">
+      {{ "AppointmentCardOfVisitors.TimeIn" | translate }}
+    </button>
+  </ng-container> -->
+<!-- sprint 11 part just hide for now end -->
+  <button class="btn btn-sm btn-white px-3" (click)="dialogRef.close()">
+    {{ "AppointmentCardOfVisitors.Back" | translate }}
+  </button>
+  <!-- <button
+    class="secondry-button"
+    mat-raised-button
+    (click)="restrictThisVisitor()"
+  >
+    {{ "AppointmentCardOfVisitors.RestrictThisVisitor" | translate }}
+  </button> -->
+</footer>
+<!-- <div class="row">
+  <div class="col-md-8"></div>
+  <div class="col-md-4">
+    {{ "AppointmentCardOfVisitors.ReprintVisitorPass" | translate | titlecase }}
+  </div>
+</div>
+<div class="row">
+  <button mat-raised-button>
+    {{
+      "AppointmentCardOfVisitors.RestrictThisVisitor" | translate | titlecase
+    }}
+  </button>
+</div> -->
+<!-- <mat-tab-group #MatTabGroup>
+  <mat-tab label="{{ 'AppointmentDetails.VisitorsDetails' | translate }}">
+    <div class="container">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="col-md-4">
+            <img
+              src="assets/images/user-image.jpg"
+              class="card-img"
+              alt="..."
+            />
+          </div>
+          <ng-container>
+            <div class="col-md-8">
+              <div class="card-body">
+                <div class="card-body">
+                  <p class="card-text">
+                    <i class="fas fa-check-circle"></i
+                    >{{ "AppointmentDetails.Registered_Visitor" | translate }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <div class="card-body">
+                  <p class="card-text">
+                    <img src="assets/images/printericon.png" />{{
+                      "AppointmentDetails.Print_Pass" | translate
+                    }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <div class="card-body">
+                  <p class="card-text">{{ "In Progress" }}</p>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div class="col-md-8">
+            <div class="card-body">
+              <div class="card-body">
+                <p class="card-text">
+                  {{ "AppointmentDetails.ScheduledAt" | translate }}
+                </p>
+                <p class="card-text">{{ "12.30PM" }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.visitorName_Label" | translate }}</span>
+          <div class="">{{ "Robin Gupta" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.EmailId" | translate }}</span>
+          <div class="">{{ "robin.gupta@imperial.com" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "Schedule.Company" | translate }}</span>
+          <div class="">{{ "Imperial" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.MobileNumber" | translate }}</span>
+          <div class="">{{ "9807875431" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.TypeOfVisitor" | translate }}</span>
+          <div class="">{{ "visitor" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "Schedule.PurposeofVisit" | translate }}</span>
+          <div class="">{{ "meeting" }}</div>
+        </div>
+      </div>
+      <div></div>
+      <ng-container>
+        <div class="container">
+          <div class="col-md-6">
+            <div class="col-md-12">
+              <h3>{{ "AppointmentDetails.Building" | translate }}</h3>
+            </div>
+            <div class="col-md-6">
+              <span>{{ "AppointmentDetails.TimeIn" | translate }}</span>
+              <div class="">{{ "11.50AM" }}</div>
+            </div>
+            <div class="col-md-6">
+              <span>{{ "AppointmentDetails.TimeOut" | translate }}</span>
+              <div class="">{{ "2.20PM" }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="col-md-12">
+              <h3>{{ "Schedule.Company" | translate }}</h3>
+            </div>
+            <div class="col-md-6">
+              <span>{{ "AppointmentDetails.TimeIn" | translate }}</span>
+              <div class="">{{ "11.55AM" }}</div>
+            </div>
+            <div class="col-md-6">
+              <span>{{ "AppointmentDetails.TimeOut" | translate }}</span>
+              <div class="">{{ "2.00PM" }}</div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <hr />
+      <div class="container">
+        <div class="col-md-12">
+          <h3>{{ "AppointmentDetails.HostDetails" | translate }}</h3>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.HostName" | translate }}</span>
+          <div class="">{{ "Nilesh" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.Company" | translate }}</span>
+          <div class="">{{ "Vams" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.MobileNumber" | translate }}</span>
+          <div class="">{{ "7890123456" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.Department" | translate }}</span>
+          <div class="">{{ "QA" }}</div>
+        </div>
+        <div class="col-md-6">
+          <span>{{ "AppointmentDetails.EmailId" | translate }}</span>
+          <div class="">{{ "nilesh@viraat.info" }}</div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<footer class="button-bg-popup">
+  <button class="secondry-button mr-20" mat-raised-button>
+    {{ "AppointmentDetails.Back" | translate }}
+  </button>
+  <button
+    class="common-popup-button"
+    (click)="openConfirmDialog()"
+    mat-raised-button
+  >
+    {{ "AppointmentDetails.Restrict_Visitor" | translate }}
+  </button>
+</footer> -->

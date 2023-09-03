@@ -1,0 +1,133 @@
+<!-- TODO: Question for visitors should be configurable -->
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative"> 
+                {{ "restricted_Visitor.restricted_Visitors_Title" | translate }}
+            </span>
+        </div>
+    </div>
+    <!-- Form for Restrict User -->
+    <form class="popup-form" [formGroup]="formRestrictVisitor" novalidate autocomplete="off">
+        <div class="popup-content">
+            <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+                {{ "Schedule.VisitorDetails" | translate }}
+            </h6>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-md-3 col-form-label">
+                    {{ "Schedule.FirstName" | translate }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-9">
+                    <input type="text" maxlength="50" class="form-control text-capitalize" id="feFirstName"
+                        placeholder="{{ 'Schedule.FirstNamePlaceholder' | translate }}" formControlName="firstName" />
+                    <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                        {{ message | titlecase }}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feLastName" class="col-md-3 col-form-label">
+                    {{ "Schedule.LastName" | translate }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-9">
+                    <input type="text" maxlength="50" class="form-control text-capitalize" id="feLastName"
+                        placeholder="{{ 'Schedule.LastNamePlaceholder' | translate }}" formControlName="lastName" />
+                    <mat-error *ngFor="let message of showValidationMessages('lastName')">
+                        {{ message | titlecase}}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-md-3 col-form-label">
+                    {{ "Schedule.EmailId" | translate }}
+                    <!-- <span class="mendatory">*</span> -->
+                </label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" maxlength="150"
+                        placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" />
+                    <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                        {{ message  | titlecase}}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feTimeZone" class="col-md-3 col-form-label">
+                    {{ "Schedule.CellNumber" | translate }}
+                </label>
+                <div class="col-md-9">
+                    <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                        [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                        [enablePlaceholder]="true" [searchCountryFlag]="true"
+                        [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                        [separateDialCode]="separateDialCode" 
+                        [selectedCountryISO]="selectedCountry" [phoneValidation]="phoneValidation" name="phone"
+                        formControlName="visitorMobileNumber" (countryChange)="checkNumber($event)"  appMobileNumberFormat>
+                    </ngx-intl-tel-input>
+                    <mat-error *ngIf="formRestrictVisitor.get('visitorMobileNumber').hasError('validatePhoneNumber')">
+                        {{ "Schedule.CellNumberValid" | translate }}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feCompany" class="col-md-3 col-form-label">{{ "Schedule.Company" | translate }}
+                </label>
+                <div class="col-md-9">
+                    <input type="text" maxlength="100" id="feCompany"
+                        placeholder="{{ 'Schedule.CompanyPlaceholder' | translate }}"
+                        class="form-control text-capitalize" formControlName="company" />
+                    <mat-error *ngFor="let message of showValidationMessages('company')">
+                        {{ message | titlecase}}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row mb-3">
+                    <label for="lightThemeLogo" class="col-sm-3 col-form-label">{{"restricted_Visitor.visitor_Image" |
+                        translate}}</label>
+                    <div class="col-sm-9">
+                        <div class="d-flex gap-3">
+                            <div class="d-grid">
+                                <input id="file" name="file" placeholder="Please select new logo" #fileInput
+                                    accept="image/x-png,image/jpeg" class="custom-file-input" type="file"
+                                    (change)="onFileChange($event)" />
+                            </div>
+                            <!-- <div *ngIf="!imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                <img src="assets/images/login-vams-logo.png" class="img-fluid" alt="Logo" />
+                            </div> -->
+                            <div *ngIf="imgpreview"
+                                class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                <img *ngFor="let item of base64textString" class="img-fluid" src="{{ item }}"
+                                    alt="Logo" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-md-3 col-form-label">
+                    {{ "restricted_Visitor.remark" | translate }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-9">
+                    <input type="text" maxlength="250" class="form-control text-capitalize" id="feremark"
+                        placeholder="{{ 'Schedule.remark_Placeholder' | translate }}" formControlName="remark" />
+                    <mat-error *ngFor="let message of showValidationMessages('remark')">
+                        {{ message | titlecase }}
+                    </mat-error>
+                </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button (click)="onSubmit()" class="btn btn-sm btn-primary-dark px-3">
+                {{ "Schedule.Save" | translate }}
+            </button>
+            <button (click)="resetForm()" type="button" class="btn btn-sm btn-white px-3">
+                {{ "CommonToken.Clear" | translate }}
+            </button>
+            <!-- <button (click)="formReset()" class="btn btn-sm btn-white  px-3">Reset</button> -->
+        </div>
+    </form>
+</div>

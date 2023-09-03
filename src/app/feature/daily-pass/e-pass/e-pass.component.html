@@ -1,0 +1,64 @@
+<div class="app-details-wrapper d-flex flex-column vh-100 scroll-y">
+    <div class="app-details d-flex flex-column position-relative mx-auto full-height" [ngClass]="{'class1':passColor[0].flag, 'class2': passColor[1].flag, 'class3':passColor[2].flag,'class4':passColor[3].flag,'class5':passColor[4].flag}" >
+        <header class="  p-4 text-center w-100">
+            <!-- <img [src]="logoUrl" alt="Vams-Logo" height="56px" /> -->
+            <div class="d-flex justify-content-between">
+                <div class="col-3" >
+                    <!-- <img src="assets/images/pass-Expire.png"  alt="Qr code" /> -->
+                    <img src="assets/images/seepz_logo.png" alt="Qr code" style="width: 100%;" />
+                </div>
+                <div class="col-9 address mobi-address" >
+                    {{epassData?.address?epassData.address:address}}
+                <!-- Unit no 39,
+                 G & J Complex 3,<br>
+                Seepz, Andheri(E),<br>
+                Mumbai -400096. -->
+                </div>
+            </div>
+        </header>
+        <section class=" w-100 flex-1" *ngIf="!passCheckout">
+            <div class="category categoryHead" *ngIf="type!='WalkIn'" >
+               Category: {{epassData?.category}}
+            </div>
+            <div class="page-content w-100 E-pass-expired" *ngIf="epassData">
+                <div class=" mx-auto text-center p-3 position-relative">
+                    <!-- <img src="assets/images/appointment-qrcode.png"  class="e-pass-qr-code" alt="Qr code" /> -->
+                    <img [src]="selfPhotoUrl" (error)="handleIamge(epassData)" class="e-pass-qr-code" alt="Qr code" />
+                </div>
+                <div style="margin: 1.5rem;" *ngIf="type!='WalkIn' ">
+                   <p><span class="b2"> Company Name</span>: {{epassData?.unitName}}</p> 
+                    <p><span class="b2">Name</span>: {{epassData?.name}}</p>
+                    <p><span class="b2">Mobile No</span>: {{epassData?.isd?epassData?.isd:isdCode}} {{formatPhoneNumber(epassData?.mobileNo)}}</p>
+                    <p *ngIf="epassData?.contractorName"> <span class="b2">Contractor Name</span>: {{epassData?.contractorName}}</p>
+                    <p *ngIf="epassData?.vehicleNumber"><span class="b2">Vehicle Number</span>: {{epassData?.vehicleNumber}}</p>
+                    <p><span class="b2">Purpose</span>: {{epassData?.purpose}}</p>
+                    <p><span class="b2">Person To Meet</span>: {{epassData?.personToMeet}}</p>
+                    <p *ngIf="epassData?.checkInDateAndTime"><span class="b2">Check-in Date & Time</span>: {{epassData?.checkInDateAndTime}}</p>
+                    <p><span class="b2">Validity</span>: {{epassData?.validityDateAndTime}}</p>
+                </div>
+                <div style="margin: 1.5rem;" *ngIf="type=='WalkIn' ">
+                    <p><span class="b2"> Visitor Name</span>: {{epassData?.name}}</p>
+                    <p><span class="b2">Visitor Company</span>: {{epassData?.visitorCompany}}</p>
+                    <p><span class="b2">Mobile No</span>: {{epassData?.isd?epassData?.isd:isdCode}}
+                        {{formatPhoneNumber(epassData?.mobileNo)}}</p>
+                    <p > <span class="b2">Type Of Visitor</span>: {{epassData?.visitorType}}</p>
+                    <p><span class="b2">Purpose Of Visit</span>: {{epassData?.purpose}}</p>
+                    <p><span class="b2">Person To Meet</span>: {{epassData?.personToMeet}}</p>
+                    <p ><span class="b2">Check-in Date & Time</span>:
+                        {{epassData?.checkInDateAndTime}}</p>
+                    <p><span class="b2">Validity</span>: {{epassData?.validityDateAndTime}}</p>
+                </div>
+                <span *ngIf="passExpire" class="expire-after">{{'epass.expired' | translate}}</span>
+            </div> 
+
+        </section>
+        <section *ngIf="passCheckout" class="expire-before">
+           <span class="passExpireMsg">{{'epass.expireMsg' | translate}}</span> 
+        </section>
+
+        <!-- <footer class="page-footer w-100 p-3">
+            <div class="row">
+            </div>
+        </footer> -->
+    </div>
+</div>

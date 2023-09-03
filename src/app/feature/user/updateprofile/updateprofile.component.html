@@ -1,0 +1,101 @@
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 mt-20 mb-20">
+        <div class="content-shadow-box">
+            <!-- <div class="edit-dtn">
+                <a href=""><i class="fas fa-pen"></i></a>
+            </div> -->
+            <h2>{{'UpdateProfile.updateProfile_Label' | translate}}</h2>
+                <form (ngSubmit)="updateProfile()" #formData="ngForm" [formGroup]="UpdateProfileForm" autocomplete="off"
+        novalidate>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.firstName_Label' | translate}}</div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="{{'UpdateProfile.firstName_Placeholder' | translate}}" class="input-style" name="firstName" formControlName="firstName" maxlength="50">
+                <label class="error-color fontSize-10"
+                    *ngIf="(firstName?.invalid && formData?.submitted && firstName?.errors?.required)||(firstName?.invalid && firstName?.touched && firstName?.errors?.required)">
+                    {{'UpdateProfile.firstName_Required' | translate}}
+                </label>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.lastName_Label' | translate}}</div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="{{'UpdateProfile.lastName_Placeholder' | translate}}" class="input-style" name="lastName" formControlName="lastName" maxlength="50">
+                <!-- <label class="error-color fontSize-10"
+                *ngIf="(firstName?.invalid && formData?.submitted && firstName?.errors?.required)||(firstName?.invalid && firstName?.touched && firstName?.errors?.required)">
+                {{'UpdateProfile.firstName_Required' | translate}}
+            </label> -->
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.email_Label' | translate}}</div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="{{'UpdateProfile.email_Placeholder' | translate}}" class="input-style" name="email" formControlName="email" [attr.disabled]="true">
+            </div>
+            <div style="clear: both;"></div>					
+            <div class="contact-detail">
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.isd_Label' | translate}}</div>
+                    <div class="input-area pb-20">
+                        <!-- <select class="input-style" name="isdcode" formControlName="isdCode">
+                            <option *ngFor="let code of isdCodes" value="{{code.IsdCode}}">+{{code.IsdCode}}</option>
+                        </select> -->
+                        <ng-select2 *ngIf="isdCodes.length>0" [options]="options" formControlName="isdCode" name="isdCode" (valueChanged)="isdCodeChange($event)" [data]="isdCodes">
+                        </ng-select2>
+                        <!-- <label class="error-color fontSize-10">Please enter your Email correctly. </label> -->
+                    </div>
+                </li>
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.cellNumber_Label' | translate}}</div>
+                    <div class="input-area pb-20">
+                        <input type="text" mask='(000) 099-999999' placeholder="{{'UpdateProfile.cellNumber_Placeholder' | translate}}" pattern="[0-9]*" inputmode="numeric" class="input-style" name="cellNumber" formControlName="cellNumber" maxlength="15">
+                        <label class="error-color fontSize-10"
+                        *ngIf="(cellNumber?.invalid && formData?.submitted && cellNumber?.errors?.required)||(cellNumber?.invalid && cellNumber?.touched && cellNumber?.errors?.required)">
+                        {{'UpdateProfile.cellNumber_Required' | translate}}
+                        </label>     
+                        <label class="error-color fontSize-10"
+                        *ngIf="(cellNumber?.invalid && cellNumber?.touched && cellNumber?.errors?.pattern)">
+                        {{'UpdateProfile.cellNumber_Pattern' | translate}}
+                        </label>   
+                    </div>
+                </li>
+            </div>
+            <div style="clear: both;"></div>		
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.userPin_Label' | translate}} </div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="{{'UpdateProfile.userPin_Placeholder' | translate}}" class="input-style" name="userPin" formControlName="userPin" maxlength="6">
+                <label class="error-color fontSize-10"
+                *ngIf="(userPin?.invalid && formData?.submitted && userPin?.errors?.required)||(userPin?.invalid && userPin?.touched && userPin?.errors?.required)">
+                {{'UpdateProfile.userPin_Required' | translate}}
+                </label>
+                <label class="error-color fontSize-10"
+                *ngIf="(userPin?.invalid && userPin?.touched && userPin?.errors?.pattern)">
+                {{'UpdateProfile.userPin_Pattern' | translate}}
+                </label>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.notificationType_Label' | translate}}</div>
+            <div class="input-area pb-20">
+                <select class="input-style" name="notificationType" formControlName="notificationType">
+                    <option *ngFor="let notification of notificationTypes" value="{{notification.id}}">{{notification.name}}</option>
+                </select>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.location_Label' | translate}} </div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="Mumbai " class="input-style" name="location" formControlName="location" [attr.disabled]="true">
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'UpdateProfile.group_Label' | translate}}</div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="Regular Employee" class="input-style" name="groupName" formControlName="groupName" [attr.disabled]="true">
+            </div>
+            <div class="text-center">
+                    <button class="primary-button fontSize-14 Weight-regular mt-10" type="submit">{{'UpdateProfile.save_Label' | translate}}</button>
+                </div>
+            </form>
+            </div>
+        </div>
+  </div>
+
+  <ng-template #profileSuccess>
+    <div class="popup-box">
+        <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+        <img src="assets/images/rechedule.png">
+        <div class="popup-box-text">{{ ServerMessage }}}</div>
+        <a href="javascript:void(0)" (click)="closeModal()" class="primary-button mt-20">Ok</a>
+    </div>
+</ng-template>

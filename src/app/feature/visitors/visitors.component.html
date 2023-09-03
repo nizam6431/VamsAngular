@@ -1,0 +1,63 @@
+<mat-button-toggle-group class="vams-button-toggle-group vams-button-toggle-group-primary bg-floral-white"
+  name="fontStyle" aria-label="Font Style" (change)="onToggleRestrictedAndAllvisitor($event.value)"
+  [(ngModel)]="toggleView">
+  <mat-button-toggle value="restrictVisitor">
+    {{"Visitors.Restricted_Visitor" | translate }}
+  </mat-button-toggle>
+
+  <mat-button-toggle value="allVisitor" >
+    {{"Visitors.AllVisitor" | translate}}
+  </mat-button-toggle>
+  
+  <button
+    class="btn btn-link p-0 fw-medium text-success ms-auto text-decoration-none border-0 d-flex align-items-center"
+    (click)="this.onChangeTimeFilter(timeFilter, selectedStatus, searchKey)">
+    <i class="icon-refresh fs-sm me-1"></i>
+    <span class="fs-xs">{{
+      "AppointmentDetails.Refresh" | translate
+      }}</span>
+  </button>
+</mat-button-toggle-group>
+
+<!-- Restrictor Visitor Appply Filter -->
+
+<div class="vams-grid-filters d-flex gap-3">
+  <div class="status-select-control-wrap bg-linen d-flex align-items-center">
+  </div>
+  <div class="input-group search-group">
+    <input (keyup)="applyFilter(serchKeyValue.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #serchKeyValue
+      class="form-control form-control-sm" />
+    <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+      (click)="cleanSearchBox(serchKeyValue)">
+      <i class="icon-cros-icon"></i>
+    </button>
+    <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(serchKeyValue.value)">
+      <i class="icon-search-icon"></i>
+    </button>
+  </div>
+</div>
+
+
+<ng-container [ngSwitch]="visitorDataShowType">
+  <div class="vams-grid-wrapper" *ngSwitchCase="'restrictVisitor'">
+    <app-grid #restrictVisitors *ngIf="dataSource" [dataSource]="dataSource" [displayedColumns]="displayedColumns"
+      [cssClass]="'table-height-vary'" [type]="'blacklisted'" (onDataChange)="visitorDataChange($event)"
+      [totalData]="totalData" (unblockUserclick)="unBlockVisitor($event)" [pageSize]="pageSize"
+      (rowClick)="gridRowClick($event)" [visitorDataShowType]="visitorDataShowType">
+    </app-grid>
+  </div>
+  <div class="vams-grid-wrapper" *ngSwitchCase="'allVisitor'">
+    <app-grid Table *ngIf="dataSource" [dataSource]="allVisitorDataSource" [displayedColumns]="displayedColumns1"
+      [cssClass]="'table-height-vary'" [type]="'blacklisted'" (onDataChange)="AllvisitorDataChange($event)"
+      [totalData]="totalData" (unblockUserclick)="blockUser($event)" [pageSize]="pageSize"
+      (rowClick)="gridRowClick($event)" [visitorDataShowType]="visitorDataShowType">
+    </app-grid>
+  </div>
+</ng-container>
+
+<footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+  <button (click)="restrictVisitorForm()" *isPermissible="permissionKeyObj.RESTRICTVISITORADD"
+    class="btn btn-sm btn-primary-dark px-3">
+    {{'Visitors.Restrict_Visitor' | translate }}
+  </button>
+</footer>

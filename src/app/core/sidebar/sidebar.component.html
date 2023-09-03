@@ -1,0 +1,23 @@
+<ng-template #scheduleappointment>
+    <app-shedule-modal (appointmentScheduled)="appointmentScheduled($event)"></app-shedule-modal>
+</ng-template>
+<aside class="vams-sidebar px-1 scroll-y bg-white d-flex flex-column align-items-center">
+    <ul class="nav d-flex flex-column flex-1 text-center">
+        <li class="nav-item" *ngFor="let item of sideBarTopMenu">
+            <a [routerLink]="[item?.navigateTo]" [state]="item?.state" [routerLinkActive]="['active']"
+                class="nav-link px-1 py-2">
+                <i class="p-1 rounded-3 d-inline-block" [ngClass]="item?.class"></i>
+                <span class="d-block mt-1">{{item?.name | translate}}</span>
+            </a>
+        </li>
+        <li class="nav-item mt-auto"></li>
+        <li class="nav-item border-top my-2"></li>
+        <li class="nav-item" *ngFor="let item of sideBarBottomMenu">
+            <a [routerLink]="[item?.navigateTo]" [state]="item?.state" [routerLinkActive]="['active']"
+                class="nav-link px-1 py-2">
+                <i class="p-1 rounded-3 d-inline-block" [ngClass]="item?.class"></i>
+                <span class="d-block mt-1">{{item?.name |translate}}</span>
+            </a>
+        </li>
+    </ul>
+</aside>

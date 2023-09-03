@@ -1,0 +1,84 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="currentSlide==1">
+    <div class="popup-header">
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{'TimeInOut.TimeInWitnQrCode'
+                | translate}}</span>
+        </div>
+    </div>
+
+    <form class="popup-form" [formGroup]="preScheduleForm">
+        <div class="popup-content">
+            <div class="text-center">
+                <zxing-scanner #scanner (scanSuccess)="scanSuccessHandler($event,'qrcode')">
+                </zxing-scanner>
+            </div>
+            <div class="fw-bold text-center my-4">
+                {{'TimeInOut.OR' | translate}}
+            </div>
+            <div class="row">
+                <label for="feFirstName" class="col-md-4 col-form-label">{{'TimeInOut.EnterOrCode' |
+                    translate}}<span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" id="feFirstName" formControlName="qrCode">
+                    <mat-error *ngFor="let message of showValidationMessageForQrCode('qrCode')">
+                        {{message}}
+                    </mat-error>
+                </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-primary-dark px-3" [disabled]="preScheduleForm.invalid"
+                (click)="scanSuccessHandler(null,'usercode')">{{'CommonToken.Next' |
+                translate}}</button>
+        </div>
+    </form>
+</div>
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="currentSlide==2">
+    <div class="popup-header">
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{'TimeInOut.TimeInWitnQrCode'
+                | translate }}</span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="row mb-3">
+            <label class="col-md-4 col-form-label">{{'TimeInOut.VisitorName' | translate}}</label>
+            <div class="col-md-8">
+                <p class="form-control-plaintext mb-0">{{(visitorData?.visitorName)}}</p>
+            </div>
+        </div>
+        <!-- <div class="row mb-3">
+            <label class="col-md-4 col-form-label">{{'TimeInOut.PersonToMeet' | translate}}</label>
+            <div class="col-md-8">{{(visitorData?.hostFirstName)+" "+(visitorData?.hostLastName)}}</div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-md-4 col-form-label">{{'TimeInOut.BuildingName' | translate}}</label>
+            <div class="col-md-8">{{visitorData?.building}}</div>
+        </div> -->
+        <div class="row mb-3">
+            <label class="col-md-4 col-form-label">{{'TimeInOut.CompanyName' | translate}}</label>
+            <div class="col-md-8">
+                <p class="form-control-plaintext mb-0">{{visitorData?.hostCompany}}</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-md-4 col-form-label">{{'TimeInOut.checkInTime' | translate}}</label>
+            <div class="col-md-8">
+                <p class="form-control-plaintext mb-0">{{visitorData?.checkIn}}</p>
+            </div>
+        </div>
+        <!-- <div class="row mb-3">
+            <div class="col-md-4 col-form-label">{{'CheckoutDetails.TimeOut' | translate}}</div>
+            <div class="col-md-8">{{visitorData?.checkOutTime}}</div>
+        </div> -->
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="confirmTimeIn()">
+            <span *ngIf="timeInOutType === 'in'">{{'TimeInOut.confirmTimeIn' | translate}}</span>
+            <span *ngIf="timeInOutType === 'out'">{{'TimeInOut.confirmTimeOut' | translate}}</span>
+        </button>
+        <!-- <button class="btn btn-sm btn-white px-3" (click)="back()">{{'CommonToken.Back' | translate}}</button> -->
+    </div>
+</div>

@@ -1,0 +1,1167 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="isExcel && showPage == 'walkin_form' && productType == 'Commercial' && feature.workFlow != 'SEEPZ'">
+    <div class="popup-header">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Walkin.WalkIn" |
+                translate }} ({{buildingName}})</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="excelWalkinForm" autocomplete="off" novalidate>
+        <ng-container *ngIf="currentSlide === 1">
+            <div class="popup-content">
+                <div class="btn-wrapper d-flex align-items-center gap-3 mb-3">
+                    <button type="submit" (click)="scanDrivingLicense()"
+                        class="btn btn-sm btn-white px-3">{{'Walkin.scan_licsence' | translate}}
+                    </button>
+                    <span>OR</span>
+                    <button type="submit" (click)="byPassActivate()"
+                        class="btn btn-sm btn-white px-3">{{'labels.by_pass_pin' |
+                        translate}}
+                    </button>
+                </div>
+                <div class="d-grid" *ngIf="idProofDetails && !showByPass">
+                    <label class="form-label">{{ "labels.dl_scan_visitor" | translate}}</label>
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="dl-photo-wrapper bg-floral-white" *ngIf="showdlpic == true">
+                            <img [src]="dlvisitorphotosrc" class="img-fluid" />
+                        </div>
+                        <p class="fs-sm mb-0"> {{this.excelWalkinForm.controls['firstName'].value+ " " +
+                            this.excelWalkinForm.controls['lastName'].value}}</p>
+                    </div>
+                </div>
+                <div class="mb-3" *ngIf="showByPass">
+                    <label class="form-label">{{ "labels.BypassPin" | translate }}</label>
+                    <div class="d-flex gap-3">
+                        <!-- <input id="codeBox1"  #bypassPin
+                        class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+                    <input id="codeBox2"  #bypassPin
+                        class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+                    <input id="codeBox3"  #bypassPin
+                        class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+                    <input id="codeBox4"  #bypassPin
+                        class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+                    <input id="codeBox4"  #bypassPin
+                        class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+                    <input id="codeBox5"  #bypassPin
+                        class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(5, $event, 6)" /> -->
+                        <input id="codeBox1" [value]="pinValue && pinValue.length>0 && pinValue[0] ?pinValue[0]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                            (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+                        <input id="codeBox2" [value]="pinValue && pinValue.length>0 && pinValue[1] ?pinValue[1]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                            (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+                        <input id="codeBox3" [value]="pinValue && pinValue.length>0 && pinValue[2]?pinValue[2]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                            (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+                        <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[3] ?pinValue[3]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                            (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+                        <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[4] ?pinValue[4]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                            (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+                        <input id="codeBox5" [value]="pinValue && pinValue.length>0 && pinValue[5]?pinValue[5]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                            (keyup)="onKeyUpEventBypass(5, $event, 6)" />
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-primary-dark px-3" [disabled]="hasError"
+                    (click)="goToNextSlide(currentSlide)">
+                    {{ "Schedule.Next" | translate }}
+                </button>
+                <button class="btn btn-sm btn-white px-3"
+                    (click)="formReset();showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                    {{ "Walkin.reset" | translate }}
+                </button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="currentSlide === 2">
+            <div class="popup-content">
+
+                <!-- <div class="row mb-3" *ngIf="this.data.visitorSettings.visitorCheckinAtBuilding"> -->
+                <div class="row mb-4"
+                    *ngIf="this.data.visitorSettings.visitorCheckinAtBuilding && isLevel1Reception">
+                    <label for="feBuildingList" class="col-md-4 col-form-label">
+                        {{"configure_email_server.building_name_placeholder" | translate}} <span
+                            class="mendatory">*</span>
+                    </label>
+
+                    <div class="col-md-8">
+                        <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+                            placeholder="{{'configure_email_server.building_name_placeholder' | translate }}"
+                            (selectionChange)="getCompanyList($event)">
+                            <mat-option *ngFor="let building of this.data.buildingList" (click)="onSelectEvent()"
+                                [value]="building.id">
+                                <p class="d-flex align-items-center mb-0">
+                                    <span class="me-auto">{{building.name}}</span>
+                                    <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>
+                                </p>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="isBuildingHasError">
+                            {{"Walkin.building_error" | translate}}
+                        </mat-error>
+                        <!-- <mat-error *ngFor="let message of showValidationMessages('building_Id')">
+                                            {{ message }}
+                                        </mat-error> -->
+                    </div>
+                </div>
+
+
+                <div class="row mb-4">
+                    <label for="hostCompany" class="col-md-4 col-form-label">{{ "Walkin.complex_in_host" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <mat-slide-toggle *ngIf="isLevel1Reception" class="align-self-start"
+                            (click)="toggleToShowCompany()">
+                        </mat-slide-toggle>
+
+                        <mat-slide-toggle *ngIf="!isLevel1Reception" class="align-self-start" (click)="toggleShow()">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+
+                <div class="row mb-4" *ngIf="!isShown && originalHostCompanyList">
+                    <label for="hostCompany" class="col-md-4 col-form-label">{{ "Walkin.host_company" | translate }}
+                        <span class="mendatory">*</span>
+                    </label>
+                    <div class="col-md-8">
+                        <ng-container *ngIf="originalHostCompanyList">
+                            <ng-container *ngIf="originalHostCompanyList.length > 0">
+                                <input type="text" #hostCompanyInput (input)="getValue(hostCompanyInput.value)"
+                                    placeholder="{{ 'Walkin.host_company_placeholder' | translate }}"
+                                    formControlName="hostCompany" aria-label="Number" matInput [matAutocomplete]="auto"
+                                    class="form-control">
+                                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                                    <mat-option *ngFor="let company of hostCompanyList" [value]="company" class="fs-sm"
+                                        (onSelectionChange)="getHostCompanyValue(company)">
+                                        {{ company.name }} | {{ company.shortName }} | {{ company.officeNumber }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <!-- <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'hostCompany',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="excelWalkinForm.get('hostCompany').errors && excelWalkinForm.get('hostCompany').errors.buildingValidation">
+                                    {{excelWalkinForm.get('hostCompany').errors.buildingValidation}}
+                                </mat-error> -->
+                                <mat-error *ngFor="let message of showValidationMessages('hostCompany')">
+                                    {{ message }}
+                                </mat-error>
+                            </ng-container>
+                            <ng-container *ngIf="originalHostCompanyList.length == 0">
+                                <select class="form-control">
+                                    <option value="" disabled selected hidden>
+                                        {{ "Walkin.no_company" | translate }}.
+                                    </option>
+                                </select>
+                                <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'hostCompany',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+                <!-- <div class="d-flex align-items-start mb-4">
+                    <button type="submit" (click)="scanDrivingLicense()"
+                        class="btn btn-sm btn-white px-3 me-3">{{'Walkin.scan_licsence' | translate}}</button>
+                    <div class="dl-photo-wrapper bg-floral-white ms-auto" *ngIf="showdlpic == true">
+                        <img [src]="dlvisitorphotosrc" class="img-fluid" />
+                    </div>
+                </div> -->
+                <div class="card bg-floral-white mb-3">
+                    <div class="card-body pb-0">
+                        <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                            {{ "Walkin.visitor_detais" | translate }}
+                        </h6>
+                        <div class="row mb-3">
+                            <label for="firstName" class="col-md-4 col-form-label">{{ "Walkin.FirstName" | translate }}
+                                <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control text-capitalize" id="firstName"
+                                    formControlName="firstName"
+                                    placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" maxlength="50" />
+                                <!-- <mat-error
+                                    *ngFor="let message of showValidationMessageForDynamicContent('firstName',excelWalkinForm)">
+                                    {{ message }}
+                                </mat-error> -->
+                                <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="lastName" class="col-md-4 col-form-label">{{ "Walkin.LastName" | translate }}
+                                <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control text-capitalize" id="lastName"
+                                    formControlName="lastName"
+                                    placeholder="{{ 'Walkin.LastNamePlaceholder' | translate }}" maxlength="50" />
+                                <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'lastName',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="feCompany" class="col-md-4 col-form-label">{{ "Walkin.visitor_company" |
+                                translate
+                                }}
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" id="visitorCompany" class="form-control text-capitalize"
+                                    formControlName="visitorCompany" placeholder="{{
+                    'Walkin.VisitorsCompanyPlaceholder' | translate
+                    }}" maxlength="100" />
+                                <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'visitorCompany',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                        <mat-divider class="mb-3"></mat-divider>
+                        <label for="feTimeZone" class="row mb-3 col-form-label" *ngIf="walkinWithBioAuth">
+                            {{ "Walkin.contactDetailsMandatory" | translate
+                            }}
+                        </label>
+                        <div class="row mb-3">
+                            <label for="feTimeZone" class="col-md-4 col-form-label">{{ "Walkin.CellNumber" | translate
+                                }}
+                                <span class="mendatory" *ngIf="isCellMandatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                    [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                    [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                    [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                    [selectedCountryISO]="selectedCountry" [separateDialCode]="separateDialCode"
+                                    [preferredCountries]="['us']" name="phone" formControlName="contactNumber"
+                                    (countryChange)="checkNumber($event)" appMobileNumberFormat
+                                    (input)="getCellInfo($event)">
+                                </ngx-intl-tel-input>
+                                <mat-error *ngIf="excelWalkinForm.get('contactNumber').hasError('validatePhoneNumber')">
+                                    {{ "Schedule.CellNumberValid" | translate }}
+                                </mat-error>
+                                <!-- <mat-error *ngIf="
+                    excelWalkinForm.get('contactNumber').touched &&
+                    excelWalkinForm.get('contactNumber').invalid
+                    ">
+                                    {{ "Please enter valid cell number" }}<br />
+                                </mat-error> -->
+                            </div>
+                        </div>
+                        <p class="fs-sm text-center mb-3">OR</p>
+                        <div class="row mb-3">
+                            <label for="feCompany" class="col-md-4 col-form-label">{{ "Walkin.EmailId" | translate }}
+                                <span class="mendatory" *ngIf="isEmailMandatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" id="email" class="form-control" formControlName="email"
+                                    (input)="getEmailId($event)"
+                                    placeholder="{{ 'Walkin.EmailPlaceholder' | translate }}" maxlength="150" />
+                                <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'email',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">{{ "Walkin.note" | translate }}</label>
+                    <div class="col-md-8">
+                        <textarea class="form-control" maxlength="250" rows="3" formControlName="notes"
+                            [(ngModel)]="notes" placeholder="{{ 'labels.note' | translate }}"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlide(currentSlide)">
+                    {{ "Schedule.Back" | translate }}
+                </button>
+                <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlide(currentSlide)"
+                    *ngIf="!walkinWithBioAuth">
+                    {{ "Schedule.Next" | translate }}
+                </button>
+                <button class="btn btn-sm btn-white px-3"
+                    (click)="formReset();showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                    {{ "Walkin.reset" | translate }}
+                </button>
+                <button *ngIf="walkinWithBioAuth" class="btn btn-sm btn-primary-dark px-3"
+                    (click)="confirmVisitorRestrictionStatus()">
+                    <!-- {{ "Walkin.check_in" | translate }} -->
+                    <span *ngIf="!walkinWithBioAuth">{{ "Walkin.check_in" | translate }}</span>
+                    <span *ngIf="walkinWithBioAuth">{{ "appointment_reject_reason.Save" | translate }}</span>
+                </button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!walkinWithBioAuth">
+            <ng-container *ngIf="currentSlide === 3">
+                <div class="popup-content">
+                    <div class="pb-20" *ngIf="!showWebcam">
+                        <img height="315" width="420" [src]="webcamImage?.imageAsDataUrl"
+                            src="assets/images/capture-photo.png" />
+                    </div>
+                    <webcam [height]="340" [width]="420" [trigger]="triggerObservable" [mirrorImage]="'never'"
+                        (imageCapture)="handleImage($event)" *ngIf="showWebcam" [switchCamera]="nextWebcamObservable">
+                    </webcam>
+                    <div *ngIf="errors.length > 0">
+                        <h4>{{ "Walkin.ErrorMessages" | translate }}:</h4>
+                        <ul *ngFor="let error of errors">
+                            <li>{{ error | json }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="popup-footer d-flex align-items-center gap-3">
+                    <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlide(currentSlide)">
+                        {{ "Schedule.Back" | translate }}
+                    </button>
+                    <button *ngIf="capturePhoto" class="btn btn-sm btn-primary-dark px-3" (click)="takeSnapshot()">
+                        {{ "Walkin.CapturePhoto" | translate}}
+                    </button>
+
+                    <button *ngIf="!capturePhoto" class="btn btn-sm btn-primary-dark px-3"
+                        (click)="showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                        {{'Walkin.CaptureAgain' | translate}}
+                    </button>
+                    <button class="btn btn-sm btn-primary-dark px-3" (click)="confirmVisitorRestrictionStatus()"
+                        [disabled]="!walkinProcess || capturePhoto">
+                        {{ "Walkin.check_in" | translate }}
+                    </button>
+                </div>
+            </ng-container>
+        </ng-container>
+    </form>
+</div>
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="productType == ProductType.Enterprise || productType == ProductType.Hospital || feature.workFlow == 'SEEPZ'">
+    <div class="popup-header" *ngIf="currentSlide === 1">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Walkin.WalkIn" |
+                translate }} 
+                <ng-container *ngIf="feature.workFlow != 'SEEPZ'">({{buildingName}})</ng-container>
+            </span>
+        </div>
+    </div>
+    <div class="popup-header" *ngIf="currentSlide === 2 || currentSlide === 3">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Walkin.WalkInAppointment" |
+                translate }} 
+                <ng-container *ngIf="feature.workFlow != 'SEEPZ'">({{buildingName}})</ng-container>
+            </span>
+        </div>
+    </div>
+    <div class="popup-header" *ngIf="currentSlide === 4">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "visitor_setting.check_in" |
+                translate }}</span>
+        </div>
+    </div>
+    <div class="popup-header" *ngIf="currentSlide === 5">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Configure.nda" |
+                translate }} 
+                <ng-container *ngIf="feature.workFlow != 'SEEPZ'">({{buildingName}})</ng-container>
+            </span>
+        </div>
+    </div>
+    <div class="popup-header" *ngIf="currentSlide === 6">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "PreScheduled.CapturePhoto" |
+                translate }} 
+                <ng-container *ngIf="feature.workFlow != 'SEEPZ'">({{buildingName}})</ng-container>
+            </span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="excelWalkinForm" autocomplete="off" novalidate>
+        <ng-container *ngIf="currentSlide === 1">
+            <div class="popup-content">
+                <!-- <div class="btn-wrapper d-flex align-items-center gap-3 mb-3">
+                    <button type="submit" (click)="scanDrivingLicense()"
+                        class="btn btn-sm btn-white px-3">{{'Walkin.scan_licsence' | translate}}
+                    </button>
+                    <span>OR</span>
+                    <button type="submit" (click)="byPassActivate()"
+                        class="btn btn-sm btn-white px-3">{{'labels.by_pass_pin' |
+                        translate}}
+                    </button>
+                </div> -->
+                <!-- <div class="d-grid" *ngIf="idProofDetails && !showByPass">
+                    <label class="form-label">{{ "labels.dl_scan_visitor" | translate}}</label>
+                    <div class="d-flex gap-3 mb-3">
+                        <div class="dl-photo-wrapper bg-floral-white" *ngIf="showdlpic == true">
+                            <img [src]="dlvisitorphotosrc" class="img-fluid" />
+                        </div>
+                        <p class="fs-sm mb-0"> {{this.excelWalkinForm.controls['firstName'].value+ " " +
+                            this.excelWalkinForm.controls['lastName'].value}}</p>
+                    </div>
+                </div> -->
+                <!-- <div class="mb-3" *ngIf="showByPass">
+                    <label class="form-label">{{ "labels.BypassPin" | translate }}</label>
+                    <div class="d-flex gap-3">
+                        <input id="codeBox1" [value]="pinValue && pinValue.length>0 && pinValue[0] ?pinValue[0]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+                        <input id="codeBox2" [value]="pinValue && pinValue.length>0 && pinValue[1] ?pinValue[1]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+                        <input id="codeBox3" [value]="pinValue && pinValue.length>0 && pinValue[2]?pinValue[2]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+                        <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[3] ?pinValue[3]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+                        <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[4] ?pinValue[4]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+                        <input id="codeBox5" [value]="pinValue && pinValue.length>0 && pinValue[5]?pinValue[5]:''"
+                            #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                            (keyup)="onKeyUpEventBypass(5, $event, 6)" />
+                    </div>
+                </div> -->
+                <div class="card bg-floral-white mx-auto mb-3">
+                    <div class="card-body">
+                      <ng-container *ngIf="feature.workFlow != 'SEEPZ'">
+                      <div class="row mb-3" *ngIf="visitorAutnticationType=='Both' || visitorAutnticationType=='Email'">
+                        <label for="feFirstName" class="col-md-4 col-form-label">
+                          {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-8">
+                          <input type="text" class="form-control" maxlength="150"
+                            placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" (keypress)="removeValidator('emailId')"/>
+                          <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                            {{ message | titlecase}}
+                          </mat-error>
+                        </div>
+                      </div>
+                      </ng-container>
+                      <p class="text-center mb-3" *ngIf="visitorAutnticationType=='Both' && feature.workFlow != 'SEEPZ'">OR</p>
+                      <div class="row" *ngIf="visitorAutnticationType=='Both' || visitorAutnticationType=='Cell'">
+                        <label for="feTimeZone" class="col-md-4 col-form-label">
+                          {{ "Schedule.CellNumber" | translate }}  <span class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-8">
+                          <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                            [separateDialCode]="separateDialCode" [preferredCountries]="['us']"
+                            [selectedCountryISO]="selectedCountry" [phoneValidation]="phoneValidation" name="phone"[maxLength]="'19'"
+                            (keypress)="removeValidator('cell')"
+                            formControlName="visitorMobileNumber" (countryChange)="checkNumber($event)" appMobileNumberFormat>
+                          </ngx-intl-tel-input>
+                          <!-- <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                [selectedCountryISO]="selectedCountry" [separateDialCode]="separateDialCode"
+                                [preferredCountries]="['us']" name="phone" formControlName="contactNumber"
+                                (countryChange)="checkNumber($event)" appMobileNumberFormat
+                                (input)="getCellInfo($event)">
+                            </ngx-intl-tel-input> -->
+                          <mat-error *ngIf="excelWalkinForm.get('visitorMobileNumber').hasError('validatePhoneNumber')
+                             || mobileNumberValid">
+                            {{ "Schedule.CellNumberValid" | translate }}
+                          </mat-error>
+                          
+                        </div>
+                      </div>
+                    </div>
+                   
+                </div>
+                <!-- <div class="row mb-3" *ngIf="visitorAutnticationType=='Email'">
+                    <label for="feFirstName" class="col-md-3 col-form-label">
+                      {{ "Schedule.EmailId" | translate }} <span class="mendatory">*</span>
+                    </label>
+                    <div class="col-md-9">
+                      <input type="text" class="form-control" maxlength="150"
+                        placeholder="{{ 'Schedule.EmailIdPlaceholder' | translate }}" formControlName="emailId" />
+                      <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                        {{ message | titlecase}}
+                      </mat-error>
+                    </div>
+                </div> -->
+                
+                <!-- <div class="row mb-3" *ngIf="visitorAutnticationType=='Cell'">
+                    <label for="feTimeZone" class="col-md-3 col-form-label">
+                      {{ "Schedule.CellNumber" | translate }} <span class="mendatory" *ngIf="visitorAutnticationType=='Cell'">*</span>
+                    </label>
+                    <div class="col-md-9">
+                      <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                        [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                        [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                        [separateDialCode]="separateDialCode" [preferredCountries]="['us']" [selectedCountryISO]="selectedCountry"
+                        [phoneValidation]="phoneValidation" name="phone" formControlName="visitorMobileNumber"
+                        (countryChange)="checkNumber($event)" appMobileNumberFormat>
+                      </ngx-intl-tel-input>
+                      <mat-error *ngIf="excelWalkinForm.get('visitorMobileNumber').hasError('validatePhoneNumber')
+                            ">
+                        {{ "Schedule.CellNumberValid" | translate }}
+                      </mat-error>
+                    </div>
+                </div> -->
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button class="btn btn-sm btn-white px-3"
+                    (click)="formReset();">
+                    {{ "Walkin.reset" | translate }}
+                </button>
+                <button type="button" class="btn btn-sm btn-primary-dark px-3"
+                    (click)="goToNextSlides(currentSlide)">
+                    {{ "Schedule.Next" | translate }}
+                </button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="currentSlide === 2">
+            <div class="popup-content">
+
+                <!-- <div class="row mb-4" *ngIf="this.data.visitorSettings.visitorCheckinAtBuilding && isLevel1Reception">
+                    <label for="feBuildingList" class="col-md-4 col-form-label">
+                        {{"configure_email_server.building_name_placeholder" | translate}} <span
+                            class="mendatory">*</span>
+                    </label>
+                    <div class="col-md-8">
+                        <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+                            placeholder="{{'configure_email_server.building_name_placeholder' | translate }}"
+                            (selectionChange)="getCompanyList($event)">
+                            <mat-option *ngFor="let building of this.data.buildingList" (click)="onSelectEvent()"
+                                [value]="building.id">
+                                <p class="d-flex align-items-center mb-0">
+                                    <span class="me-auto">{{building.name}}</span>
+                                    <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>
+                                </p>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="isBuildingHasError">
+                            {{"Walkin.building_error" | translate}}
+                        </mat-error>
+                    </div>
+                </div> -->
+                <!-- <div class="row mb-4">
+                    <label for="hostCompany" class="col-md-4 col-form-label">{{ "Walkin.complex_in_host" | translate }}
+                    </label>
+                    <div class="col-md-8">
+                        <mat-slide-toggle *ngIf="isLevel1Reception" class="align-self-start"
+                            (click)="toggleToShowCompany()">
+                        </mat-slide-toggle>
+
+                        <mat-slide-toggle *ngIf="!isLevel1Reception" class="align-self-start" (click)="toggleShow()">
+                        </mat-slide-toggle>
+                    </div>
+                </div> -->
+
+                <div class="row mb-4 slide2Photo" *ngIf="!secndEditableBool">
+                    <div class="picture d-flex align-items-center justify-content-center p-1 overflow-hidden">
+                        <img (error)="handleIamge(walkVisitorData.photoUrl)" 
+                          [src]="walkVisitorData.photoUrl ? walkVisitorData.photoUrl : 'assets/images/profile-pic.png' " />
+                      </div>
+                </div>
+
+                <!-- <div class="row mb-4" *ngIf="!isShown && originalHostCompanyList">
+                    <label for="hostCompany" class="col-md-4 col-form-label">{{ "Walkin.host_company" | translate }}
+                        <span class="mendatory">*</span>
+                    </label>
+                    <div class="col-md-8">
+                        <ng-container *ngIf="originalHostCompanyList">
+                            <ng-container *ngIf="originalHostCompanyList.length > 0">
+                                <input type="text" #hostCompanyInput (input)="getValue(hostCompanyInput.value)"
+                                    placeholder="{{ 'Walkin.host_company_placeholder' | translate }}"
+                                    formControlName="hostCompany" aria-label="Number" matInput [matAutocomplete]="auto"
+                                    class="form-control">
+                                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                                    <mat-option *ngFor="let company of hostCompanyList" [value]="company" class="fs-sm"
+                                        (onSelectionChange)="getHostCompanyValue(company)">
+                                        {{ company.name }} | {{ company.shortName }} | {{ company.officeNumber }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngFor="let message of showValidationMessages('hostCompany')">
+                                    {{ message }}
+                                </mat-error>
+                            </ng-container>
+                            <ng-container *ngIf="originalHostCompanyList.length == 0">
+                                <select class="form-control">
+                                    <option value="" disabled selected hidden>
+                                        {{ "Walkin.no_company" | translate }}.
+                                    </option>
+                                </select>
+                                <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'hostCompany',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div> -->
+                <!-- <div class="d-flex align-items-start mb-4">
+                    <button type="submit" (click)="scanDrivingLicense()"
+                        class="btn btn-sm btn-white px-3 me-3">{{'Walkin.scan_licsence' | translate}}</button>
+                    <div class="dl-photo-wrapper bg-floral-white ms-auto" *ngIf="showdlpic == true">
+                        <img [src]="dlvisitorphotosrc" class="img-fluid" />
+                    </div>
+                </div> -->
+                <div class="card bg-floral-white mb-3">
+                    <div class="card-body pb-0">
+                        <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                            {{ "Walkin.visitor_detais" | translate }}
+                        </h6>
+                        <label for="feTimeZone" class="row mb-3 col-form-label" *ngIf="walkinWithBioAuth">
+                            {{ "Walkin.contactDetailsMandatory" | translate
+                            }}
+                        </label>
+                        <div class="row">
+                            <div class="row mb-3" *ngIf="visitorAutnticationType=='Both' || visitorAutnticationType=='Cell'">
+                                <label for="feTimeZone" class="col-md-4 col-form-label">{{ "Walkin.CellNumber" | translate
+                                    }}
+                                    <span class="mendatory" *ngIf="isCellMandatory">*</span>
+                                </label>
+                                <div class="col-md-8 nonEditCl">
+                                    <ngx-intl-tel-input class="telephone-control-group nonEditCl" [cssClass]="'form-control'"
+                                        [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                        [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                        [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                        [selectedCountryISO]="selectedCountry" [separateDialCode]="separateDialCode"
+                                        [preferredCountries]="['us']" name="contactNumber" formControlName="contactNumber"
+                                        (countryChange)="checkNumber($event)" appMobileNumberFormat id="ngxInput"
+                                        (input)="getCellInfo($event)">
+                                    </ngx-intl-tel-input>
+                                    <mat-error *ngIf="excelWalkinForm.get('contactNumber').hasError('validatePhoneNumber')">
+                                        {{ "Schedule.CellNumberValid" | translate }}
+                                    </mat-error>
+                                    <!-- <mat-error *ngIf="
+                        excelWalkinForm.get('contactNumber').touched &&
+                        excelWalkinForm.get('contactNumber').invalid
+                        ">
+                                        {{ "Please enter valid cell number" }}<br />
+                                    </mat-error> -->
+                                </div>
+                            </div>
+                            <p *ngIf="visitorAutnticationType=='Both' && feature.workFlow != 'SEEPZ'" class="fs-sm text-center mb-3">OR</p>
+                            <ng-container *ngIf="feature.workFlow != 'SEEPZ'">
+                            <div class="row mb-3" *ngIf="visitorAutnticationType=='Both' || visitorAutnticationType=='Email'">
+                                <label for="feCompany" class="col-md-4 col-form-label">{{ "Walkin.EmailId" | translate }}
+                                    <span class="mendatory" *ngIf="isEmailMandatory">*</span>
+                                </label>
+                                <div class="col-md-8">
+                                    <input type="text" id="email" class="form-control nonEditCl" formControlName="email"
+                                        (input)="getEmailId($event)" readonly
+                                        placeholder="{{ 'Walkin.EmailPlaceholder' | translate }}" maxlength="150" />
+                                    <mat-error *ngFor="
+                        let message of showValidationMessageForDynamicContent(
+                            'email',
+                            excelWalkinForm
+                        )
+                        ">
+                                        {{ message }}
+                                    </mat-error>
+                                </div>
+                            </div>
+                            </ng-container>
+                        </div>
+                        <!-- <div class="row" *ngIf="visitorAutnticationType=='Cell'">
+                            <div class="row mb-3">
+                                <label for="feTimeZone" class="col-md-4 col-form-label">{{ "Walkin.CellNumber" | translate
+                                    }}
+                                    <span class="mendatory" *ngIf="isCellMandatory">*</span>
+                                </label>
+                                <div class="col-md-8 nonEditCl">
+                                    <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                        [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                        [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                        [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                        [selectedCountryISO]="selectedCountry" [separateDialCode]="separateDialCode"
+                                        [preferredCountries]="['us']" name="contactNumber" formControlName="contactNumber"
+                                        (countryChange)="checkNumber($event)" appMobileNumberFormat
+                                        (input)="getCellInfo($event)">
+                                    </ngx-intl-tel-input>
+                                    <mat-error *ngIf="excelWalkinForm.get('contactNumber').hasError('validatePhoneNumber')">
+                                        {{ "Schedule.CellNumberValid" | translate }}
+                                    </mat-error>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- <div class="row" *ngIf="visitorAutnticationType=='Email'">
+                            <div class="row mb-3">
+                                <label for="feCompany" class="col-md-4 col-form-label">{{ "Walkin.EmailId" | translate }}
+                                    <span class="mendatory" *ngIf="isEmailMandatory">*</span>
+                                </label>
+                                <div class="col-md-8">
+                                    <input type="text" id="email" class="form-control nonEditCl" formControlName="email"
+                                        (input)="getEmailId($event)"
+                                        placeholder="{{ 'Walkin.EmailPlaceholder' | translate }}" maxlength="150" />
+                                    <mat-error *ngFor="
+                        let message of showValidationMessageForDynamicContent(
+                            'email',
+                            excelWalkinForm
+                        )
+                        ">
+                                        {{ message }}
+                                    </mat-error>
+                                </div>
+                            </div>
+                        </div> -->
+                        <mat-divider class="mb-3"></mat-divider>
+                        <div class="row mb-3">
+                            <label for="firstName" class="col-md-4 col-form-label">{{ "Walkin.FirstName" | translate }}
+                                <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control text-capitalize" id="firstName"
+                                    formControlName="firstName" [ngClass]="secndEditableBool ? '' : 'nonEditCl'"
+                                    placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" maxlength="50" 
+                                    [readonly]="registeredUser" />
+                                <!-- <mat-error
+                                    *ngFor="let message of showValidationMessageForDynamicContent('firstName',excelWalkinForm)">
+                                    {{ message }}
+                                </mat-error> -->
+                                <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="lastName" class="col-md-4 col-form-label">{{ "Walkin.LastName" | translate }}
+                                <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control text-capitalize" id="lastName"
+                                    formControlName="lastName" [ngClass]="secndEditableBool ? '' : 'nonEditCl'"
+                                    placeholder="{{ 'Walkin.LastNamePlaceholder' | translate }}" maxlength="50" 
+                                    [readonly]="registeredUser" />
+                                <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'lastName',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="feCompany" class="col-md-4 col-form-label">
+                                {{ "Walkin.visitor_company" | translate }}
+                                <span *ngIf="this.userData.feature.workFlow == 'SEEPZ'" class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" id="visitorCompany" class="form-control text-capitalize"
+                                    formControlName="visitorCompany" [ngClass]="secndEditableBool ? '' : 'nonEditCl'" placeholder="{{
+                    'Walkin.VisitorsCompanyPlaceholder' | translate
+                    }}" maxlength="100" [readonly]="registeredUser" />
+                                <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent(
+                        'visitorCompany',
+                        excelWalkinForm
+                    )
+                    ">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row mb-3">
+                    <label class="col-md-4 col-form-label">{{ "Walkin.note" | translate }}</label>
+                    <div class="col-md-8">
+                        <textarea class="form-control" maxlength="250" rows="3" formControlName="notes"
+                            [(ngModel)]="notes" placeholder="{{ 'labels.note' | translate }}"></textarea>
+                    </div>
+                </div> -->
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlides(currentSlide)">
+                   {{ "Schedule.Back" | translate }}
+                </button>
+                <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlides(currentSlide)"
+                    >
+                    {{ "Schedule.Next" | translate }}
+                </button>
+                <!-- <button class="btn btn-sm btn-white px-3"
+                    (click)="formReset();showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                    {{ "Walkin.reset" | translate }}
+                </button> -->
+                <!-- <button *ngIf="walkinWithBioAuth" class="btn btn-sm btn-primary-dark px-3"
+                    (click)="confirmVisitorRestrictionStatus()">
+                    <span *ngIf="!walkinWithBioAuth">{{ "Walkin.check_in" | translate }}</span>
+                    <span *ngIf="walkinWithBioAuth">{{ "appointment_reject_reason.Save" | translate }}</span>
+                </button> -->
+            </div>
+        </ng-container>
+        <ng-container *ngIf="currentSlide === 3">
+            <div class="popup-content">
+                <div class=" mb-3">
+                    <div class="pb-0">
+                        <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                            {{ "Walkin.visitor_detais" | translate }}
+                        </h6>
+                        <label for="feTimeZone" class="row mb-3 col-form-label" *ngIf="walkinWithBioAuth">
+                            {{ "Walkin.contactDetailsMandatory" | translate
+                            }}
+                        </label>
+                        <div class="row mb-3">
+                            <label for="feBuildingList" class="col-md-4 col-form-label">
+                                {{ "VisitorsDetails.HostName" | translate }} <span class="mendatory">*</span>
+                              </label>
+                              <div class="col-md-8 autoErrow">
+                                <div class="mat-select-arrow-wrapper"><div class="mat-select-arrow"></div></div>
+                                <input type="text" [placeholder]="hostNamePlace" 
+                                formControlName="hostType" required
+                                     aria-label="Number" matInput [matAutocomplete]="auto" class="form-control hostNameInput">
+                                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWithus">
+                                    <mat-option *ngFor="let item of hostTypeData" [value]="item" class="fs-sm"
+                                        (onSelectionChange)="getValuees($event)">
+                                        {{ item.name }} - {{item.email}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                
+                                <!-- <mat-select disableOptionCentering class="form-control" formControlName="hostType"
+                                  placeholder=" {{ 'VisitorsDetails.HostName' | translate }}">
+                                  <mat-option *ngFor="let item of hostTypeData" [value]="item.employeeId">
+                                    <p class="d-flex align-items-center mb-0">
+                                      <span class="me-auto">{{item.name}} - {{item.email}}</span>
+                                    </p>
+                                  </mat-option>
+                                </mat-select> -->
+                                <!-- <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent('hostType', excelWalkinForm)">
+                                    {{ message }}
+                                </mat-error> -->
+                                <mat-error *ngIf="hostNameFlag">
+                                    {{ 'Walkin.hostNameValid' | translate }}
+                                </mat-error>
+                                <!-- <mat-error *ngFor="let message of showValidationMessages('hostType')">
+                                  {{ message }}
+                                </mat-error> -->
+                              </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="feBuildingList" class="col-md-4 col-form-label">
+                                {{ "Schedule.PurposeofVisit" | translate }} <span class="mendatory">*</span>
+                              </label>
+                              <div class="col-md-8">
+
+                                <mat-select required disableOptionCentering class="form-control" formControlName="visitPurposeId"
+                                  placeholder=" {{ 'Schedule.PurposeOfVisitPlaceholder' | translate }}">
+                                  <mat-option *ngFor="let item of purposeOfVisitorData" [value]="item.id">
+                                    <p class="d-flex align-items-center mb-0">
+                                      <span class="me-auto">{{item.purpose}}</span>
+                                      <!-- <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>  -->
+                                    </p>
+                                  </mat-option>
+                                </mat-select>
+                                <mat-error *ngFor="let message of showValidationMessages('visitPurposeId')">
+                                  {{ message }}
+                                </mat-error>
+                                <!-- <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent('visitPurposeId', excelWalkinForm)">
+                                    {{ message }}
+                                </mat-error> -->
+                              </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="feBuildingList" class="col-md-4 col-form-label">
+                                {{"Reschedule.TypeOfVisitor" |translate}} <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <mat-select required disableOptionCentering class="form-control" formControlName="visitorTypeId"
+                                  placeholder=" {{'Reschedule.TypeOfVisitorPlaceholder'|translate}} ">
+                                  <mat-option *ngFor="let item of visitorTypeData" [value]="item.id">
+                                    <p class="d-flex align-items-center mb-0">
+                                      <span class="me-auto">{{item.name}}</span>
+                                      <!-- <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>  -->
+                                    </p>
+                                  </mat-option>
+                                </mat-select>
+                                <mat-error *ngFor="let message of showValidationMessages('visitorTypeId')">
+                                  {{ message }}
+                                </mat-error>
+                                <!-- <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent('visitorTypeId', excelWalkinForm)">
+                                    {{ message }}
+                                </mat-error> -->
+                              </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="feBuildingList" class="col-md-4 col-form-label">
+                                <ng-container *ngIf="this.userData.feature.workFlow != 'SEEPZ'">{{"VisitorsDetails.walkin_duration" |translate}}</ng-container>
+                                <ng-container *ngIf="this.userData.feature.workFlow == 'SEEPZ'">{{"VisitorsDetails.MeetingEndTime" |translate}}</ng-container>
+                                <span class="mendatory">*</span>
+                            </label>
+                            <div class="col-md-8">
+                                <ng-container *ngIf="this.userData.feature.workFlow != 'SEEPZ'">
+                                <mat-select required disableOptionCentering class="form-control" formControlName="duration"
+                                  placeholder=" {{'VisitorsDetails.select_walkin_duration'|translate}} ">
+                                  <mat-option *ngFor="let item of appointmentDurationTypeData" [value]="item.id">
+                                    <p class="d-flex align-items-center mb-0">
+                                      <span class="me-auto">{{item.value}}</span>
+                                      <!-- <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i>  -->
+                                    </p>
+                                  </mat-option>
+                                </mat-select>
+                                <mat-error *ngFor="let message of showValidationMessages('duration')">
+                                  {{ message }}
+                                </mat-error>
+                                </ng-container>
+                                <ng-container *ngIf="this.userData.feature.workFlow == 'SEEPZ'">
+                                    <app-time-picker  [value]="{time:this.excelWalkinForm.value.duration,callFrom:callFrom}"
+                                        (timePickerAppointment)="getScheduledTime($event)" [format]="timeFormatForTimePicker"
+                                        [defaultTime]="defaultTime" screen="scheduled" type="from" >
+                                    </app-time-picker>
+                                    <mat-error *ngFor="let message of showValidationMessages('duration')">
+                                        {{ message }}
+                                    </mat-error>
+                                    <mat-error *ngIf="isStartGreatThanEndTime">
+                                        {{ "toster_message.appointment_ent_time" | translate  }}
+                                    </mat-error>
+                                </ng-container>
+                                <!-- <mat-error *ngFor="
+                    let message of showValidationMessageForDynamicContent('duration', excelWalkinForm)">
+                                    {{ message }}
+                                </mat-error> -->
+                              </div>
+                        </div>
+                        <div class="row mb-3 text-end">
+                            <span class="mat-error" *ngIf="allFieldRequired">{{ "error_messages.all_field_required" | translate }}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlide(currentSlide)">
+                    {{ "Schedule.Back" | translate }}
+                </button>
+                <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlides(currentSlide)">
+                    {{ "Schedule.Next" | translate }}
+                </button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="currentSlide === 4">
+            <div class="popup-content">
+                <div class=" mb-3">
+                    <div class="btn-wrapper d-flex align-items-center gap-3 mb-3">
+                        <button *ngIf="!scanners" (click)="scanQrActivated()" class="btn btn-sm btn-white px-3">
+                            {{ "buttons.Scan_qr" | translate }}
+                        </button>
+                        <button *ngIf="!sendOtpFl" (click)="sendOtpActivated()" class="btn btn-sm btn-white px-3">
+                            {{ "buttons.valid_otp" | translate }}
+                        </button>
+                        <!-- <span>
+                            {{"labels.OR" | translate }}
+                        </span> -->
+                        <button *ngIf="!showByPass" type="submit" (click)="byPassActivated()"
+                            class="btn btn-sm btn-white px-3">{{'labels.by_pass_pin' |
+                            translate}}
+                        </button>
+                    </div>
+                    <div class="d-grid" *ngIf="idProofDetails && !showByPass">
+                        <label class="form-label">{{ "labels.dl_scan_visitor" | translate}}</label>
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="dl-photo-wrapper bg-floral-white" *ngIf="showdlpic == true">
+                                <img [src]="dlvisitorphotosrc" class="img-fluid" />
+                            </div>
+                            <!-- <p class="fs-sm mb-0"> {{firstName + " " + lastName}}</p> -->
+                        </div>
+                    </div>
+                    <div class="mb-3" *ngIf="scanners">
+                        <div class="mb-3 card card-scanner card-body p-2 border-primary overflow-hidden">
+                            <zxing-scanner #scannerCode (scanSuccess)="scanSuccessHandler($event)">
+                            </zxing-scanner>
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label class="form-label">{{ "Walkin.note" | translate }}</label>
+                            <textarea class="form-control" maxlength="250" rows="3" [(ngModel)]="notes"
+                                placeholder="{{ 'labels.note' | translate }}"></textarea>
+                        </div> -->
+                        <div class="col-md-12">
+                            <!-- (keypress)="scanSuccessHandlers($event, qrcodes.value)" (keyup)="scanSuccessHandlers($event, qrcodes.value)" -->
+                            <input type="number" maxlength="100" id="qrCoeInput" (keypress)="scanSuccessHandlers(qrcodes.value, $event)"
+                                #qrcodes [(ngModel)]="qrCode" placeholder="{{ 'placeholders.enter_qr_code' | translate }}"
+                                class="form-control text-capitalize" [ngModelOptions]="{standalone: true}" /> 
+                            <p class="otpError mt-2" *ngIf="errorQR">Please enter QR code</p>                   
+                        </div>
+                    </div>
+                    <div class="mb-3" *ngIf="sendOtpFl">
+                        <label class="form-label">{{ "labels.otp" | translate }}<span class="mendatory">*</span></label>
+                        <!-- <input type="number" (keyup.enter)="validateOtp(otps)" id="" maxlength="4" required
+                                #otps [(ngModel)]="otp" placeholder="{{ 'placeholders.please_enter_otp' | translate }}"
+                                class="form-control text-capitalize" /> -->
+                        <div class="d-flex gap-3">
+                            <input id="otpcodeBox1" appAutoFocus [value]="otpValue && otpValue.length>0 && otpValue[0] ?otpValue[0]:''"
+                                #otps class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventByOtp(0, $event, 4)" />
+                            <input id="otpcodeBox2" [value]="otpValue && otpValue.length>0 && otpValue[1] ?otpValue[1]:''"
+                                #otps class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventByOtp(1, $event, 4)" />
+                            <input id="otpcodeBox3" [value]="otpValue && otpValue.length>0 && otpValue[2]?otpValue[2]:''"
+                                #otps class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventByOtp(2, $event, 4)" />
+                            <input id="otpcodeBox4" [value]="otpValue && otpValue.length>0 && otpValue[3] ?otpValue[3]:''"
+                                #otps class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventByOtp(3, $event, 4)" />
+                        </div>
+                        <p class="otpError" *ngIf="errorotp">Minimum & Maximum length four</p>
+                        <p class="sendOtp"><span>Not received the OTP?</span>
+                            <span class="resendOtp" (click)="resendOTP()">
+                                {{ "labels.resend_otp" | translate }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="mb-3" *ngIf="showByPass">
+                        <label class="form-label">{{ "labels.BypassPin" | translate }}</label>
+                        <div class="d-flex gap-3">
+                            <input id="codeBox1" appAutoFocus [value]="pinValue && pinValue.length>0 && pinValue[0] ?pinValue[0]:''"
+                                #bypassPin class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+                            <input id="codeBox2" [value]="pinValue && pinValue.length>0 && pinValue[1] ?pinValue[1]:''"
+                                #bypassPin class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+                            <input id="codeBox3" [value]="pinValue && pinValue.length>0 && pinValue[2]?pinValue[2]:''"
+                                #bypassPin class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+                            <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[3] ?pinValue[3]:''"
+                                #bypassPin class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+                            <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[4] ?pinValue[4]:''"
+                                #bypassPin class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+                            <input id="codeBox5" [value]="pinValue && pinValue.length>0 && pinValue[5]?pinValue[5]:''"
+                                #bypassPin class="form-control flex-1 text-center" type="number" maxlength="1" onkeypress="return event.keyCode === 8 || event.charCode >= 48 && event.charCode <= 57"
+                                (keyup)="onKeyUpEventBypass(5, $event, 6)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlides(currentSlide)">
+                    {{ "Schedule.Back" | translate }}
+                </button>
+                <!-- <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlides(currentSlide)"
+                    *ngIf="!walkinWithBioAuth">
+                    {{ "Schedule.Next" | translate }}
+                </button> -->
+                <button *ngIf="showByPass" (click)="confrimationDailog()" [disabled]="hasError"
+                class="btn btn-sm btn-primary-dark px-3">{{
+                "buttons.Next" | translate }}</button>
+                <button *ngIf="sendOtpFl" (click)="confrimationDailogs('otp')" [disabled]="hasError"
+                    class="btn btn-sm btn-primary-dark px-3">{{
+                    "buttons.Next" | translate }}</button>
+                <button *ngIf="scanners" (click)="confrimationDailogs('scanner')"
+                    class="btn btn-sm btn-primary-dark px-3">{{
+                    "buttons.Next" | translate }}</button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="currentSlide === 5">
+            <div class="popup-content">
+                <div class="card card-scanner card-body p-2 border-primary overflow-hidden mb-3">
+                    <pdf-viewer [src]="ndaDocumentUrl" [render-text]="true"
+                        [original-size]="false" style="width:100%; height:300px;"></pdf-viewer>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <mat-checkbox [checked]="ndaCheckin" [ngModelOptions]="{standalone: true}" [(ngModel)]="ndaCheckin"
+                            (change)="onClickExpandRx($event.checked)">I Accept</mat-checkbox>    
+                        <p class="otpError" *ngIf="errornda">Please accept NDA</p>             
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlides(currentSlide)">
+                    {{ "Schedule.Back" | translate }}
+                </button>
+                <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlides(currentSlide)">
+                    {{ "Schedule.Next" | translate }}
+                </button>
+            </div>
+        </ng-container>
+        <ng-container>
+            <ng-container *ngIf="currentSlide === 6">
+                <div class="popup-content">
+                    <div class="pb-20" *ngIf="!showWebcam">
+                        <img height="315" width="420" [src]="webcamImage?.imageAsDataUrl"
+                            src="assets/images/capture-photo.png" />
+                    </div>
+                    <webcam [height]="340" [width]="420" [trigger]="triggerObservable" [mirrorImage]="'never'"
+                        (imageCapture)="handleImage($event)" *ngIf="showWebcam" [switchCamera]="nextWebcamObservable">
+                    </webcam>
+                    <div *ngIf="errors.length > 0">
+                        <h4>{{ "Walkin.ErrorMessages" | translate }}:</h4>
+                        <ul *ngFor="let error of errors">
+                            <li>{{ error | json }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="popup-footer d-flex align-items-center gap-3">
+                    <button type="button" class="btn btn-sm btn-white px-3" (click)="goToPreviousSlides(currentSlide)">
+                        {{ "Schedule.Back" | translate }}
+                    </button>
+                    <button *ngIf="capturePhoto" class="btn btn-sm btn-primary-dark px-3" (click)="takeSnapshot()">
+                        {{ "Walkin.CapturePhoto" | translate}}
+                    </button>
+
+                    <button *ngIf="!capturePhoto" class="btn btn-sm btn-primary-dark px-3"
+                        (click)="showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                        {{'Walkin.CaptureAgain' | translate}}
+                    </button>
+                    <button *ngIf="!data.visitorSettings.allowWalkinApproval" class="btn btn-sm btn-primary-dark px-3" (click)="confirmVisitorRestrictionStatus()"
+                        [disabled]="!walkinProcess || capturePhoto">
+                        {{ "Walkin.check_in" | translate }}
+                    </button>
+                    <button *ngIf="data.visitorSettings.allowWalkinApproval" class="btn btn-sm btn-primary-dark px-3" (click)="confirmVisitorRestrictionStatus()"
+                        [disabled]="!walkinProcess || capturePhoto">
+                        {{ "complex_Details.Save" | translate }}
+                    </button>
+                </div>
+            </ng-container>
+        </ng-container>
+    </form>
+</div>

@@ -1,0 +1,95 @@
+<div class="popup-header">
+  <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+  <div class="popup-title-wrapper d-flex align-items-center" *ngIf="data.status != 'AWAITINGAPPROVAL' && data.type != 'WALKIN'">
+    <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+      "AppointmentDetails.CancelAppointment" | translate | uppercase
+      }}</span>
+  </div>
+ 
+  <div class="popup-title-wrapper d-flex align-items-center" *ngIf="data.status == 'AWAITINGAPPROVAL' && data.type == 'WALKIN'">
+    <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+      "AppointmentDetails.RejectAppointment" | translate | uppercase
+      }}</span>
+  </div>
+</div>
+<ng-container *ngIf="reasonData">
+  <div class="popup-content">
+    <div class="main" [formGroup]="formCancel" *ngIf="currentSlide == 1">
+      <p class="fs-sm" *ngIf="data.status != 'AWAITINGAPPROVAL' && data.type != 'WALKIN'">
+        {{ "AppointmentDetails.confirm_cancel_appointment" | translate: hostNameTranslate}}
+      </p>
+      <p class="fs-sm" *ngIf="data.status == 'AWAITINGAPPROVAL' && data.type == 'WALKIN'">
+        {{ "AppointmentDetails.confirm_reject_appointment" | translate: hostNameTranslate}}
+      </p>
+      <p class="fs-xs text-muted" *ngIf="formCancel.invalid">
+        {{ "AppointmentDetails.SelectReasonError" | translate }}
+      </p>
+      <div *ngIf="reasonData.length < 10">
+        <mat-selection-list #shoes [multiple]="false" formControlName="reason"
+          class="vams-selection-list d-grid gap-3 pt-0">
+          <mat-list-option *ngFor="let reason of reasonData" [value]="reason" class="vams-selection-list-item">
+            {{ reason.reason }}
+          </mat-list-option>
+          <!-- <mat-error *ngFor="let message of showValidationMessages('reason')">
+          {{message}}
+        </mat-error> -->
+        </mat-selection-list>
+      </div>
+      <div *ngIf="reasonData.length >= 10">
+        <div class="row mb-3">
+          <label class="col-md-3 col-form-label">
+            {{ "AppointmentDetails.SelectReason" | translate }}
+          </label>
+          <div class="col-md-9">
+            <mat-select class="form-control" formControlName="reason" placeholder="{{
+              'AppointmentDetails.PleaseSelectReason' | translate
+            }}">
+              <mat-option *ngFor="let item of reasonData" [value]="item">{{ item.reason }}
+              </mat-option>
+            </mat-select>
+            <!-- <mat-error *ngFor="let message of showValidationMessages('reason')">
+            {{ message }}
+          </mat-error> -->
+          </div>
+        </div>
+      </div>
+      <!-- <div class="button-bg-popup">
+      <button class="common-popup-button mr-20" [disabled]="formCancel.invalid" (click)="cancelAppointment()"
+        mat-raised-button>
+        {{ "CommonToken.Yes" | translate }}
+      </button>
+      <button class="secondry-button" mat-raised-button (click)="dialogRef.close()">
+        {{ "CommonToken.No" | translate }}
+      </button>
+    </div> -->
+    </div>
+    <div class="main" [formGroup]="formCancel" *ngIf="currentSlide == 2">
+      <p>
+        {{ "AppointmentDetails.cancel_appointment_message_1" | translate }}{{ data.hostFirstName + " " +
+        data.hostLastName }}{{ "AppointmentDetails.cancel_appointment_message_2" | translate }}
+      </p>
+      <!-- <div class="button-bg-popup">
+      <button class="common-popup-button mr-20" [disabled]="formCancel.invalid" (click)="dialogRef.close()"
+        mat-raised-button>
+        {{ "CommonToken.OK" | translate }}
+      </button>
+    </div> -->
+    </div>
+  </div>
+  <footer class="popup-footer d-flex align-items-center gap-3" *ngIf="data.status != 'AWAITINGAPPROVAL' && data.type != 'WALKIN'">
+    <button class="btn btn-sm btn-primary-dark px-3" [disabled]="formCancel.invalid" (click)="openDialog()">
+      {{ "CommonToken.Cancel" | translate }}
+    </button>
+    <button class="btn btn-sm btn-white px-3" (click)="dialogRef.close()">
+      {{ "CommonToken.Back" | translate }}
+    </button>
+  </footer>
+  <footer class="popup-footer d-flex align-items-center gap-3" *ngIf="data.status == 'AWAITINGAPPROVAL' && data.type == 'WALKIN'">
+    <button class="btn btn-sm btn-primary-dark px-3" [disabled]="formCancel.invalid" (click)="openRejectDialog()">
+      {{ "CommonToken.Reject" | translate }}
+    </button>
+    <button class="btn btn-sm btn-white px-3" (click)="dialogRef.close()">
+      {{ "CommonToken.Back" | translate }}
+    </button>
+  </footer>
+</ng-container>

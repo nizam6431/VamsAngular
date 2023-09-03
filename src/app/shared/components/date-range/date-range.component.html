@@ -1,0 +1,19 @@
+<div class="dialog-content d-grid gap-4">
+    <div class="dialog-body d-grid gap-4">
+        <mat-form-field appearance="fill">
+            <!-- <mat-label>Enter a date range</mat-label> -->
+            <mat-date-range-input [min]="minDateForRange" [max]="maxDateForRange" [formGroup]="dateRange" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Start date">
+                <input matEndDate formControlName="end" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker (closed)="close()" touchUi></mat-date-range-picker>
+            <!-- <mat-error *ngIf="dateRange.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="dateRange.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error> -->
+        </mat-form-field>
+    </div>
+    <!-- <div class="dialog-actions gap-3">
+      <button class="btn btn-sm btn-white px-3" (click)="close(false)">Cancel</button>
+      <button class="btn btn-sm btn-primary-dark px-3" (click)="close(true)">Select</button>
+    </div> -->
+</div>

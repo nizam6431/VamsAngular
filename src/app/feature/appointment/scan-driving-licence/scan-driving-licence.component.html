@@ -1,0 +1,30 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{'Walkin.scan_licsence'
+                | translate}}</span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="img-wrapper d-flex align-items-center justify-content-center" *ngIf="!showWebcam">
+            <img [src]="webcamImage?.imageAsDataUrl" src="assets/images/capture-photo.png" class="img-fluid" />
+        </div>
+        <div class="vams-webcam-wrapper d-flex align-items-center justify-content-center" *ngIf="showWebcam">
+            <webcam [imageQuality]="1" [height]="500" [width]="500" [trigger]="triggerObservable"
+                (imageCapture)="handleImage($event)" [switchCamera]="nextWebcamObservable"></webcam>
+        </div>
+        <mat-error *ngIf="isPhotoCaptured==false">
+            {{'CheckIn.UploadError' | translate}}</mat-error>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button *ngIf="!isPhotoCaptured" class="btn btn-sm btn-primary-dark px-3" (click)="takeSnapshot()">{{
+            'CheckIn.CapturePhoto' | translate}}</button>
+        <button *ngIf="isPhotoCaptured" class="btn btn-sm btn-primary-dark px-3"
+            (click)="showWebcam = true; webcamImage=undefined; isPhotoCaptured = undefined">{{
+            'CheckIn.CaptureAgain' | translate}}</button>
+        <button [disabled]="!isPhotoCaptured" class="btn btn-sm btn-primary-dark px-3" (click)="scanLicense()">{{
+            'CheckIn.Scan' | translate}}</button>
+    </div>
+</div>

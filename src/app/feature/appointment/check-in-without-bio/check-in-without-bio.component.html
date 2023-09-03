@@ -1,0 +1,177 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                <span *ngIf="currentSlide == 1">{{"labels.dl_scan_header" | translate }}</span>
+                <span *ngIf="currentSlide == 2">{{"labels.scan_qr_code" | translate }}</span>
+                <span *ngIf="currentSlide == 3">{{"labels.appointment_details" | translate }}</span>
+                <span *ngIf="currentSlide == 4">{{"labels.capture_photo" | translate }}</span>
+            </span>
+        </div>
+    </div>
+    <div class="popup-form">
+        <div class="popup-content" *ngIf="currentSlide == 1">
+            <div class="btn-wrapper d-flex align-items-center gap-3 mb-3">
+                <button type="submit" (click)="scanDrivingLicense()"
+                    class="btn btn-sm btn-white px-3">{{'Walkin.scan_licsence' | translate}}
+                </button>
+                <span>OR</span>
+                <button type="submit" (click)="byPassActivate()"
+                    class="btn btn-sm btn-white px-3">{{'labels.by_pass_pin' |
+                    translate}}
+                </button>
+            </div>
+            <div class="d-grid" *ngIf="idProofDetails && !showByPass">
+                <label class="form-label">{{ "labels.dl_scan_visitor" | translate}}</label>
+                <div class="d-flex gap-3 mb-3">
+                    <div class="dl-photo-wrapper bg-floral-white" *ngIf="showdlpic == true">
+                        <img [src]="dlvisitorphotosrc" class="img-fluid" />
+                    </div>
+                    <p class="fs-sm mb-0"> {{firstName + " " + lastName}}</p>
+                </div>
+            </div>
+            <div class="mb-3" *ngIf="showByPass">
+                <label class="form-label">{{ "labels.BypassPin" | translate }}</label>
+                <div class="d-flex gap-3">
+                    <input id="codeBox1" [value]="pinValue && pinValue.length>0 && pinValue[0] ?pinValue[0]:''"
+                        #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+                    <input id="codeBox2" [value]="pinValue && pinValue.length>0 && pinValue[1] ?pinValue[1]:''"
+                        #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+                    <input id="codeBox3" [value]="pinValue && pinValue.length>0 && pinValue[2]?pinValue[2]:''"
+                        #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+                    <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[3] ?pinValue[3]:''"
+                        #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+                    <input id="codeBox4" [value]="pinValue && pinValue.length>0 && pinValue[4] ?pinValue[4]:''"
+                        #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+                    <input id="codeBox5" [value]="pinValue && pinValue.length>0 && pinValue[5]?pinValue[5]:''"
+                        #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(5, $event, 6)" />
+                    <!-- <input id="codeBox1" #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+                    <input id="codeBox2" #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+                    <input id="codeBox3" #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+                    <input id="codeBox4" #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+                    <input id="codeBox4" #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+                    <input id="codeBox5" #bypassPin class="form-control flex-1 text-center" type="text" maxlength="1"
+                        (keyup)="onKeyUpEventBypass(5, $event, 6)" /> -->
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{{ "Walkin.note" | translate }}</label>
+                <textarea class="form-control" maxlength="250" rows="3" [(ngModel)]="notes"
+                    placeholder="{{ 'labels.note' | translate }}"></textarea>
+            </div>
+        </div>
+        <div class="popup-content" *ngIf="currentSlide == 2">
+            <div class="card card-scanner card-body p-2 border-primary overflow-hidden">
+                <zxing-scanner #scanner (scanSuccess)="scanSuccessHandler($event)">
+                </zxing-scanner>
+            </div>
+        </div>
+        <div class="popup-content" *ngIf="currentSlide == 3">
+            <ng-container *ngFor="let item of apptDetailsKeys ; let ind = index;">
+                <ng-container *ngIf="ind % 2 == 0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row mb-3">
+                                <label *ngIf="apptDetailsKeys[ind]" for="employeeFirstName" class="col-md-4 col-form-label">
+                                    {{ "AppointmentVisitorDetails."+apptDetailsKeys[ind] | translate }}</label>
+                                <div class="col-md-8" *ngIf="apptDetailsKeys[ind]">
+                                    <ng-container
+                                        *ngIf="apptDetailsKeys[ind] && appointmentData[apptDetailsKeys[ind]]!=undefined else NotAvailable">
+                                        <p class="form-control-plaintext text-break mb-0">
+                                            {{appointmentData[apptDetailsKeys[ind]]}}
+                                        </p>
+                                    </ng-container>
+                                    <ng-template #NotAvailable>
+                                        <p class="form-control-plaintext mb-0">-
+                                        </p>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row mb-3">
+                                <label *ngIf="apptDetailsKeys[ind+1]" for="employeeFirstName"
+                                    class="col-md-4 col-form-label">
+                                    {{ "AppointmentVisitorDetails."+apptDetailsKeys[ind+1] | translate }}</label>
+                                <div class="col-md-8" *ngIf="apptDetailsKeys[ind+1]">
+                                    <ng-container
+                                        *ngIf="apptDetailsKeys[ind+1] && appointmentData[apptDetailsKeys[ind+1]]!=undefined else NotAvailable">
+                                        <p class="form-control-plaintext text-break mb-0">
+                                            {{appointmentData[apptDetailsKeys[ind+1]]}}
+                                        </p>
+                                    </ng-container>
+                                    <ng-template #NotAvailable>
+                                        <p class="form-control-plaintext mb-0">-
+                                        </p>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+        <div class="popup-content" *ngIf="currentSlide == 4">
+            <div class="pb-20" *ngIf="!showWebcam">
+                <img height="315" width="420" [src]="webcamImage?.imageAsDataUrl"
+                    src="assets/images/capture-photo.png" />
+            </div>
+            <webcam [height]="340" [width]="420" [trigger]="triggerObservable" [mirrorImage]="'never'"
+                (imageCapture)="handleImage($event)" *ngIf="showWebcam" [switchCamera]="nextWebcamObservable">
+            </webcam>
+            <div *ngIf="errors.length > 0">
+                <h4>{{ "Walkin.ErrorMessages" | translate }}:</h4>
+                <ul *ngFor="let error of errors">
+                    <li>{{ error | json }}</li>
+                </ul>
+            </div>
+        </div>
+        <footer class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 1">
+            <button class="btn btn-sm btn-white px-3" (click)="cancel()">{{ "buttons.Back" | translate }}</button>
+            <button class="btn btn-sm btn-white px-3" (click)="formReset()">
+                {{ "Walkin.reset" | translate }}
+            </button>
+            <button (click)="confrimationDailog()" [disabled]="hasError"
+                class="btn btn-sm btn-primary-dark px-3">{{ "buttons.Submit" | translate }}</button>
+        </footer>
+        <footer class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 2 && showDl">
+            <!-- <button (click)="confrimationDailog()" [disabled]="hasError"
+                class="btn btn-sm btn-primary-dark px-3">Submit</button> -->
+            <button class="btn btn-sm btn-white px-3" (click)="currentSlide = 1">{{ "buttons.Back" | translate }}</button>
+        </footer>
+        <footer class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 3">
+            <button (click)="currentSlide = currentSlide + 1"
+                class="btn btn-sm btn-primary-dark px-3">Next</button>
+            <button class="btn btn-sm btn-white px-3" (click)="currentSlide =  currentSlide -1">{{ "buttons.Back" | translate }}</button>
+        </footer>
+        <footer class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 4">
+            <button type="button" class="btn btn-sm btn-white px-3" (click)="currentSlide = currentSlide - 1">
+                {{ "Schedule.Back" | translate }}
+            </button>
+            <button *ngIf="capturePhoto" class="btn btn-sm btn-primary-dark px-3" (click)="takeSnapshot()">
+                {{ "Walkin.CapturePhoto" | translate}}
+            </button>
+
+            <button *ngIf="!capturePhoto" class="btn btn-sm btn-primary-dark px-3"
+                (click)="showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                {{'Walkin.CaptureAgain' | translate}}
+            </button>
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="checkIn()"
+                [disabled]="capturePhoto">
+                {{ "Walkin.check_in" | translate }}
+            </button>
+        </footer>
+    </div>
+</div>

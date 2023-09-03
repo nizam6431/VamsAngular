@@ -1,0 +1,71 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                {{"ContractorPass.Details" | translate }}
+            </span>
+        </div>
+    </div>
+
+    <div class="popup-content">
+        <div class="popup-form">
+            <div class="row">
+                <label for="contractorCompanyName" class="col-md-4 col-form-label">
+                    {{"grid_columns.contractor_pass.contractorCompanyName"|translate}}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{getAllContractorRes.contractorCompanyName}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <label for="employeeFirstName" class="col-md-4 col-form-label">
+                    {{"grid_columns.contractor_pass.contractorName"|translate}}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{getAllContractorRes.contractorName}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <label for="employeeFirstName" class="col-md-4 col-form-label">
+                    {{"grid_columns.contractor_pass.departmentName"|translate}}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{getAllContractorRes.departmentName}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <label for="employeeFirstName" class="col-md-4 col-form-label">
+                    {{"grid_columns.contractor_pass.startDate"|translate}}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{getAllContractorRes.startDate}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <label for="employeeFirstName" class="col-md-4 col-form-label">
+                    {{"grid_columns.contractor_pass.endDate"|translate}}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{getAllContractorRes.endDate}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <label for="employeeFirstName" class="col-md-4 col-form-label">
+                    {{"grid_columns.contractor_pass.startTime"|translate}}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{getAllContractorRes.startTime}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <label for="employeeFirstName" class="col-md-4 col-form-label">
+                    {{"grid_columns.contractor_pass.endTime"|translate}}
+                </label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext text-break mb-0">{{getAllContractorRes.endTime}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+    @extend .host;
+}
+
+.col-tag {
+    width: 14rem;
+}

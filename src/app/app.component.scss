@@ -1,0 +1,8 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  @extend .scroll-y;
+}

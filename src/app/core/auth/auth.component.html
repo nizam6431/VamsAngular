@@ -1,0 +1,21 @@
+<div  class="d-flex flex-column justify-content-center align-items-center">
+    <div class="position-relative d-flex align-items-center ribbon">
+        <img class="" src="assets/images/card-bend.png" alt="" />
+    </div>
+    <div class="card card-authentication shadow">
+        <div class="card-body">
+            <div class="d-flex flex-column align-items-center">
+                <div class="badge-hole bg-light opacity-50 rounded-pill border border-light mb-4"></div>
+                <div class="d-flex justify-content-center mb-4">
+                    <img class="logo" [src]="logoUrl?logoUrl:'assets/images/login-vams-logo.png'" alt="Vams" />
+                </div>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

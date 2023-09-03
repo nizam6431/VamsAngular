@@ -1,0 +1,227 @@
+<!-- 
+<ng-template #changelanguage>
+  <app-change-language></app-change-language>
+</ng-template>
+ -->
+<!-- Logo -->
+<div class="vams-logo position-fixed d-flex align-items-center justify-content-center bg-white">
+  <img [src]="logoUrl?logoUrl:'assets/images/login-vams-logo.png'" alt="VAMS" class="img-fluid" />
+</div>
+<!-- Header -->
+<header class="vams-page-header d-flex align-items-center gap-3 bg-floral-white">
+  <h5 class="box3 fw-semi-bold mb-0 me-auto">{{ title | titlecase }}</h5>
+  <!--
+    <div *ngIf="selectedBuilding" class="box3">
+      <i class="fas fa-map-marker-alt"></i>{{ selectedBuilding }}
+    </div>
+     -->
+  <div class="d-flex align-items-center justify-content-end flex-1 gap-3">
+    <div class="d-flex align-items-center" *ngIf="userLevel == 'Level1'">
+      <div class="d-flex align-items-center gap-2" *ngIf="
+          userDetails.role &&
+          (userDetails.role.shortName == 'L2Reception' ||
+            userDetails.role.shortName == 'L2SecurityGuard')
+        ">
+        <div class="building-badge d-flex align-items-stretch" *ngFor="let building of buildingList">
+          <p class="flex-1 fs-xs fw-medium mb-0 px-2 py-1">{{ building["name"] }}</p>
+          <div class="icon-box d-flex align-items-center">
+            <i class="icon-location fs-sm text-white"></i>
+          </div>
+        </div>
+      </div>
+      <div class="vams-dropdown" *ngIf="userDetails.role && userDetails.role.shortName == 'L2Admin'">
+        <mat-select disableOptionCentering [(ngModel)]="selectedBuilding" class="form-control"
+          placeholder="select builtding" (selectionChange)="selectBuilding()">
+          <mat-option *ngFor="let building of buildingList" [value]="building['id']">
+            {{building["name"]}}
+          </mat-option>
+        </mat-select>
+
+        <!-- <select [(ngModel)]="selectedBuilding" class="form-control" (change)="selectBuilding()">
+          <option [ngValue]="null" [hidden]="true" [disabled]="true">
+            <i class="fas fa-map-marker-alt mr-10"></i>{{
+            "login_select_building.select_building_placeholder" | translate
+            }}
+          </option>
+          <option *ngFor="let building of buildingList" [selected]="building['id'] == selectedBuilding"
+            [value]="building['id']">
+            {{ building["name"] }}
+          </option>
+        </select> -->
+      </div>
+    </div>
+    <div>
+      <div class="d-flex align-items-center justify-content-center gap-3">
+        <div *ngIf="userService.isPermissible('sos')">
+          <button 
+            class="btn btn-link text-decoration-none user-name p-0 "  (click)="openSOS()">
+            <label style="cursor:pointer;">SOS</label>
+          </button> |
+        </div>
+        <button *ngIf="userDetails?.role?.shortName == 'L3Admin' && userDetails?.feature != null && userDetails?.feature != 'undefined'" class="btn btn-sm btn-primary-dark px-3 ml-1"
+        (click)="openPayDialog('card')">
+          Add Balance
+        </button>
+        <div *ngIf="userDetails.level1Id && userDetails.level1Id != 0" class="d-flex align-items-center gap-2">
+          <p class="fs-xs fw-semi-bold mb-0">
+            {{userFullName |titlecase}} 
+          </p> |
+          <button *ngIf="userService.isPermissible('updateProfile') == false && (userDetails.role.shortName == 'L2SecurityGuard' || userDetails.role.shortName == 'L1SecurityGuard' )"
+            class="btn btn-link text-decoration-none user-name p-0">
+            {{ userShortName }}
+          </button>
+          <button *ngIf="userService.isPermissible('updateProfile')"
+            class="btn btn-link text-decoration-none user-name p-0" (click)="myProfile()">
+            {{ userShortName }}
+          </button>
+        </div>
+        <mat-divider [vertical]="true" class="align-self-stretch my-2"></mat-divider>
+        <div class="d-flex align-items-center">
+          <p class="fs-xs fw-semi-bold mb-0">
+            {{
+            "Menus.Sign_Out" | translate
+            }}
+          </p>
+          <button class="btn btn-link d-flex align-items-center text-decoration-none p-2 border-0" (click)="logout()">
+            <i class="material-icons fs-5 fw-medium">logout</i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <div class="profile-menu" #profileMenu *ngIf="isProfileMenuOpen">
+      <!--
+        <div class="text-center">
+          <div class="qrcode-profile">
+            <img src="assets/images/qrcode.png" />
+          </div>
+          <div class="your-pass">Your Pass</div>
+        </div>
+        -->
+      <!-- <div
+          class="menu-list"
+          *ngIf="userService.isPermissible('updateProfile')"
+        >
+          <picture>
+            <source
+              srcset="assets/images/profile-dark.png"
+              media="(prefers-color-scheme: dark)"
+            />
+            <img src="assets/images/profile-default.png" /> </picture
+          ><a href="/VAMSBasicWeb3.2/josh/user/updateprofile">{{
+            "Menus.Profile" | translate
+          }}</a>
+        </div> -->
+      <div class="menu-list" *ngIf="userService.isPermissible('ReAuthenticateVisitor')">
+        <picture>
+          <source srcset="images/re-authenticate.png" media="(prefers-color-scheme: dark)" />
+          <img src="assets/images/re-authenticate.png" />
+        </picture><a href="/VAMSBasicWeb3.2/josh/appointment/re-authenticate" style="width: 89%">{{
+          "Menus.Reauthenticate" | translate }}</a>
+      </div>
+      <!-- <div class="menu-list">
+          <picture>
+            <source
+              srcset="assets/images/change-language-dark.png"
+              media="(prefers-color-scheme: dark)"
+            />
+            <img src="assets/images/change-language-default.png" /> </picture
+          ><a href="javascript:void(0)">{{
+            "Menus.Change_Language" | translate
+          }}</a>
+                </div> -->
+      <!-- <div class="menu-list" *ngIf="showQrCodeMenu">
+                    <i class="material-icons fs-sm fw-medium">qr_code_2</i>
+                    <a href="javascript:void(0)" (click)="openDialog('QR')">{{
+            "Menus.MyAccessQrCode" | translate
+            }}</a>
+                </div> -->
+      <div class="menu-list">
+        <i class="material-icons fs-sm fw-medium">password</i>
+        <a href="javascript:void(0)" (click)="openDialog('password')">{{
+          "Menus.Change_Password" | translate
+          }}</a>
+      </div>
+      <!--
+        <div class="menu-list">
+          <picture>
+            <source
+              srcset="images/theme-dark.png"
+              media="(prefers-color-scheme: dark)"
+            />
+            <img src="assets/images/theme-default.png" /> </picture
+          ><a href="javascript:void(0)">{{ "Menus.Dark_Theme" | translate }}</a>
+          <div class="menu-list-switch">
+            <label class="switch"
+              ><input
+                type="checkbox"
+                class="ng-untouched ng-pristine ng-valid" /><span
+                checked
+                class="slider round"
+              ></span
+            ></label>
+          </div>
+        </div>
+        -->
+
+
+      <!-- TODO: Location -->
+      <!--
+      <div class="status-select-button">
+        <div class="flag">
+          <div class="top-links">
+            <ul
+              class="main-wrapper"
+              (mouseenter)="menuMouseAction($event, true)"
+              (mouseleave)="menuMouseAction($event, false)"
+            >
+              <li class="dropheader">
+                <a href="javascript:void(0)" class="headerinner flagtitle"
+                  ><img class="" src="assets/images/checkin-icon.png" /><span>{{
+                    locationName
+                  }}</span>
+                  <i
+                    class="fa fa-chevron-down countryarrow"
+                    aria-hidden="true"
+                  ></i
+                ></a>
+                <ul class="optionlist" #mainwrapper>
+                  <li
+                    *ngFor="let location of locations"
+                    (click)="
+                      locationChange($event, location.LocationId, mainwrapper)
+                    "
+                    attr.data-value="{{ location.LocationId }}"
+                  >
+                    <a href="javascript:void(0)">{{ location.LocationName }}</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      -->
+      <!--
+      <div>
+        <a class="sos-button"><img src="assets/images/sos-icon.png" /></a>
+      </div>
+      <div><a class="bell-icon icon-bell-icon"></a></div>
+      -->
+      <!--
+      <div>
+        <div class="dark-light-switch">
+          <label class="switch">
+            <input
+              type="checkbox"
+              [(ngModel)]="isDarkTheme"
+              (change)="themeChange($event)"
+            />
+            <span class="slider round" checked=""></span>
+          </label>
+        </div>
+      </div>
+      -->
+    </div>
+  </div>
+</header>

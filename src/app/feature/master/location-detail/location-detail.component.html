@@ -1,0 +1,269 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="!isEdit && loctionObject">
+    <div class="vams-page-body d-flex flex-column flex-1 scroll-y">
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingName" class="col-sm-4 col-form-label">{{"level2_details.level2_name" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingName" value="{{ loctionObject?.data?.name }}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingaddress" class="col-sm-4 col-form-label">{{"level2_details.level2_address" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingaddress" value="{{ loctionObject?.data?.address?.line1}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingCountry" class="col-sm-4 col-form-label">{{"level2_details.isdCode" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingCountry" value="{{ loctionObject?.data?.address?.contactIsd}}"/>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingCountry" class="col-sm-4 col-form-label">{{"level2_details.country" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingCountry" value="{{ loctionObject?.data?.address?.country}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingcontactNumber" class="col-sm-4 col-form-label">{{"level2_details.contactNumber" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingcontactNumber" value="{{ loctionObject?.data?.address?.contactMobile}}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingtimeZone" class="col-sm-4 col-form-label">{{"level2_details.timeZone" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingtimeZone" value="{{ loctionObject?.data?.accountConfig?.timezone}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingdateFormat" class="col-sm-4 col-form-label">{{"level2_details.dateFormat" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingdateFormat" value="{{loctionObject?.data?.accountConfig?.dateFormat}}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingtimeFormat" class="col-sm-4 col-form-label">{{"level2_details.timeFormat" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingtimeFormat" value="{{loctionObject?.data?.accountConfig?.timeFormat}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingmapLink" class="col-sm-4 col-form-label">{{"level2_details.mapLink" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingmapLink" value="{{loctionObject?.data?.address?.mapLink}}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="buildingStatus" class="col-sm-4 col-form-label">{{"level2_details.status" | translate}}</label>
+                    <div class="col-sm-6">
+                      <input type="text" readonly class="form-control-plaintext" id="buildingStatus"value="{{ loctionObject?.data?.status }}"/>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+            (click)="isEditClick()">
+            {{"CommonToken.Edit" |translate}}
+        </button>
+    </footer>
+</div>
+
+<form class="popup-form" [formGroup]="formLocation" novalidate *ngIf="isEdit">
+    <div class="popup-content">
+        <div class="row mb-3">
+            <label for="feFirstName" class="col-sm-4 col-form-label">{{ "level2_details.level2_name" | translate }}
+                <span class="mendatory">*</span></label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="feFirstName" formControlName="name" maxlength="50"
+                    placeholder="{{ 'level2_details.name_placeholder' | translate }}" />
+                    <mat-error class="mat-error" *ngFor="let message of showValidationMessages('name')">
+                        {{ message }}
+                    </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feFirstName" class="col-sm-4 col-form-label">{{ "level2_details.level2_address" | translate }}
+                <span class="mendatory">*</span></label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="addressLine1" formControlName="addressLine1" maxlength="50"
+                    placeholder="{{ 'level2_details.address_placeholder' | translate }}" />
+                <mat-error *ngFor="let message of showValidationMessages('addressLine1')">
+                    {{ message }}
+                </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feAddressLine2" class="col-sm-4 col-form-label">{{"level2_details.level2_address2"|translate}}</label>
+            <div class="col-md-6">
+                <input type="text" autocomplete="off" class="form-control" id="feAddressLine2"
+                placeholder="{{ 'level2_details.address_placeholder1' | translate }}"   formControlName="addressLine2" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feCountry" class="col-sm-4 col-form-label">{{"level2_details.country" |translate}}<span
+                    class="mendatory">*</span></label>
+            <div class="col-md-6">
+                <input type="text" placeholder='{{"level2_details.countryRequired" |translate}}' formControlName="country" aria-label="Number"
+                    matInput [matAutocomplete]="auto" class="form-control">
+                <mat-autocomplete #auto="matAutocomplete"
+                    (optionSelected)="onStateChange($event.option.value,true)">
+                    <mat-option *ngFor="let country of countryList" [value]="country.niceName" class="fs-sm">
+                        {{ country.niceName }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngFor="let message of showValidationMessages('country')">
+                    {{ message }}
+                </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feTimeZone" class="col-sm-4 col-form-label">{{"level2_details.contactNumber"
+                |translate}}<span class="mendatory">*</span></label>
+            <div class="col-md-6">
+                <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                    [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                    [enablePlaceholder]="true" [searchCountryFlag]="true"
+                    [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                    [selectedCountryISO]="selectedCountry" [phoneValidation]="true"
+                    [separateDialCode]="separateDialCode" [maxLength]="'15'" (countryChange)="checkNumber($event)"
+                    name="phone" formControlName="contactMobile" appMobileNumberFormat>
+                </ngx-intl-tel-input>
+
+                <mat-error *ngFor="let message of showValidationMessages('contactMobile')">
+                    {{ message }}
+                </mat-error>
+
+                <mat-error *ngIf="
+            formLocation.get('contactMobile').hasError('validatePhoneNumber') && (formLocation.get('contactMobile').value!=null)
+          ">
+                    {{ "error_messages.invalid_contact_format" |translate }}
+                </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feTimeZone" class="col-sm-4 col-form-label">{{"level2_details.timeZone" |translate}}
+                <span class="mendatory">*</span></label>
+            <div class="col-md-6">
+                <mat-select class="form-control" placeholder="Select Time Zone" disableOptionCentering
+                    formControlName="timeZone" [compareWith]="compareCategoryObjects">
+                    <mat-option *ngFor="let timeZone of timeZones?.data" [value]="timeZone.displayName">
+                        {{ timeZone.displayName }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngFor="let message of showValidationMessages('timeZone')">
+                    {{ message }}
+                </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feDateFormat" class="col-sm-4 col-form-label">{{"level2_details.dateFormat"
+                |translate}} <span class="mendatory">*</span></label>
+            <div class="col-md-6">
+                <mat-select class="form-control" placeholder="Select Date Format" disableOptionCentering
+                    formControlName="dateFormat">
+                    <mat-option *ngFor="let dateformat of dateFormats" [value]="dateformat.value">
+                        {{ dateformat.viewValue }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngFor="let message of showValidationMessages('dateFormat')">
+                    {{ message }}
+                </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feTimeFormat" class="col-sm-4 col-form-label">{{"level2_details.timeFormat"
+                |translate}} <span class="mendatory">*</span></label>
+            <div class="col-md-6">
+                <mat-select class="form-control" placeholder="Select Time Format" disableOptionCentering
+                    formControlName="timeFormat">
+                    <mat-option *ngFor="let timeformat of timeFormats" [value]="timeformat.value">
+                        {{ timeformat.viewValue }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngFor="let message of showValidationMessages('timeFormat')">
+                    {{ message }}
+                </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="feMapLink" class="col-sm-4 col-form-label">{{"level2_details.mapLink" |translate}}
+                <span class="mendatory">*</span></label>
+            <div class="col-md-6">
+                <input type="text" autocomplete="off" class="form-control" id="feState" formControlName="mapLink" 
+                placeholder="{{ 'level2_details.mapLinkRequired' | translate }}"/>
+                <mat-error *ngFor="let message of showValidationMessages('mapLink')">
+                    {{ message }}
+                </mat-error>
+            </div>
+        </div>
+        <div class="row mb-3" *ngIf="loctionObject.data">
+            <label for="feLastName" class="col-sm-4 col-form-label">{{ "level2_details.status" | translate }}
+                <span class="mendatory">*</span></label>
+            <!-- <div class="col-sm-6">
+                <input type="text" readonly class="form-control-plaintext"formControlName="status" id="feBuildingStatus" value="{{ loctionObject?.data?.status }}" />
+            </div> -->
+            <div class="col-sm-6">
+                <mat-select class="form-control" formControlName="status">
+                  <mat-option selected *ngFor="let name of statusList"[value]="name" >{{ name }}</mat-option>
+                </mat-select>
+                <mat-error *ngFor="let message of showValidationMessages('status')">
+                  {{ message }}<br />
+                </mat-error>
+              </div>
+        </div>
+
+    </div>
+    <footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+        <button (click)="onSubmit()" class="btn btn-sm btn-primary-dark px-3">
+            {{"complex_Details.Save" |translate}}
+        </button>
+        <button (click)="cancel()" class="btn btn-sm btn-white px-3">
+            {{"complex_Details.Cancel" |translate}}
+        </button>
+    </footer>
+    <!-- <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'add'" (click)="addLocation()">
+            {{ "CommonToken.Add" | translate }}
+        </button>
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'edit'" (click)="onSubmit()">
+            {{ "CommonToken.Save" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'edit'" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'add'" (click)="resetForm()">
+            {{ "CommonToken.Clear" | translate }}
+        </button>
+    </div> -->
+</form>

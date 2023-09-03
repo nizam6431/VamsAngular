@@ -1,0 +1,13 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.img-box {
+  width: 15rem;
+
+  img {
+    object-fit: contain;
+  }
+}

@@ -1,0 +1,34 @@
+<div class="vams-page-preview d-flex flex-column flex-1 scroll-y">
+    <div class="mb-3" *ngIf="!editBannerImage">
+        <label for="bannerLogo" class="form-label">{{"dyanamic_email_template.banner_logo"
+            |translate}}</label>
+            <div class="mb-3">
+            <!-- <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"image.imageSize" | translate}}</p> -->
+            <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"image.imageType" | translate}}</p>
+            <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"upload_image.banner_image" | translate}}</p>
+   </div>
+        <div *ngIf="bannerLogo" class="email-banner p-1 border rounded-4">
+            <img _ngcontent-lde-c178="" [src]="bannerLogo" class="img-fluid" alt="Banner" />
+        </div>
+    </div>
+    <div class="d-grid gap-2 mb-3" *ngIf="editBannerImage">
+        <div class="d-inline-block">
+            <button class="btn btn-sm btn-white px-3"
+                onclick="document.getElementById('selectBannerImage').click()">{{'dyanamic_email_template.upload_banner_image'
+                | translate}}</button>
+            <input id="selectBannerImage" name="file" accept="image/x-png,image/jpeg" onclick="this.value = null"
+                class="custom-file-input" type="file" (change)="onFileChange($event)" style="display:none" />
+        </div>
+        <div>
+        <!-- <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"image.imageSize" | translate}}</p> -->
+        <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"image.imageType" | translate}}</p>
+        <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"upload_image.banner_image" | translate}}</p>
+       </div>
+        <div *ngIf="bannerLogo" class="email-banner p-1 border rounded-4">
+            <img [src]="bannerLogo" class="img-fluid" alt="Banner" />
+        </div>
+        <!-- <div *ngIf="imagePriview" class="email-banner p-1 border rounded-4">
+            <img [src]="bannerLogo" class="img-fluid" alt="Banner" />
+        </div>    -->
+    </div>
+</div>

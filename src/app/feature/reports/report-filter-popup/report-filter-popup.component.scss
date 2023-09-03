@@ -1,0 +1,11 @@
+@import "src/assets/stylesheets/core";
+:host {
+    @extend .host;
+}
+
+.report-filter-popup {
+
+    .popup-header {
+        padding-top: 0.625rem;
+    }
+}

@@ -1,0 +1,31 @@
+// Icons
+@import "./icon";
+// Bootstrap
+@import "./boostrap";
+// Angular Material
+@import "./angular-material";
+// International Telephone Input
+@import "~intl-tel-input/build/css/intlTelInput.css";
+@import "./iti";
+// Select2
+@import "~select2/src/scss/core.scss";
+// Flag Icons
+@import "~flag-icon-css/sass/flag-icon.scss";
+// NGX Toastr
+@import "~ngx-toastr/toastr";
+// Custom SCSS
+@import "./global";
+// root SCSS
+@import "./_root";
+// dialog SCSS
+@import "./_dialog";
+// Custom File Input
+@import "./custom-file-input";
+// Tabs
+@import "./tabs";
+// Datepicker
+@import "./datepicker";
+// Timepicker
+@import "./timepicker";
+// Lists
+@import "./lists";

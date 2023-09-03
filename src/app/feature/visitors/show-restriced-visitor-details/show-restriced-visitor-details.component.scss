@@ -1,0 +1,9 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.details-wrapper {
+  padding: 2rem 3rem;
+}

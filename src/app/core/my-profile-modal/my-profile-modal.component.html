@@ -1,0 +1,405 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="isAdd">
+    <div class="popup-header">
+        <button class="btn-close popup-close position-absolute opacity-100" (click)="cancelDiloag()"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Profile_Form.edit_profile" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="profileForm">
+        <div class="popup-content">
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feFirstName" class="col-md-4 col-form-label">{{ "EmployeeForm.FirstName" | translate
+                            }}
+                            <span class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <input maxlength="50" type="text" class="form-control" formControlName="firstName"
+                                formid="feFirstName" placeholder="{{
+                  'EmployeeForm.PleaseEnterFirstName' | translate
+                }}" />
+                            <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feLastName" class="col-md-4 col-form-label">{{"EmployeeForm.LastName" | translate
+                            }}
+                            <span class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <input maxlength="50" type="text" class="form-control" formControlName="lastName"
+                                id="feLastName" placeholder="{{
+                  'EmployeeForm.PleaseEnterLastName' | translate
+                }}" />
+                            <mat-error *ngFor="let message of showValidationMessages('lastName')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Role -->
+
+                <!--  -->
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="forMobile" class="col-md-4 col-form-label">{{ "EmployeeForm.CellNumber" | translate
+                            }}
+                            <span class="mendatory" *ngIf="isCellValid">*</span>
+                        </label>
+                        <div class="col-md-8">
+                            <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                [selectedCountryISO]="selectedIso" [phoneValidation]="true"
+                                [separateDialCode]="separateDialCode" [maxLength]="maxLength"
+                                (countryChange)="checkNumber($event)" name="phone" formControlName="cell"
+                                appMobileNumberFormat>
+                            </ngx-intl-tel-input>
+                            <mat-error *ngIf="profileForm.get('cell').hasError('validatePhoneNumber')">
+                                {{'EmployeeForm.ValidCellNumber' | translate}}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feEmailAddress" class="col-md-4 col-form-label">{{ "EmployeeForm.Email" | translate
+                            }}
+                            <span class="mendatory" *ngIf="isEmailValid">*</span></label>
+                        <div class="col-md-8">
+                            <input *ngIf="productType != ProductTypeEnum.Enterprise" type="email" maxlength="150" class="form-control" formControlName="emailId" [readonly]="!this.isExcel" id="feEmailAddress" placeholder="{{'EmployeeForm.PleaseEnterEmailAddress' | translate }}" />
+
+                        <input *ngIf="productType == ProductTypeEnum.Enterprise" type="email" maxlength="150" class="form-control" [readonly]="true" formControlName="emailId" id="feEmailAddress" placeholder="{{'EmployeeForm.PleaseEnterEmailAddress' | translate}}" />            
+                            <mat-error *ngFor="let message of showValidationMessages('emailId')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5" >
+                <div class="col-md-6" *ngIf="isExcel">
+                    <div class="row mb-3">
+                        <label for="role" class="col-md-4 col-form-label">{{ "EmployeeForm.UserName" | translate
+                            }} </label>
+                        <div class="col-md-8">
+                            <input maxlength="50" readonly type="text" class="form-control" formControlName="userName"
+                                id="role" placeholder="{{ 'EmployeeForm.UserName' | translate
+                                }}  " />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="role" class="col-md-4 col-form-label">{{ "EmployeeForm.Role" | translate
+                            }} </label>
+                        <div class="col-md-8">
+                            <input maxlength="50" readonly type="text" class="form-control" formControlName="role"
+                                id="role" placeholder="{{ 'EmployeeForm.roleRequried' | translate
+                                }}  " />
+                            <mat-error *ngFor="let message of showValidationMessages('role')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feNotificationType" class="col-md-4 col-form-label">{{
+                            "EmployeeForm.NotificationType" |
+                            translate }}
+                            <span class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <mat-select class="form-control" formControlName="notificationType" (ngModelChange)="onNotificationChange($event)" placeholder="{{
+                  'EmployeeForm.PleaseSelectNotificationType' | translate
+                }}">
+                                <mat-option selected *ngFor="let name of notificationTypeList" [value]="name" >{{
+                                    name }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngFor="
+                  let message of showValidationMessages('notificationType')
+                ">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="bypass" class="col-md-4 col-form-label">{{"EmployeeForm.bypass_Pin" |translate}}
+                            <span class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <input type="text" maxlength="6" class="form-control" formControlName="bypassPin"
+                                id="bypass" placeholder="{{
+              'EmployeeForm.PleseEnterBypassPin' | translate
+            }}" />
+                            <mat-error *ngFor="let message of showValidationMessages('bypassPin')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feStatus" class="col-md-4 col-form-label">{{ "EmployeeForm.Status" | translate
+                            }}
+                          </label>
+                        <div class="col-md-8">
+                            <input type="text" readonly class="form-control" id="status" formControlName="status"  />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label class="col-md-4 col-form-label">{{"EmployeeForm.select_languge" |translate}}
+                            <span class="mendatory">*</span></label>
+                        <div class="col-md-8">
+                            <mat-select class="form-control" formControlName="languge" >
+                                <mat-option selected value="{{item.code}}" *ngFor="let item of languageCodeList">
+                                    {{item.name}} 
+                                </mat-option>
+                            </mat-select>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row gx-5">
+          
+                <div class="col-md-12" *ngIf="buildingData.length>0 && productType != ProductTypeEnum.Enterprise">
+                    <div class="row mb-3">
+                        <label for="feLastName" class="col-md-2 col-form-label">{{ "EmployeeForm.BuildingData" | translate
+                        }} 
+                            </label>
+                            <div class="col-md-8">
+                            <mat-chip-list cdkDropList cdkDropListOrientation="horizontal" formControlName="buildings">
+                                <mat-chip class="fs-xs vams-chip" cdkDrag *ngFor="let buildings of buildingData">
+                                    {{buildings.name}}
+                                </mat-chip>
+                            </mat-chip-list>
+                            </div>
+                            <!-- <ng-multiselect-dropdown #multiSelect class="vams-multiselect-dropdown form-control"  [settings]="settings" [data]="buildingData" placeholder="{{'placeholders.select_building' | translate}}" formControlName="buildings" [disabled]="true"> </ng-multiselect-dropdown> -->
+                    </div>
+
+                </div>
+
+                <!-- Role -->
+
+                <!--  -->
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="updateProfile()">
+                {{ "CommonToken.Save" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3" (click)="cancelDiloag()">
+                {{ "CommonToken.Cancel" | translate }}
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="!isAdd">
+    <div class="popup-header">
+        <button class="btn-close popup-close position-absolute opacity-100" (click)="cancelDiloag()"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Profile_Form.profile_detail" | translate }}</span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="employeeFirstName" class="col-md-4 col-form-label">{{
+                        "EmployeeForm.FirstName" | translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="employeeFirstName"
+                            value="{{userDetail?.firstName}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="employeeLastName" class="col-md-4 col-form-label">{{
+                        "EmployeeForm.LastName" | translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="employeeLastName"
+                            value="{{userDetail?.lastName}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="cellNumber" class="col-md-4 col-form-label">{{ "EmployeeForm.CellNumber" | translate
+                        }}</label>
+                    <div class="col-md-8" >
+                        <p class="form-control-plaintext d-flex align-items-center mb-0">
+                            <span *ngIf="userDetail?.mobileNo">+{{
+                                userDetail?.isd +
+                                " " +
+                                formatCellNumber(userDetail?.mobileNo)
+                                }}</span>
+                        </p>
+                        <!-- <input type="text" readonly class="form-control-plaintext" id="cellNumber"
+                            value="{{userDetail?.isd}} {{userDetail?.mobileNo}}" /> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="email" class="col-md-4 col-form-label">{{ "EmployeeForm.Email" | translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="email"
+                            value="{{userDetail?.emailId}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" *ngIf="isExcel">
+                <div class="row mb-3">
+                    <label for="userName" class="col-md-4 col-form-label">{{ "EmployeeForm.UserName" | translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="userName" value="{{userDetail?.userName}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="role" class="col-md-4 col-form-label">{{ "EmployeeForm.Role" | translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="role"
+                            value="{{roleType?.roleDisplayName}}" />
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-6" *ngIf="buildingData.length>0">
+                <div class="row mb-3">
+                    <label for="SelectedBuildings" class="col-md-4 col-form-label">{{ "EmployeeForm.SelectedBuilding" |
+                        translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <mat-chip-list cdkDropList cdkDropListOrientation="horizontal">
+                            <mat-chip class="fs-xs vams-chip" cdkDrag *ngFor="let buildings of buildingData">
+                                {{buildings.name}}
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="notificationTYpe" class="col-md-4 col-form-label">{{ "EmployeeForm.NotificationType" |
+                        translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="notificationTYpe"
+                            value="{{userDetail?.notificationType}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="byPassPin" class="col-md-4 col-form-label">{{ "EmployeeForm.bypass_Pin" | translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="byPassPin" value="{{userDetail?.userPin}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="status" class="col-md-4 col-form-label">{{ "EmployeeForm.Status" | translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="status" value="{{userDetail?.status}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="english-us" class="col-md-4 col-form-label">{{ "EmployeeForm.selected_languge" |
+                        translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext" id="english-us"
+                            value="{{langugeName?.name}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="buildingData.length>0 && productType != ProductTypeEnum.Enterprise">
+            <div class="col-md-12">
+                <div class="row mb-3">
+                    <label for="SelectedBuildings" class="col-md-2 col-form-label">{{ "EmployeeForm.SelectedBuilding" |
+                        translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <mat-chip-list cdkDropList cdkDropListOrientation="horizontal">
+                            <mat-chip class="fs-xs vams-chip" cdkDrag *ngFor="let buildings of buildingData">
+                                {{buildings.name}}
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-12">
+                <div class="row mb-3">
+                    <label for="SelectedBuildings" class="col-md-3 col-form-label">{{ "EmployeeForm.SelectedBuilding" |
+                        translate
+                        }}</label>
+                    <div class="col-md-8">
+                        <mat-chip-list cdkDropList cdkDropListOrientation="horizontal">
+                            <mat-chip class="fs-xs vams-chip" cdkDrag *ngFor="let buildings of buildingData">
+                                {{buildings.name}}
+                            </mat-chip>
+                        </mat-chip-list>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="isAdd=true">
+            {{ "CommonToken.Edit" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancelDiloag()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+        <ng-container>
+            <button class="btn btn-sm btn-primary-dark px-3 ms-auto" (click)="changePwd('password')">
+                {{ "CommonToken.Change_Password" | translate }}
+            </button>
+        </ng-container>
+    </div>
+</div>

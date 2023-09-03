@@ -1,0 +1,44 @@
+{
+    "data": [
+        {
+            "field": "areMultipleVisitorsAllowed",
+            "isVisible": false,
+            "isManddatory":false
+        },
+        {
+            "field": "visitorLastName",
+            "isVisible": true,
+            "isManddatory": true            
+        },
+        {
+            "field": "visitorCompany",
+            "isVisible": true,
+            "isManddatory": true            
+        },
+        {
+            "field": "visitorType",
+            "isVisible": false,
+            "isManddatory": false            
+        },
+        {
+            "field": "hostName",
+            "isVisible": true,
+            "isManddatory": true            
+        },
+        {
+            "field": "purposeOfVisit",
+            "isVisible": true,
+            "isManddatory": false            
+        },
+        {
+            "field": "checkInQuestion",
+            "isVisible": false,
+            "isManddatory": false            
+        },
+        {
+            "field": "assets",
+            "isVisible": true,
+            "isManddatory": false            
+        }
+    ]
+}

@@ -1,0 +1,164 @@
+.vams-dialog-xs {
+  width: 18rem;
+}
+
+.vams-dialog-sm {
+  width: 25rem;
+}
+
+.vams-dialog {
+  width: 32rem;
+}
+
+.vams-dialog-lg {
+  width: 50rem;
+}
+
+.vams-dialog-xl {
+  width: 72rem;
+}
+
+.vams-dialog-xs,
+.vams-dialog-sm,
+.vams-dialog,
+.vams-dialog-lg,
+.vams-dialog-xl {
+  .mat-dialog-container {
+    display: flex;
+    padding: 0;
+    border-radius: 0;
+    @include scrollbars();
+  }
+
+  .mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    max-height: unset;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.popup-header {
+  padding-top: 3rem;
+}
+
+.popup-close {
+  top: 1rem;
+  right: 1rem;
+}
+
+.popup-title-wrapper {
+  height: 2.25rem;
+}
+
+.popup-title {
+  height: 100%;
+  background-color: var(--popup-heading-bg);
+  color: var(--heading-text);
+  padding: 0.25rem 2rem;
+
+  &:after {
+    content: "";
+    position: absolute;
+    right: -1.125rem;
+    border-top: 1.125rem solid transparent;
+    border-bottom: 1.125rem solid transparent;
+    border-left: 1.125rem solid var(--popup-heading-bg);
+  }
+}
+
+.popup-form {
+  @extend .host;
+}
+
+.popup-content {
+  background: transparent url(/assets/images/bg-dialog.png) bottom right
+    no-repeat;
+  background-size: 50% auto;
+  background-attachment: fixed;
+  flex: 1;
+  padding: 2rem 3rem;
+  @extend .scroll-y;
+}
+
+.popup-footer {
+  background-color: var(--popup-footer-bg);
+  padding: 1rem 2rem;
+
+  .btn {
+    min-width: 8rem;
+  }
+}
+
+// Confirmation Dialog
+.vams-dialog-confirm {
+  width: 25rem;
+
+  .mat-dialog-container {
+    border-radius: 0.5rem;
+    @include scrollbars();
+  }
+
+  .dialog-header,
+  .dialog-body,
+  .dialog-actions {
+    padding: 1rem;
+  }
+
+  .dialog-actions {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+    @include media-breakpoint-down(md) {
+      display: grid;
+      align-content: unset;
+      justify-content: unset;
+      gap: 1.5rem !important;
+    }
+
+    &.dialog-actions-space-between {
+      justify-content: space-between;
+
+      @include media-breakpoint-down(md) {
+        justify-content: unset;
+      }
+    }
+
+    .btn {
+      min-width: 8rem;
+    }
+  }
+}
+
+// Document Dialog
+.vams-dialog-document {
+  width: 32rem;
+  height: calc(100% - 2rem);
+
+  .ng2-pdf-viewer-container {
+    border-radius: 0.25rem;
+    @extend .scroll-y;
+  }
+}
+
+//View document details popup
+.vams-dialog-popup {
+  position: relative !important;
+}
+.view-popup-close{
+  top: 0.2rem;
+  right: 0.2rem;
+}
+
+.vams-dialog-popup-view-detail{
+  position: relative !important;
+  margin-left: 10rem;
+}
+.vams-dialog-fullview{
+  width: auto;
+}

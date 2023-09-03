@@ -1,0 +1,16 @@
+@import "src/assets/stylesheets/core";
+:host {
+    @extend .host;
+}
+
+.form-control{
+    background-color: white !important;
+}
+.nonEditCl {
+    pointer-events: none;
+  }
+  .slide2Photo {
+    position: fixed;
+    top: 0;
+    right: 70px;
+  }

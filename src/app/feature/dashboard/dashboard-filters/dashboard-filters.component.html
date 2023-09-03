@@ -1,0 +1,20 @@
+<div class="search-filter-dox">
+    <a class="search-icon-box" (click)="showSearchFilter()" *ngIf="isShowStatusFilter"><i class="fas fa-search"></i></a>
+   <div class="filter-box" [ngStyle]="{'display':isShowStatusFilter ? 'block' : 'none' }">
+       <i class="fas fa-filter"></i>	
+       <select class="filter-input-box" [(ngModel)]="status" (change)="statusChanged()">
+         <!-- <option selected value="AwaitingApproval" class="color-awaiting-approval">Awaiting Approval</option>
+         <option value="Walkin" class="color-walkin">Walkin</option> -->
+         <option value="All" selected>All</option>
+         <option value="Scheduled" class="color-scheduled">Scheduled</option>
+         <option value="InProgress" class="color-inprogress">In Progress</option>
+         <!-- <option value="Completed" class="color-completed">Completed</option>
+         <option value="Rejected" class="color-rejected">Rejected</option> -->
+       </select>
+   </div> 
+   <a class="filter-icon-box" (click)="showStatusFilter()" *ngIf="isShowSearchFilter" 
+   ><i class="fas fa-filter color-awaiting-approval" ></i></a>
+   <input type="text" [(ngModel)]="searchTexts" (keyup.enter)="searchTextEnterKey()" [ngStyle]="{'display':isShowSearchFilter ? 'block' : 'none' }"
+   placeholder="{{'Dashboard.Search' | translate}}" class="search-input-box">
+   <a class="search-btn" (click)="searchTextEnterKey()" *ngIf="isShowSearchFilter"><i class="fas fa-search"></i></a>
+</div>

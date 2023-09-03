@@ -1,0 +1,197 @@
+<mat-tab-group class="vams-tab-group vams-tab-group-secondary flex-1 scroll-y"
+  (selectedTabChange)="getTabDetails($event?.tab?.textLabel)" [selectedIndex]="selectedIndex">
+  <mat-tab label="{{ 'Common_Tabs.Complex_Details' | translate }}" *ngIf="type == 'complex'">
+    <ng-template matTabContent>
+      <app-complex-details-form></app-complex-details-form>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="{{ 'Common_Tabs.hospital_details' | translate }}" *ngIf="type == 'hospital'">
+    <ng-template matTabContent>
+      <app-complex-details-form></app-complex-details-form>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="{{ 'Common_Tabs.Building_Details' | translate }}" *ngIf="type == 'building'">
+    <ng-template matTabContent>
+      <app-building-detail></app-building-detail>
+    </ng-template>
+  </mat-tab>
+
+  
+   <mat-tab label="{{ 'Common_Tabs.enterprise_details'|translate }}" *ngIf="commonDataTabVisable && productType == ProductType.Enterprise">
+    <ng-template matTabContent>
+      <app-location-detail [locationLevel2Id]="locationLevel2Id" (locationLevel2ID) = "locationDetailsLevel2ID($event)" (displayCompanyName)="displayCompanyName($event)"></app-location-detail>
+    </ng-template>
+  </mat-tab>
+
+ <mat-tab label="{{ 'Common_Tabs.sub-location' | translate }}" *ngIf="commonDataTabVisable && productType == ProductType.Enterprise">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-grid [dataSource]="subLocationData" type="subLocation" [totalData]="totalData" [locationLevel2Id]="subLocationlevel2Id"
+          (onDataChange)="commonDataChange($event)" [showToggle]="true" [displayedColumns]="displayedColumns"
+          (dialogClose)="dialogClosed($event)" (deleteAction)="deleteSubLocation($event)"></app-grid>
+      </div>
+      <footer class="vams-grid-footer bg-floral-white">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialog('subLocation')">
+          {{ "Common_Tabs.add_sub_location" | translate }}
+        </button>
+      </footer>
+    </ng-template>
+  </mat-tab>
+  
+  <mat-tab label="{{ 'Common_Tabs.Company_Details' | translate }}" *ngIf="type == 'company'">
+    <ng-template matTabContent>
+      <app-l3-company-details></app-l3-company-details>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="{{ 'Common_Tabs.Departments' | translate }}" *ngIf="commonDataTabVisable && productType != ProductType.Hospital">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-grid [dataSource]="departmentData" type="department" [totalData]="totalData"
+          (onDataChange)="commonDataChange($event)" [showToggle]="true" [displayedColumns]="displayedColumns"
+          (dialogClose)="dialogClosed($event)" (deleteAction)="deleteDepartment($event)"></app-grid>
+      </div>
+      <footer class="vams-grid-footer bg-floral-white">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialog('department')">
+          {{ "Common_Tabs.Add_Department" | translate }}
+        </button>
+      </footer>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="{{ 'Common_Tabs.Employees' | translate }}" *ngIf="commonDataTabVisable ">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-grid (deleteAction)="deleteEmployee($event)" (dialogClose)="dialogClosed($event)"
+          [dataSource]="employeeData" type="employee" [showToggle]="true" [displayedColumns]="displayedColumns"
+          [companyRowData]="companyRowData" [totalData]="totalData" (onDataChange)="commonDataChange($event)">
+        </app-grid>
+      </div>
+      <footer class="vams-page-footer d-flex align-items-center gap-3 mt-auto bg-floral-white" *ngIf="productType == ProductType.Commercial">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialog('employee')">
+          {{ "Common_Tabs.Add_New_Employee" | translate }}
+        </button>
+     
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialogForBulkUpload()">
+          {{ "Common_Tabs.employee_bulk_upload" | translate }}
+       </button>
+      </footer>
+      <footer class="vams-page-footer d-flex align-items-center gap-3 mt-auto bg-floral-white" *ngIf="productType == ProductType.Enterprise">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialog('employee')">
+          {{ "Common_Tabs.Add_New_Employee" | translate }}
+        </button>
+      </footer>
+      <footer  class="vams-page-footer d-flex align-items-center gap-3 mt-auto bg-floral-white" *ngIf="productType == ProductType.Hospital">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialog('employee')">
+          {{ "Common_Tabs.Add_New_Petient" | translate }}
+        </button>
+      </footer>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="{{ 'Common_Tabs.Contractors' | translate }}" *ngIf="!commonDataTabVisable && selectedTab === 'contractors'">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-grid (deleteAction)="deleteContractor($event)" (dialogClose)="dialogClosed($event)"
+          [dataSource]="contractorsData" type="contractors" [showToggle]="true" [displayedColumns]="displayedColumns"
+         [totalData]="totalData" (onDataChange)="commonDataChange($event)">
+        </app-grid>
+      </div>
+      <footer class="vams-page-footer d-flex align-items-center gap-3 mt-auto bg-floral-white">
+        <button class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialog('contractors')">
+          {{ "Common_Tabs.add_contractor" | translate }}
+        </button>
+      </footer>
+    </ng-template>
+  </mat-tab>
+
+  <!-- <mat-tab label="{{ 'Common_Tabs.Company' | translate }}">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-grid (deleteAction)="deleteEmployee($event)" (dialogClose)="dialogClosed($event)"
+          [dataSource]="employeeData" type="Company" [showToggle]="true" [displayedColumns]="displayedColumns"
+          [companyRowData]="companyRowData" [totalData]="totalData" (onDataChange)="commonDataChange($event)">
+        </app-grid>
+      </div>
+      <footer class="vams-grid-footer bg-floral-white">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+          (click)="openDialog('Company')">
+          {{ "Common_Tabs.Add_Company" | translate }}
+        </button>
+      </footer>
+    </ng-template>
+  </mat-tab> -->
+<!-- hide bio security devive as per nilesh sir told -->
+  <!-- <mat-tab label="{{ 'Common_Tabs.Bio_Security_Device_config' | translate }}" *ngIf="!level3Id && commonDataTabVisable && productType != ProductType.Hospital">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-bio-security-device-list (dialogClose)="dialogClosed($event)" [dataSource]="bioSecurityDeviceData"
+          type="bio" [showToggle]="true" [displayedColumns]="displayedColumns" [totalData]="totalData"
+          (onDataChange)="commonDataChange($event)"></app-bio-security-device-list>
+      </div>
+      <footer class="vams-grid-footer bg-floral-white"></footer>
+    </ng-template>
+  </mat-tab> -->
+
+  <mat-tab label="{{'company_unit.company' |translate}}" *ngIf="!commonDataTabVisable && selectedTab !== 'contractors' && productType != ProductType.Hospital">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-company-unit type="companyUnit" [displayedColumns]="displayedColumns" [companyRowData]="companyRowData">
+        </app-company-unit>
+      </div>
+      <footer class="vams-grid-footer bg-floral-white"></footer>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="{{'company_unit.room' |translate}}" *ngIf="!commonDataTabVisable && productType == ProductType.Hospital">
+    <ng-template matTabContent>
+      <div class="vams-grid-wrapper">
+        <app-company-unit type="companyUnit" [displayedColumns]="displayedColumns" [companyRowData]="companyRowData">
+        </app-company-unit>
+      </div>
+      <footer class="vams-grid-footer bg-floral-white"></footer>
+    </ng-template>
+  </mat-tab>
+
+  <!-- <mat-tab label="Contractors">
+    <div>
+      <app-grid [dataSource]="dataSource" type="contractor" [displayedColumns]="displayedColumns"></app-grid>
+    </div>
+    <div class="master-footer">
+      <div class="container">
+        <div class="button-bg">
+          <button class="common-button" (click)="openDialog('contractor')">
+            Add Contractors
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-tab> -->
+
+  <!-- <mat-tab label="{{ 'Common_Tabs.Contractors_Company' | translate }}">
+    <ng-template matTabContent>
+      <div class="complex-contractors-company">
+        <app-grid [dataSource]="dataSource" type="contractor-company" [displayedColumns]="displayedColumns">
+        </app-grid>
+      </div>
+      <div class="master-footer">
+        <div class="container">
+          <div class="button-bg">
+            <button class="common-button" (click)="openDialog('contractor-company')">
+              <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+              {{ "Common_Tabs.ADD_CONTRACTORS_COMPANY" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </mat-tab> -->
+</mat-tab-group>

@@ -1,0 +1,96 @@
+<div class="vams-page-body d-flex flex-column flex-1 p-0 scroll-y">
+    <h6 class="vams-page-sub-title fw-bold mb-0 pt-4 px-3">
+        {{ title }}</h6>
+    <!-- sub content is for sub tabs come under main tab from side bar (for example look HSQ question tab)) -->
+    <app-configure-sub-content *ngIf="type == 'HSQ_screening_questionnaire'" [type]="type"
+        [hsqQuestionAddEvent]="hsqQuestionAdd"></app-configure-sub-content>
+    <ng-container [ngSwitch]="type">
+        <app-email-server-config *ngSwitchCase="'email_server_config'" [addFormResult]="addFormResult">
+        </app-email-server-config>
+        <app-visitor-settings *ngSwitchCase="'visitor'"></app-visitor-settings>
+        <!-- <app-bio-security-server-detail *ngSwitchCase="'bio-security-device'"></app-bio-security-server-detail> -->
+        <app-appointment-reject-reason-master *ngSwitchCase="'appointment_reject_reason_master'"
+            [aaptCancelReasonAdd]="aaptCancelReasonAdd"></app-appointment-reject-reason-master>
+        <app-nda *ngSwitchCase="'NDA'" [ndaUploadFile]="ndaUploadFile" (fileUpload)="fileUpload($event)"></app-nda>
+        <app-privacy-policy *ngSwitchCase="'privacy_policy'" [privacyUploadFile]="privacyUploadFile"
+            (fileUpload)="fileUpload($event)"></app-privacy-policy>
+        <app-terms-conditions *ngSwitchCase="'terms_condition'" [termsConditionUploadFile]="termsConditionUploadFile"
+            (fileUpload)="fileUpload($event)"></app-terms-conditions>
+        <app-dynamic-email-template *ngSwitchCase="'banner_image'" [editBannerImage]="editBannerImage"
+            [saveBannerImage]="saveBannerImage" (saveBtn)="saveButtonDisbale($event)"></app-dynamic-email-template>
+        <!-- <app-hsq-config *ngSwitchCase="'HSQ_screening_questionnaire'" [hsqQuestionAdd]="hsqQuestionAdd">
+            </app-hsq-config> -->
+        <app-privacy-policy-visitor *ngSwitchCase="'privacy_policy_visitor'"
+            [privacyUploadVisitorFile]="privacyUploadVisitorFile" (fileUpload)="fileUpload($event)">
+        </app-privacy-policy-visitor>
+        <app-terms-condition-visitor *ngSwitchCase="'terms_condition_visitor'"
+            [termsConditionUploadVisitorFile]="termsConditionUploadVisitorFile" (fileUpload)="fileUpload($event)">
+        </app-terms-condition-visitor>
+        <app-dynamic-permissions *ngSwitchCase="'dynamic_permissions'" [permissionsEvent]="permissionsEvent"
+            [dynamicPermission]="dynamicPermission"></app-dynamic-permissions>
+        <app-provider-setup *ngSwitchCase="'provider_setup'" (changeFooter)="changeFooterbtn($event)"
+            (addDeviceEmmiter)="addNewDeviceBtn($event)" [refreshData]="refreshData"
+            [refreshDeviceSetupList]="refreshDeviceSetupList" [refreshAccessSetup]="refreshAccessSetup">
+        </app-provider-setup>
+        <app-sms-template *ngSwitchCase="'sms_template'"></app-sms-template>
+        <app-email-template *ngSwitchCase="'email_template'"></app-email-template>
+        <app-contractor-config *ngSwitchCase="'contractor_config_field'" [contractorConfigAdd]="contractorConfigAdd"
+            (contractorConfigEmittor)="getContractorConfig($event)"></app-contractor-config>
+        <!-- <app-provider-device-details *ngSwitchCase="'provider_device'" ></app-provider-device-details> -->
+        <!-- TODO Add your component here by using key in side menu ts file from constant -->
+        <app-rate-card *ngSwitchCase="'rateCard'" [refreshRateCard]="refreshRateCard" ></app-rate-card>
+    </ng-container>
+</div>
+
+<footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+    <button
+        *ngIf="type != 'NDA' &&  type != 'privacy_policy'  && type !='terms_condition' && type!='banner_image' && type !='privacy_policy_visitor' &&  type !='terms_condition_visitor' && type != 'dynamic_permissions' && type != 'provider_setup' && type != 'sms_template' && type != 'email_template'"
+        class="btn btn-sm btn-primary-dark px-3" (click)="openDialog(this.type)">
+        {{"CommonToken.Add"| translate}}
+    </button>
+    <button
+        *ngIf="type == 'NDA' || type == 'privacy_policy'  || type =='terms_condition' || type =='privacy_policy_visitor' ||type =='terms_condition_visitor'"
+        [disabled]="!uploadEnable" class="btn btn-sm btn-primary-dark px-3" (click)="uploadPdfFile()">
+        {{ "nda.upload" | translate }}
+    </button>
+    <button *ngIf="type == 'banner_image' && !editBannerImage" class="btn btn-sm btn-primary-dark px-3"
+        (click)="editBannerLogo()">
+        {{ "CommonToken.Edit" | translate }}
+    </button>
+    <button *ngIf="type == 'banner_image' && editBannerImage" class="btn btn-sm btn-primary-dark px-3"
+        (click)="uploadBannerLogo()" [disabled]="!saveBtnFlag">
+        {{ "CommonToken.Save" | translate }}
+    </button>
+    <button *ngIf="type == 'banner_image' && editBannerImage" class="btn btn-sm btn-white px-3"
+        (click)="changeFooterBtn()">
+        {{ "CommonToken.Cancel" | translate }}
+    </button>
+    <!-- <button *ngIf="type == 'NDA' || type == 'privacy_policy'  || type =='terms_condition' " 
+        class="btn btn-sm btn-primary-dark px-3" (click)="cancelPdfFile()">
+        Cancel
+    </button> -->
+    <!-- removing add new provider button as per robin and nilesh told me -->
+    <button *ngIf="!providerDevice &&  type == 'provider_setup' && !addDevice " class="btn btn-sm btn-primary-dark px-3"
+        (click)="addNewProvide()">
+        {{ "provider_setup.add_new_provider" | translate }}
+    </button>
+    <button
+        *ngIf="providerDevice && type != 'NDA' && !addDevice &&  type != 'privacy_policy'  && type !='terms_condition'  && type !='email_server_config'  && type !='appointment_reject_reason_master'  && type!='banner_image' && type !='privacy_policy_visitor' &&  type !='terms_condition_visitor' && type != 'dynamic_permissions' && type != 'HSQ_screening_questionnaire' && type!='contractor_config_field' && type!='sms_template' && type!='email_template' "
+        class="btn btn-sm btn-primary-dark px-3" (click)="addNewAccessSetup()">
+        {{ "provider_setup.addAccessSetupBtn" | translate }}
+    </button>
+    <button
+        *ngIf="addDevice &&  type != 'privacy_policy'  && type !='terms_condition'  && type !='email_server_config'  && type !='appointment_reject_reason_master'  && type!='banner_image' && type !='privacy_policy_visitor' &&  type !='terms_condition_visitor' && type != 'dynamic_permissions' && type != 'HSQ_screening_questionnaire'  && type!='contractor_config_field' && type!='sms_template' && type!='email_template' "
+        class="btn btn-sm btn-primary-dark px-3" (click)="addNewBuilding()">
+        {{ "provider_setup.addDeviceBtn" | translate }}
+    </button>
+    <ng-container *ngIf="type == 'dynamic_permissions'">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="permissionEvents('save')">
+            {{ "CommonToken.Save" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="permissionEvents('reset')">
+            {{ "CommonToken.Reset" | translate }}
+        </button>
+    </ng-container>
+
+</footer>

@@ -1,0 +1,15 @@
+<ng-container *ngIf="!isL3Admin">
+  <div class="vams-grid-wrapper">
+    <app-grid [dataSource]="dataSource" [totalData]="totalData" type="contractor_company"
+      [displayedColumns]="displayedColumns" (deleteAction)="deleteCompany($event)" [showToggle]="true"
+      (valueChange)="toggleTabs($event)" (onDataChange)="companyDataChange($event)"
+      (dialogClose)="dialogClosed($event)">
+    </app-grid>
+  </div>
+  <footer class="vams-page-footer d-flex align-items-center gap-3 mt-auto bg-floral-white">
+    <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+      (click)="openDialog()">
+      {{ "Common_Tabs.Add_Company" | translate }}
+    </button>
+  </footer>
+</ng-container>

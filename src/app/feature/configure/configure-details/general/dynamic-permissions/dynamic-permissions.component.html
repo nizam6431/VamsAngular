@@ -1,0 +1,32 @@
+<div *ngIf="formatedData && formatedData.length && columns.length" class="vams-table-wrapper vams-table-responsive">
+    <table mat-table [dataSource]="formatedData">
+        <ng-container *ngFor="let colName of columns; let i = index" [matColumnDef]="columns[i].key"
+            [sticky]="isSticky(colName.key)">
+            <th mat-header-cell *matHeaderCellDef> {{colName.value | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="colName.key == 'key'; else itIsButton ">
+                    {{element['name']}}
+                </div>
+                <ng-template #itIsButton>
+                    <div *ngIf="element[colName.key].isDisabled; else isVisible" class="text-center">
+                        <div *ngIf="element[colName.key].isPermissible; else notAllowed ">
+                            {{'dynamic_permission.allowed' | translate}}
+                        </div>
+                        <ng-template #notAllowed>
+                            {{'dynamic_permission.not_allowed' | translate}}
+                        </ng-template>
+                    </div>
+                    <ng-template #isVisible>
+                        <div class="text-center">
+                            <mat-slide-toggle [checked]="element[colName.key].isPermissible" class="mat-slide-toggle-sm"
+                                (change)="onChange(element.key,colName.key, element[colName.key], $event.source.checked)">
+                            </mat-slide-toggle>
+                        </div>
+                    </ng-template>
+                </ng-template>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnKeys;"></tr>
+    </table>
+</div>

@@ -1,0 +1,791 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="!isEdit && viewData">
+    <div class="vams-page-body d-flex flex-column flex-1 scroll-y">
+        <div class="row gx-5" *ngIf="!isEdit">
+            <div class="col-md-6" *ngIf="productType != ProductType.Hospital">
+                <div class="row mb-3">
+                    <label for="lightThemeLogo" class="col-sm-3 col-form-label">{{
+						"Company.light" | translate
+						}}</label>
+                    <div class="col-sm-9">
+                        <div class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                            <!-- <img _ngcontent-lde-c178="" src="assets/images/login-vams-logo.png" class="img-fluid" /> -->
+                            <img [src]="LightLogoUrl" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" *ngIf="productType != ProductType.Hospital">
+                <div class="row mb-3">
+                    <label for="darkThemeLogo" class="col-sm-3 col-form-label">{{
+						"Company.dark" | translate
+						}}</label>
+                    <div class="col-sm-9">
+                        <div class="theme-logo-wrapper d-flex align-items-center justify-content-center bg-dark overflow-hidden p-1">
+                            <!-- <img _ngcontent-lde-c178="" src="assets/images/VAMS_Logo_Dark.png" class="img-fluid" /> -->
+                            <img [src]="darkLogoUrl" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="companyName" class="col-sm-3 col-form-label">{{
+						"Company.name" | translate
+						}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="companyName" value="{{ viewData.data.name }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="companyShortName" class="col-sm-3 col-form-label">{{
+						"Company.shortName" | translate
+						}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="companyShortName" value="{{ viewData.data.shortName }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="companyEmail" class="col-sm-3 col-form-label">{{
+						"Company.email" | translate
+						}}</label>
+                    <div class="col-sm-9" *ngIf="viewData.data.email; else emptyEmail">
+                        <input type="text" readonly class="form-control-plaintext" id="companyEmail" value="{{ viewData.data.email }}" />
+                    </div>
+                    <ng-template #emptyEmail>
+                        <div class="col-sm-9">
+                            <input type="text" readonly class="form-control-plaintext" id="companyEmail" value="" />
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="companyStatus" class="col-sm-3 col-form-label">{{
+						"Company.status" | translate
+						}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="companyStatus" value="{{ viewData.data.status }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row gx-5" *ngIf="viewData.data.accessControl else noAccessControl">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="" class="col-md-3 col-form-label">{{'Company.ShowAccessMethod'|translate}}
+					</label>
+                    <div class="col-md-9">
+                        <div class="vams-checkbox-wrapper d-flex flex-wrap">
+                            <ng-container *ngFor="let item of acessCantrolList | keyvalue ;let i=index">
+                                <mat-checkbox class="pointer-event-none me-3" *ngIf="selectedAccessCantrol.includes(convertToInt(item.value))" [checked]="selectedAccessCantrol.includes(convertToInt(item.value))" (change)="getAccessCantrol($event,item,i)">
+                                    {{'Company.'+item.key|translate}}
+                                </mat-checkbox>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-template #noAccessControl>
+            <p class="form-control-plaintext">{{'Company.NoAccessMethodSet'|translate}}</p>
+        </ng-template> -->
+        <div class="card bg-floral-white" *ngFor="let unitData of viewData.data.companyUnits; let i = index">
+            <div class="card-body">
+                <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                    {{ "Company.unit" | translate }} {{ i + 1 }}
+                </h6>
+                <div class="row gx-5">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="level3AddressName" class="col-sm-3 col-form-label">{{
+								"Company.building" | translate
+								}}</label>
+                            <div class="col-sm-9">
+                                <input type="text" readonly class="form-control-plaintext" id="level3AddressName" value="{{ unitData.level3Address.name }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="level3AddressOfficeNo" class="col-sm-3 col-form-label">{{ "Company.unit" |
+								translate
+								}}</label>
+                            <div class="col-sm-9">
+                                <input type="text" readonly class="form-control-plaintext" id="level3AddressOfficeNo" value="{{ unitData.level3Address.officeNo }}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-5">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="level3CompanyContact" class="col-sm-3 col-form-label">{{ "Company.contact" |
+								translate
+								}}</label>
+                            <div class="col-sm-9" *ngIf="
+                  unitData?.level3Address.contactIsd &&
+                    unitData?.level3Address.contactMobile;
+                  else emptyContact
+                ">
+                                <input type="text" readonly class="form-control-plaintext" id="level3CompanyContact" value="{{
+                    unitData?.level3Address.contactIsd &&
+                    formatCellNumber(unitData?.level3Address.contactMobile)
+                      ? '+' +
+                        unitData?.level3Address.contactIsd +
+                        ' ' +
+                        formatCellNumber(unitData?.level3Address.contactMobile)
+                      : ''
+                  }}" />
+                            </div>
+                            <ng-template #emptyContact>
+                                <div class="col-sm-9">
+                                    <input type="text" readonly class="form-control-plaintext" id="level3CompanyContact" value="" />
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="level3CompanyFloor" class="col-sm-3 col-form-label">{{
+								"Company.floor" | translate
+								}}</label>
+                            <div class="col-sm-9">
+                                <input type="text" readonly class="form-control-plaintext" id="level3CompanyFloor" value="{{ unitData.level3Address.floorNo }}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div *ngIf="unitData['admins'].length != 1; else multiAdmins">
+					<div *ngFor="let adminData of unitData.admins">
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								<div class="dilogbox-label">
+									{{ "Company.adminEmail" | translate }}
+								</div>
+								<div class="dilogbox-value">{{ adminData.email }}</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="dilogbox-label">
+									{{ "Company.cellNo" | translate }}
+								</div>
+								<div class="dilogbox-value">{{ adminData.mobileNo }}</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="dilogbox-label">
+									{{ "Company.firstName" | translate }}
+								</div>
+								<div class="dilogbox-value">{{ adminData.firstName }}</div>
+							</div>
+							<div class="col-md-6 col-sm-12">
+								<div class="dilogbox-label">
+									{{ "Company.lastName" | translate }}
+								</div>
+								<div class="dilogbox-value">{{ adminData.lastName }}</div>
+							</div>
+						</div>
+						<br /><br />
+					</div>
+				</div>
+				<ng-template #multiAdmins>
+					<div *ngFor="let adminData of unitData.admins">
+						<div class="col-md-6 col-sm-12">
+							<div class="dilogbox-label">
+								{{ adminData["firstName"] }} {{ adminData["lastName"] }}
+							</div>
+							<div>
+								<p
+									class="show-icon"
+									(click)="getEmployeeById(adminData['employeeId'])"
+								></p>
+							</div>
+						</div>
+					</div>
+				</ng-template> -->
+            </div>
+        </div>
+    </div>
+    <footer class="vams-page-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" *isPermissible="permissionKeyObj.MASTERVIEWEDIT" (click)="isEditClick()">
+			{{ "Company.edit" | translate }}
+		</button>
+    </footer>
+</div>
+
+<!-- <form
+	class="mt-5 pb-100 pl-36"
+	[formGroup]="formCompanyEdit"
+	novalidate
+	*ngIf="isEdit"
+>
+	<div class="container-fluid">
+		<div class="form-row">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="dilogbox">
+								<div class="dilogbox-left">
+									<label for="feName"
+										>{{ "Company.light" | translate
+										}}<span class="mendatory">*</span></label
+									>
+								</div>
+								<div class="input-brouse">
+									<div class="position-relative">
+										<input
+											id="file"
+											name="file"
+											accept="image/x-png,image/jpeg"
+											onclick="this.value = null"
+											formControlName="lightThemeLogoUrl"
+											class="form-control border-radius mr-10"
+											type="file"
+											(change)="onFileChange($event)"
+										/>
+										<mat-error
+											*ngFor="
+												let message of showValidationMessages('lightLogo')
+											"
+										>
+											{{ message }}<br />
+										</mat-error>
+									</div>
+									<span *ngIf="imgpreview">
+										<img
+											*ngFor="let item of base64textString"
+											src="{{ item }}"
+											alt="light logo"
+											width="100px"
+											height="60px"
+										/>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="dilogbox">
+								<div class="dilogbox-left">
+									<label for="feName"
+										>{{ "Company.dark" | translate
+										}}<span class="mendatory">*</span></label
+									>
+								</div>
+								<div class="input-brouse">
+									<div class="position-relative">
+										<input
+											id="file"
+											name="file"
+											accept="image/x-png,image/gif,image/jpeg"
+											onclick="this.value = null"
+											formControlName="darkThemeLogoUrl"
+											class="form-control border-radius"
+											type="file"
+											(change)="onFileChangeForDarkLogo($event)"
+										/>
+										<mat-error
+											*ngFor="let message of showValidationMessages('darkLogo')"
+										>
+											{{ message }}<br />
+										</mat-error>
+									</div>
+									<span *ngIf="darkLogoPreview">
+										<img
+											*ngFor="let item of base64textStringForDarkImg"
+											src="{{ item }}"
+											alt="Dark logo"
+											width="100px"
+											height="60px"
+										/>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="dilogbox">
+								<div class="dilogbox-left">
+									<label for="feName"
+										>{{ "Company.name" | translate }}
+										<span class="mendatory">*</span></label
+									>
+								</div>
+								<div class="dilogbox-right">
+									<input
+										type="text"
+										class="form-control"
+										maxlength="250"
+										id="feName"
+										formControlName="name"
+									/>
+									<mat-error
+										*ngFor="let message of showValidationMessages('name')"
+									>
+										{{ message }}<br />
+									</mat-error>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="dilogbox">
+								<div class="dilogbox-left">
+									<label for="feShortName"
+										>{{ "Company.shortName" | translate
+										}}<span class="mendatory">*</span></label
+									>
+								</div>
+								<div class="dilogbox-right">
+									<input
+										type="text"
+										class="form-control"
+										maxlength="10"
+										id="feShortName"
+										formControlName="shortName"
+									/>
+									<mat-error
+										*ngFor="let message of showValidationMessages('shortName')"
+									>
+										{{ message }}<br />
+									</mat-error>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="dilogbox">
+								<div class="dilogbox-left">
+									<label for="feShortName"
+										>{{ "Company.email" | translate
+										}}<span class="mendatory">*</span></label
+									>
+								</div>
+								<div class="dilogbox-right">
+									<input
+										type="text"
+										class="form-control"
+										id="feLastName"
+										formControlName="email"
+									/>
+									<mat-error
+										*ngFor="let message of showValidationMessages('email')"
+									>
+										{{ message }}<br />
+									</mat-error>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="dilogbox">
+								<div class="dilogbox-left">
+									<label for="feLastName"
+										>{{ "Company.status" | translate
+										}}<span class="mendatory">*</span></label
+									>
+								</div>
+								<div class="dilogbox-right">
+									<select class="form-control" formControlName="status">
+										<option
+											selected
+											*ngFor="let name of statusList"
+											[value]="name"
+										>
+											{{ name }}
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-row"></div>
+		<div class="form-row"></div>
+		<div class="form-row"></div>
+
+		<div class="button-bg">
+			<button
+				(click)="onSubmit()"
+				class="common-button mr-20"
+				mat-raised-button
+			>
+				Save
+			</button>
+			<button (click)="cancel()" class="secondry-button" mat-raised-button>
+				Cancel
+			</button>
+		</div>
+	</div>
+</form> -->
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="isEdit && viewData">
+    <form class="vams-form-wrapper" [formGroup]="formCompanyEdit">
+        <div class="vams-page-body flex-1 scroll-y">
+            <div class="row gx-5" *ngIf="productType != ProductType.Hospital">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feFirstName" class="col-md-3 col-form-label">{{ "Company.light" | translate }}
+							<!-- <span class="mendatory">*</span> -->
+						</label>
+                        <div class="col-md-9">
+                            <div class="input-brouse">
+                                <!-- <span *ngIf="lightLogo">
+									<img [src]="lightLogo" class="img-responsive logo-size" />
+								</span> -->
+                                <div class="d-flex gap-3">
+                                    <div class="d-grid">
+                                        <input id="file" name="file" accept="image/x-png,image/jpeg" onclick="this.value = null" formControlName="lightThemeLogoUrl" class="custom-file-input" type="file" (change)="onFileChange($event)" />
+                                        <!-- <mat-error *ngFor="
+                        let message of showValidationMessages('lightLogo')
+                      ">
+                                            {{ message }}
+                                        </mat-error> -->
+                                    </div>
+                                    <div *ngIf="!imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                        <!-- <img src="assets/images/login-vams-logo.png" class="img-fluid" alt="Logo" /> -->
+                                        <img [src]="LightLogoUrl" class="img-fluid" alt="Logo" />
+                                    </div>
+                                    <div *ngIf="imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                        <!-- <img *ngFor="let item of base64textString" class="img-fluid" src="{{ item }}" alt="Logo" /> -->
+                                        <img [src]="LightLogoUrl" class="img-fluid" alt="Logo" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="darkLogo" class="col-md-3 col-form-label">{{ "Company.dark" | translate }}
+							<!-- <span class="mendatory">*</span> -->
+						</label>
+                        <div class="col-md-9">
+                            <div class="d-flex gap-3">
+                                <div class="d-grid">
+                                    <input id="file" name="file" accept="image/x-png,image/jpeg" onclick="this.value = null" formControlName="darkThemeLogoUrl" class="custom-file-input" type="file" (change)="onFileChangeForDarkLogo($event)" />
+                                    <!-- <mat-error *ngFor="let message of showValidationMessages('darkLogo')">
+                                        {{ message }}
+                                    </mat-error> -->
+                                </div>
+                                <div *ngIf="!darkLogoPreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center bg-dark overflow-hidden p-1">
+                                    <!-- <img src="assets/images/VAMS_Logo_Dark.png" class="img-fluid" alt="Logo" /> -->
+                                    <img [src]="darkLogoUrl" class="img-fluid" alt="Logo" />
+                                </div>
+                                <div *ngIf="darkLogoPreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center bg-dark overflow-hidden p-1">
+                                    <!-- <img class="img-fluid" *ngFor="let item of base64textStringForDarkImg" src="{{ item }}" alt="Logo" /> -->
+                                    <img [src]="darkLogoUrl" class="img-fluid" alt="Logo" />
+                                </div>
+                            </div>
+                            <!-- <span *ngIf="darkLogo">
+								<img
+									_ngcontent-lde-c178=""
+									[src]="darkLogo"
+									class="img-responsive logo-size"
+								/>
+							</span> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feFirstName" class="col-md-3 col-form-label">{{ "Company.name" | translate
+							}}<span class="mendatory">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="feFirstName" formControlName="name" maxlength="100" />
+                            <mat-error *ngFor="let message of showValidationMessages('name')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feLastName" class="col-md-3 col-form-label">{{ "Company.shortName" | translate
+							}}<span class="mendatory">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="feLastName" formControlName="shortName" maxlength="20" />
+                            <mat-error *ngFor="let message of showValidationMessages('shortName')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feEmail" class="col-md-3 col-form-label">{{ "Company.email" | translate
+							}}<span *ngIf="!isExcel" class="mendatory">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="feEmail" formControlName="email" maxlength="150" />
+                            <mat-error *ngFor="let message of showValidationMessages('email')">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label for="feCompanyStatus" class="col-md-3 col-form-label">{{ "Company.status" | translate
+							}}<span class="mendatory">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" readonly class="form-control-plaintext" id="feCompanyStatus" value="{{ formCompanyEdit.get('status').value }}" />
+                        </div>
+                        <!-- <div class="dilogbox-right">
+							<select class="form-control" formControlName="status">
+								<option selected *ngFor="let name of statusList" [value]="name">
+									{{ name }}
+								</option>
+							</select>
+							<mat-error
+								*ngFor="let message of showValidationMessages('status')"
+							>
+								{{ message }}<br />
+							</mat-error>
+						</div> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="row gx-5">
+                <div class="col-md-6">
+                    <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">{{'Company.AccessMethod'|translate}}
+							<span class="mendatory">*</span>
+						</label>
+                        <div class="col-md-9">
+                            <div class="vams-checkbox-wrapper d-flex flex-wrap">
+                                <ng-container *ngFor="let item of acessCantrolList | keyvalue ;let i=index">
+                                    <mat-checkbox class="me-3" [checked]="selectedAccessCantrol.includes(convertToInt(item.value))" [disabled]="disabledAccessCantrol.includes(convertToInt(item.value))" (change)="getAccessCantrol($event,item,i)">
+                                        {{'Company.'+item.key|translate}}
+                                    </mat-checkbox>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div formArrayName="level3CompanyUnits">
+                <div class="card bg-floral-white" *ngFor="
+            let unit of formCompanyEdit.controls.level3CompanyUnits['controls'];
+            let i = index
+          ">
+                    <div class="card-header d-flex align-items-center gap-3">
+                        <h6 class="card-title fs-sm fw-semi-bold mb-0">
+                            {{ "Company.unit" | translate }} {{ i + 1 }}
+                        </h6>
+                        <button *ngIf="!unit.get('companyUnitId').value" class="btn btn-sm btn-link text-decoration-none border-0 d-flex align-items-center justify-content-center" (click)="removeOffice(i)">
+							<i class="icon-delete fs-6 text-dark"></i>
+						</button>
+                    </div>
+                    <div class="card-body">
+                        <div formGroupName="{{ i }}">
+                            <div formGroupName="level3Address">
+                                <div class="row gx-5">
+                                    <div class="col-md-6">
+                                        <div class="row mb-3">
+                                            <label for="feCompanyAddress" class="col-md-3 col-form-label">{{
+												"Company.building" | translate }}
+												<span class="mendatory">*</span></label>
+                                            <div class="col-md-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="feCompanyAddress" value="{{ unit.get('level3Address').value.name }}" />
+                                                <!-- <select class="input-style" formControlName="building">
+													<option
+														*ngFor="let bldg of buildingList"
+														value="{{ bldg.level2Id }}"
+													>
+														{{ bldg.name }}
+													</option>
+												</select>
+												<mat-error
+													*ngFor="
+														let message of showValidationMessages('building')
+													"
+												>
+													{{ message }}<br />
+												</mat-error> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row mb-3">
+                                            <label for="feCompanyNo" class="col-md-3 col-form-label">{{ "Company.unit" |
+												translate
+												}}<span class="mendatory">*</span></label>
+                                            <div class="col-md-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="feCompanyNo" value="{{ unit.get('level3Address').value.officeNo }}" />
+                                                <!-- <input
+													type="text"
+													class="form-control"
+													formControlName="officeNo"
+												/>
+												<mat-error
+													*ngFor="
+														let message of showValidationMessages('officeNo')
+													"
+												>
+													{{ message }}
+												</mat-error> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row gx-5">
+                                    <div class="col-md-6">
+                                        <div class="row mb-3">
+                                            <label for="feFirstName" class="col-md-3 col-form-label">
+												{{ "Company.contact" | translate }}
+												<span *ngIf="!isExcel" class="mendatory">*</span>
+											</label>
+                                            <div class="col-md-9">
+                                                <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]"
+                                                    [selectFirstCountry]="false" [selectedCountryISO]="selectedCountriesFoUnit[i]" [phoneValidation]="true" [separateDialCode]="separateDialCode" [maxLength]="maxLength" name="phone" formControlName="contactMobile" appMobileNumberFormat>
+                                                </ngx-intl-tel-input>
+                                                <mat-error *ngIf=" unit.get('level3Address').controls.contactMobile.hasError('validatePhoneNumber')">
+													{{ "error_messages.invalid_contact_format" |translate }}
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row mb-3">
+                                            <label for="feCompanyFloor" class="col-md-3 col-form-label">
+												{{ "Company.floor" | translate }}
+												<span class="mendatory">*</span>
+											</label>
+                                            <div class="col-md-9">
+                                                <input type="text" readonly class="form-control-plaintext" id="feCompanyFloor" value="{{ unit.get('level3Address').value.floorNo }}" />
+                                                <!-- <input
+													type="text"
+													class="form-control"
+													formControlName="floorNo"
+												/>
+												<mat-error
+													*ngFor="
+														let message of showValidationMessages('floorNo')
+													"
+												>
+													{{ message }}
+												</mat-error> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="adminsList">
+                                <div *ngFor="let adminData of adminsList | keyvalue">
+                                    <div *ngFor="let admin of adminData.value">
+                                        <!-- <div
+											class="row"
+											*ngIf="adminData.key == unit.get('companyUnitId').value"
+										>
+											<div
+												*ngIf="adminData.value.length == 1; else multiAdmins"
+											>
+												<div class="col-md-6 col-sm-12">
+													<div class="dilogbox-label">
+														{{ "Company.adminEmail" | translate }}
+													</div>
+													<div class="dilogbox-value">{{ admin["email"] }}</div>
+												</div>
+												<div class="col-md-6 col-sm-12">
+													<div class="dilogbox-label">
+														{{ "Company.cellNo" | translate }}
+													</div>
+													<div class="dilogbox-value">
+														{{ admin["mobileNo"] }}
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-12">
+													<div class="dilogbox-label">
+														{{ "Company.firstName" | translate }}
+													</div>
+													<div class="dilogbox-value">
+														{{ admin["firstName"] }}
+													</div>
+												</div>
+												<div class="col-md-6 col-sm-12">
+													<div class="dilogbox-label">
+														{{ "Company.lastName" | translate }}
+													</div>
+													<div class="dilogbox-value">
+														{{ admin["lastName"] }}
+													</div>
+												</div>
+											</div>
+											<ng-template #multiAdmins>
+												<div class="col-md-6 col-sm-12">
+													<div class="dilogbox-label">
+														{{ admin["firstName"] }}
+														{{ admin["lastName"] }}
+													</div>
+													<div>
+														<p
+															class="show-icon"
+															(click)="getEmployeeById(admin['employeeId'])"
+														></p>
+														<p
+															class="icon-cros-icon popup-close-button"
+															(click)="
+																removeFromAdminList(
+																	admin['employeeId'],
+																	unit.get('companyUnitId').value
+																)
+															"
+														></p>
+													</div>
+												</div>
+											</ng-template>
+										</div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row createCompany-button-space">
+			<div class="col-md-6">
+				<button
+					mat-raised-button
+					(click)="addMoreOffice()"
+					class="add-more-button"
+				>
+					<span>{{ "Company.addUnit" | translate }}</span>
+				</button>
+			</div>
+			<div class="col-md-6"></div>
+		</div> -->
+        <!-- <div class="button-bg">
+			<button
+				(click)="onSubmit()"
+				class="common-button mr-20"
+				mat-raised-button
+			>
+				Save
+			</button>
+			<button (click)="onCancel()" class="secondry-button" mat-raised-button>
+				Cancel
+			</button>
+		</div> -->
+        <footer class="vams-page-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="updateCompany()">
+				{{ "Company.save" | translate }}
+			</button>
+            <button class="btn btn-sm btn-white px-3" (click)="onCancel()">
+				{{ "Company.cancel" | translate }}
+			</button>
+        </footer>
+    </form>
+</div>

@@ -1,0 +1,51 @@
+<div class="dialog-content d-grid">
+    <div class="dialog-body d-grid gap-4">
+        <h6 *ngIf="title" class="fw-bold text-center">
+            <p class="mb-0" [innerHTML]="title">
+        </h6>
+        <div *ngIf="icon" class="img-wrapper text-center">
+            <img [src]="icon" [alt]="alt_string" width="48px" />
+        </div>
+        <ng-container *ngIf="message" class="d-grid text-center gap-3">
+            <p class="mb-0" [innerHTML]="message">
+            </p>
+        </ng-container>
+        <ng-container *ngIf="messages">
+            <div class="d-grid text-center gap-3" *ngFor="let message of messages">
+                <p class="mb-0" [innerHTML]="message">
+                </p>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="inputText">
+            <form class="popup-form p-2" [formGroup]="reasonForm" novalidate autocomplete="off">
+                <label for="feRemark" class="form-label">
+                    {{ "restricted_Visitor.remark" | translate }}
+                    <span class="mendatory">*</span>
+                </label>
+                <textarea class="form-control text-capitalize" maxlength="250" formControlName="remark" rows="3"
+                    placeholder="{{ 'restricted_Visitor.remark_Placeholder' | translate }}">
+                        </textarea>
+                <ng-container *ngIf="reasonForm.controls['remark'].touched || reasonForm.controls['remark'].dirty">
+                    <mat-error
+                        *ngIf="reasonForm.controls['remark'].errors && reasonForm.controls['remark'].errors.whitespace">
+                        {{ "restricted_Visitor.remark_Error_Message" | translate }}
+                    </mat-error>
+                    <mat-error
+                        *ngIf="reasonForm.controls['remark'].errors && reasonForm.controls['remark'].errors.pattern">
+                        {{ "restricted_Visitor.remark_Error_Pattern_Message" | translate }}
+                    </mat-error>
+                </ng-container>
+            </form>
+        </ng-container>
+    </div>
+    <div class="dialog-actions gap-3">
+        <ng-container *ngIf="ok_button else with_yes_button">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="close(false)">{{ok_buttonText}}</button>
+        </ng-container>
+        <ng-template #with_yes_button>
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="close(true)"
+                [disabled]="reasonForm.invalid">{{yes_button}}</button>
+            <button class="btn btn-sm btn-white px-3" (click)="close(false)">{{no_button}}</button>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<div id="chart" *ngIf="!nodataFound">
+    <apx-chart [series]="chartOptions.series" [legend]="chartOptions.legend" [chart]="chartOptions.chart" [labels]="chartOptions.labels"
+      [responsive]="chartOptions.responsive" [title]="chartOptions.title" [colors]="chartOptions.colors" [dataLabels]="chartOptions.dataLabels" [plotOptions]="chartOptions.plotOptions"  
+      ></apx-chart>
+  </div>
+  
+  <div id="chart" *ngIf="nodataFound">
+    Data Not Found
+  </div>

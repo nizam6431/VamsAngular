@@ -1,0 +1,207 @@
+<!-- Add/Edit Appointment cancel reason -->
+
+<div class="d-flex flex-column flex-1 scroll-y" >
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="mode=='add'"
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "rateCard.add" | translate }}</span>
+            <span *ngIf="mode=='edit'"
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "rateCard.edit" | translate }}</span>
+            <span *ngIf="mode=='show'" class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "rateCard.details" | translate }}</span>
+        </div>
+    </div>
+
+    <form class="popup-form" [formGroup]="rateCard" novalidate >
+        <div class="popup-content"  *ngIf="mode=='add'">
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_passtype"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <mat-select class="form-control" formControlName="passType"
+                        placeholder="Select Pass Type" (selectionChange)="changePassType($event.value)">
+                        <mat-option *ngFor="let item of passTypes" [value]="item">
+                            <p class="d-flex align-items-center mb-0">
+                                <span class="me-auto">{{item.name}}</span>
+                            </p>
+                        </mat-option>
+                    </mat-select>
+                    <!-- <input *ngIf="currentSlide!=1" readonly type="text" class="form-control" id="vehicleNumber"
+                        [value]="selectedCategory" /> -->
+                    <mat-error *ngFor=" let message of showValidationMessages('passType')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+            <div *ngIf="selectedPassType">
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_category"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <mat-select class="form-control" formControlName="category" placeholder="Select Category Type"
+                        (selectionChange)="changeCategory($event.value)">
+                        <mat-option *ngFor="let item of categoryType" [value]="item">
+                            <p class="d-flex align-items-center mb-0">
+                                <span class="me-auto">{{item.name}}</span>
+                            </p>
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngFor=" let message of showValidationMessages('category')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_validity"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <mat-select class="form-control"*ngIf="selectedPassType=='P'" formControlName="validity" placeholder="Select Validity"
+                        (selectionChange)="selectValidity($event.value)">
+                        <mat-option *ngFor="let item of validityList" [value]="item">
+                            <p class="d-flex align-items-center mb-0">
+                                <span class="me-auto">{{item.name}}</span>
+                            </p>
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngFor=" let message of showValidationMessages('validity')">
+                        {{ message }}
+                    </mat-error>
+                    <input *ngIf="selectedPassType=='D'" readonly type="text" class="form-control" id="vehicleNumber"
+                        [value]="validityList[0].name" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.enter_rate"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="number"  class="form-control" id="price" formControlName="price" maxlength="4"  
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                        <mat-error *ngFor=" let message of showValidationMessages('price')">
+                            {{ message }}
+                        </mat-error>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="popup-content" *ngIf="mode=='edit'">
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_passtype"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" id="feFirstName" formControlName="passType"  
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_category"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="text"readonly class="form-control" id="feFirstName" formControlName="category"  
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_validity"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="text"readonly class="form-control" id="feFirstName" formControlName="validity"
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.enter_rate"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" id="feFirstName" formControlName="price" maxlength="4"
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                    <mat-error *ngFor=" let message of showValidationMessages('price')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+        </div>
+        <div class="popup-content" *ngIf="mode=='show'">
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_passtype"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" id="feFirstName" formControlName="passType"
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_category"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" id="feFirstName" formControlName="category"
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.select_validity"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control" id="feFirstName" formControlName="validity"
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="feFirstName" class="col-sm-4 col-form-label">{{ "rateCard.enter_rate"
+                    |
+                    translate }}
+                    <span class="mendatory">*</span></label>
+                <div class="col-sm-8">
+                    <input type="number" readonly class="form-control" id="feFirstName" formControlName="price" maxlength="4"
+                        placeholder="{{ 'rateCard.enter_rate' | translate }}" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="mode == 'add'" (click)="onSubmit()">
+            {{ "CommonToken.Add" | translate }}
+        </button>
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="mode == 'edit'" (click)="updateForm()">
+            {{ "CommonToken.Save" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="mode == 'edit'" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="mode == 'add'" (click)="resetForm()">
+            {{ "CommonToken.Clear" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="mode == 'show'" (click)="mode='edit'">
+            {{ "CommonToken.Edit" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" *ngIf="mode == 'show'" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>
+
+

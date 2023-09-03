@@ -1,0 +1,693 @@
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="!isEdit && complexData">
+    <div class="vams-page-body d-flex flex-column flex-1 scroll-y">
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="lightThemeLogo" class="col-sm-3 col-form-label">{{"complex_Details.lightThemeDemo"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <div class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                            <img _ngcontent-lde-c178="" [src]="LightLogoUrl" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="darkThemeLogo" class="col-sm-3 col-form-label">{{"complex_Details.darkThemeDemo"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <div class="theme-logo-wrapper d-flex align-items-center justify-content-center bg-dark overflow-hidden p-1">
+                            <img _ngcontent-lde-c178="" [src]="darkLogoUrl" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="complexName" class="col-sm-3 col-form-label">{{"complex_Details.name"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="complexName"
+                            value="{{ complexData?.data.name }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="shortName" class="col-sm-3 col-form-label">{{"complex_Details.shortName"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="shortName"
+                            value="{{ complexData?.data.shortName }}" />
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="row gx-5" *ngIf="!SeepzWorkFlow">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="passPrefix" class="col-sm-3 col-form-label">{{"complex_Details.visitorPassPrefix"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="passPrefix"
+                            value="{{ complexData?.data.accountConfig.prefix }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="contractorPrefix"
+                        class="col-sm-3 col-form-label">{{"complex_Details.contractorPassPrefix" |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="contractorPrefix"
+                            value="{{ complexData?.data.accountConfig.contractorPrefix }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="address" class="col-sm-3 col-form-label">{{"complex_Details.address"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <ng-container *ngIf="complexData.data.address.line1; else noAddress">
+                            <p class="form-control-plaintext mb-0">
+                                {{ formatAddress() }}
+                            </p>
+                        </ng-container>
+                        <ng-template #noAddress>
+                            -
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="timezone" class="col-sm-3 col-form-label">{{"complex_Details.timeZone"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="timezone"
+                            value="{{ complexData?.data.accountConfig.timezone }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="officeNo" class="col-sm-3 col-form-label">{{"complex_Details.officeNo"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="officeNo"
+                            value="{{ complexData.data.address.officeNo }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="licenseCount" class="col-sm-3 col-form-label">{{"complex_Details.numberOfLicence"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="licenseCount"
+                            value="{{ complexData?.data.licenseCount }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="floorNo" class="col-sm-3 col-form-label">{{"complex_Details.Floor" |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="floorNo"
+                            value="{{ complexData?.data.address.floorNo }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="status" class="col-sm-3 col-form-label">{{"complex_Details.Status" |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="status"
+                            value="{{ complexData?.data.status | uppercase }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="floorNo" class="col-sm-3 col-form-label">{{"complex_Details.contactNumber"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <ng-container *ngIf="complexData?.data.address.contactMobile; else noNumber">
+                            <p class="form-control-plaintext d-flex align-items-center mb-0">
+                                <span class="flag-icon me-2" [ngClass]="flagClass"></span>
+                                <span>+{{
+                                    complexData?.data.address.contactIsd +
+                                    " " +
+                                    formatCellNumber(complexData?.data.address.contactMobile)
+                                    }}</span>
+                            </p>
+                        </ng-container>
+                        <ng-template #noNumber>
+                            -
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="contactEmail" class="col-sm-3 col-form-label">{{"complex_Details.EmailID"
+                        |translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" readonly class="form-control-plaintext" id="contactEmail"
+                            value="{{ complexData?.data.address.contactEmail }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+           <div  class="col-md-6">
+                <div class="row mb-3">
+                    <label for="QRCode" class="col-sm-3 col-form-label">{{"complex_Details.branding_QR_code" | translate}}</label>
+                    <div class="col-sm-9">
+                        <div class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                            <img _ngcontent-lde-c178="" [src]="BrandingQrCodeImage" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div *ngIf = "QRCodeImage" class="col-md-6">
+                <div class="row mb-3">
+                    <label for="QRCode" class="col-sm-3 col-form-label">{{"complex_Details.setup_QR_code" | translate}}</label>
+                    <div class="col-sm-9">
+                        <div class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                            <img _ngcontent-lde-c178="" [src]="QRCodeImage" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            
+        </div>
+    </div>
+    <footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+        <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+            (click)="isEditClick()">
+            {{"complex_Details.Edit" |translate}}
+        </button>
+    </footer>
+</div>
+
+<form class="vams-form-wrapper" [formGroup]="formComplex" autocomplete="off" novalidate *ngIf="isEdit">
+    <div class="vams-page-body flex-1 scroll-y">
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="lightThemeLogo" class="col-sm-3 col-form-label">{{"complex_Details.lightThemeDemo"
+                        |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-sm-9">
+                        <div class="d-flex gap-3">
+                            <div class="d-grid">
+                                <input id="file" name="file" placeholder="Please select new logo"
+                                    accept="image/x-png,image/jpeg" onclick="this.value = null"
+                                    formControlName="lightLogo" class="custom-file-input" type="file"
+                                    (change)="onFileChange($event)" />
+                                <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"upload_image.complex_logo" | translate}}</p>
+                                <mat-error *ngFor="let message of showValidationMessages('lightLogo')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                            <div *ngIf="!imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                <!-- <img src="assets/images/login-vams-logo.png" class="img-fluid" alt="Logo" /> -->
+                                <img [src]="LightLogoUrl" class="img-fluid" alt="Logo" />
+                            </div>
+                            <div *ngIf="imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                <!-- <img *ngFor="let item of base64textString" class="img-fluid" src="{{ item }}" alt="Logo" /> -->
+                                <img [src]="LightLogoUrl" class="img-fluid" alt="Logo" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="darkThemeLogo" class="col-sm-3 col-form-label">{{"complex_Details.darkThemeDemo"
+                        |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-sm-9">
+                        <div class="d-flex gap-3">
+                            <div class="d-grid">
+                                <input id="file" name="file" accept="image/x-png,image/gif,image/jpeg"
+                                    onclick="this.value = null" formControlName="darkLogo" class="custom-file-input"
+                                    type="file" (change)="onFileChangeForDarkLogo($event)" />
+                                    <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"upload_image.complex_logo" | translate}}</p>
+                                <mat-error *ngFor="let message of showValidationMessages('darkLogo')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                            <div *ngIf="!darkLogoPreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center bg-dark overflow-hidden p-1">
+                                <!-- <img src="assets/images/VAMS_Logo_Dark.png" class="img-fluid" alt="Logo" /> -->
+                                <img [src]="darkLogoUrl" class="img-fluid" alt="Logo" />
+                            </div>
+                            <div *ngIf="darkLogoPreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center bg-dark overflow-hidden p-1">
+                                <!-- <img class="img-fluid" *ngFor="let item of base64textStringForDarkImg" src="{{ item }}" alt="Logo" /> -->
+                                <img [src]="darkLogoUrl" class="img-fluid" alt="Logo" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feName" class="col-sm-3 col-form-label">{{"complex_Details.name" |translate}} <span
+                            class="mendatory">*</span></label>
+                    <div class="col-sm-9">
+                        <input type="text" autocomplete="off" class="form-control" maxlength="250" id="feName"
+                            formControlName="name" />
+                        <mat-error *ngFor="let message of showValidationMessages('name')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feShortName" class="col-sm-3 col-form-label">{{"complex_Details.shortName" |translate}}
+                        <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" maxlength="10" id="feShortName"
+                            formControlName="shortName" />
+                        <mat-error *ngFor="let message of showValidationMessages('shortName')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feAddressLine1" class="col-sm-3 col-form-label">{{"complex_Details.addressLine1"
+                        |translate}}<span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feAddressLine1"
+                            formControlName="addressLine1" />
+                        <mat-error *ngFor="let message of showValidationMessages('addressLine1')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feAddressLine2" class="col-sm-3 col-form-label">{{"complex_Details.addressLine2"
+                        |translate}}</label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feAddressLine2"
+                            formControlName="addressLine2" />
+                        <!--
+            <mat-error
+              *ngFor="
+                let message of showValidationMessages('addressLine2')
+              "
+            >
+              {{ message }}
+            </mat-error>
+            -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feOfficeNo" class="col-sm-3 col-form-label">{{"complex_Details.officeNo"
+                        |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feOfficeNo"
+                            formControlName="officeNo" />
+                        <mat-error *ngFor="let message of showValidationMessages('officeNo')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feFloor" class="col-sm-3 col-form-label">{{"complex_Details.floorNo"
+                        |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feFloor"
+                            formControlName="floorNo" />
+                        <mat-error *ngFor="let message of showValidationMessages('floorNo')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feCity" class="col-sm-3 col-form-label">{{"complex_Details.City" |translate}} <span
+                            class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feCity" formControlName="city" />
+                        <mat-error *ngFor="let message of showValidationMessages('city')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feZipCode" class="col-sm-3 col-form-label">{{"complex_Details.zipCode" |translate}}
+                        <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" maxlength="10" id="feZipCode"
+                            formControlName="zipCode" />
+                        <mat-error *ngFor="let message of showValidationMessages('zipCode')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feState" class="col-sm-3 col-form-label">{{"complex_Details.State" |translate}} <span
+                            class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feState"
+                            formControlName="state" />
+                        <mat-error *ngFor="let message of showValidationMessages('state')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feCountry" class="col-sm-3 col-form-label">{{"complex_Details.Country" |translate}}<span
+                            class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <!-- <mat-select class="form-control" placeholder="please select" disableOptionCentering (selectionChange)="onStateChange($event.value, true)" formControlName="country">
+                            <mat-option *ngFor="let country of countries.data" [value]="country.niceName">
+                                {{ country.niceName }}
+                            </mat-option>
+                        </mat-select> -->
+                        <input type="text" placeholder="please select" formControlName="country" aria-label="Number"
+                            matInput [matAutocomplete]="auto" class="form-control">
+                        <mat-autocomplete #auto="matAutocomplete"
+                            (optionSelected)="onStateChange($event.option.value,true)">
+                            <mat-option *ngFor="let country of countryList" [value]="country.niceName" class="fs-sm">
+                                {{ country.niceName }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngFor="let message of showValidationMessages('country')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feTimeZone" class="col-sm-3 col-form-label">{{"complex_Details.timeZone" |translate}}
+                        <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <mat-select class="form-control" placeholder="Please select" disableOptionCentering
+                            formControlName="timeZone" *ngIf="timeZones" [compareWith]="compareCategoryObjects">
+                            <mat-option *ngFor="let timeZone of timeZones?.data" [value]="timeZone.displayName">
+                                {{ timeZone.displayName }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngFor="let message of showValidationMessages('timeZone')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feTimeZone" class="col-sm-3 col-form-label">{{"complex_Details.contactNumber"
+                        |translate}}<span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                            [enablePlaceholder]="true" [searchCountryFlag]="true"
+                            [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                            [selectedCountryISO]="selectedCountry" [phoneValidation]="true"
+                            [separateDialCode]="separateDialCode" [maxLength]="'15'"
+                            (countryChange)="checkNumber($event)" name="phone" formControlName="contactNumber"
+                            appMobileNumberFormat>
+                        </ngx-intl-tel-input>
+
+                        <mat-error *ngFor="let message of showValidationMessages('contactNumber')">
+                            {{ message }}
+                        </mat-error>
+
+                        <mat-error *ngIf="
+                        formComplex.get('contactNumber').hasError('validatePhoneNumber') && (formComplex.get('contactNumber').value!=null)
+                      ">
+                      {{ "error_messages.invalid_contact_format" |translate }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feMapLink" class="col-sm-3 col-form-label">{{"complex_Details.mapLink" |translate}}
+                        <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feState"
+                            formControlName="mapLink" />
+                        <!--
+            <textarea
+              class="form-control"
+              id="feMapLink"
+              formControlName="mapLink"
+              rows="5"
+              cols="60"
+            >
+            </textarea>
+            -->
+                        <mat-error *ngFor="let message of showValidationMessages('mapLink')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feEmailAddress" class="col-sm-3 col-form-label">{{"complex_Details.EmailID" |translate}}
+                        <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="email" autocomplete="off" class="form-control" id="feEmailAddress"
+                            formControlName="email" maxlength="200" />
+                        <mat-error *ngFor="let message of showValidationMessages('email')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5" *ngIf="!SeepzWorkFlow">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feVisitorsPassPrefix"
+                        class="col-sm-3 col-form-label">{{"complex_Details.visitorPassPrefix" |translate}} <span
+                            class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feVisitorsPassPrefix"
+                            formControlName="visitorsPassPrefix" maxlength="50" />
+                        <mat-error *ngFor="
+                let message of showValidationMessages('visitorsPassPrefix')
+              ">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feContractorPassPrefix" class="col-sm-3 col-form-label">
+                        {{"complex_Details.contractorPassPrefix" |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <input type="text" autocomplete="off" class="form-control" id="feContractorPassPrefix"
+                            formControlName="contractorPassPrefix" maxlength="50" />
+                        <mat-error *ngFor="
+                let message of showValidationMessages('contractorPassPrefix')
+              ">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feDateFormat" class="col-sm-3 col-form-label">{{"complex_Details.dateFormat"
+                        |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <mat-select class="form-control" placeholder="please select" disableOptionCentering
+                            formControlName="dateFormat">
+                            <mat-option *ngFor="let dateformat of dateFormats" [value]="dateformat.value">
+                                {{ dateformat.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngFor="let message of showValidationMessages('dateFormat')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feTimeFormat" class="col-sm-3 col-form-label">{{"complex_Details.timeFormat"
+                        |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <mat-select class="form-control" placeholder="Please select" disableOptionCentering
+                            formControlName="timeFormat">
+                            <mat-option *ngFor="let timeformat of timeFormats" [value]="timeformat.value">
+                                {{ timeformat.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngFor="let message of showValidationMessages('timeFormat')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div *ngIf = "!QRCodeuploaded" class="col-md-6">
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">{{'labels.qr_code_image'|translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9 d-flex d-grid align-items-start gap-3">
+                    <div class="d-grid">
+                        <button class="btn btn-sm btn-white px-3 "
+                            onclick="document.getElementById('getFileQRCodeImage').click()">{{'buttons.Upload_qr_code' | translate}}</button>
+                        <input type='file' id="getFileQRCodeImage" accept="image/x-png,image/jpeg" onclick="this.value = null"
+                            class="custom-file-input" formControlName="setupQRCodeUrl" (change)="onFileChangeNew($event,'QrCodeImage')" style="display:none">
+                        <p id="fileUploadHelpBlock" class="form-text fs-xs  mb-0">{{"upload_image.qr_code" | translate}}</p>
+                    </div>
+                        <!-- <div *ngIf="!imgpreview" class="theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                                                      
+                                                                        <img [src]="QRCodeImage" class="img-fluid" alt="Logo" />
+                                                                    </div> -->
+                        <div *ngIf="imgpreview"
+                            class=" theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                            <img [src]="QRCodeImage" class="img-fluid" alt="Qr-code" />
+                        </div>
+                    </div>
+                    <mat-error *ngFor="let message of showValidationMessages('setupQRCodeUrl')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+
+            <div  class="col-md-6">
+                <div class="row mb-3">
+                    <label class="col-md-3 col-form-label">{{'labels.branding_qr_image'|translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9 d-flex d-grid align-items-start gap-3">
+                    <div class="d-grid">
+                        <button class="btn btn-sm btn-white px-3 "
+                            onclick="document.getElementById('getFileBrandingQrCodeImage').click()">{{'branding_image.Branding_qr_code' | translate}}</button>
+                        <input type='file' id="getFileBrandingQrCodeImage" accept="image/x-png,image/jpeg" onclick="this.value = null"
+                            class="custom-file-input" formControlName="qrLogo" (change)="onFileChangeNew($event,'BrandingQrCodeImage')" style="display:none">
+                        <p id="fileUploadHelpBlock" class="form-text fs-xs  mb-0">{{"upload_image.branding_image" | translate}}</p>
+                    </div>
+                        <div 
+                            class=" theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                            <img [src]="BrandingQrCodeImage" class="img-fluid" alt="Qr-code" />
+                        </div>
+                    </div>
+                    <!-- <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"branding_image.imageType" | translate}} -->
+                    <mat-error *ngFor="let message of showValidationMessages('qrLogo')">
+                        {{ message }}
+                    </mat-error>
+                </div>
+            </div>
+            <!-- <div class="col-md-6">
+                <div class="row mb-3">
+                    <label for="feTimeFormat" class="col-sm-3 col-form-label">{{"complex_Details.timeFormat"
+                        |translate}} <span class="mendatory">*</span></label>
+                    <div class="col-md-9">
+                        <mat-select class="form-control" placeholder="Please select" disableOptionCentering
+                            formControlName="timeFormat">
+                            <mat-option *ngFor="let timeformat of timeFormats" [value]="timeformat.value">
+                                {{ timeformat.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngFor="let message of showValidationMessages('timeFormat')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <!--
+    <div class="row gx-5">
+      <div class="col-md-6">
+        <div class="row mb-3">
+          <label for="forContactNumber" class="col-sm-3 col-form-label"
+            >Cell number <span class="mendatory">*</span></label
+          >
+          <div class="col-md-9">
+            <input
+              type="text"
+              class="form-control"
+              id="forContactNumber"
+              formControlName="contactNumber"
+            />
+            <mat-error
+              *ngFor="let message of showValidationMessages('contactNumber')"
+            >
+              {{ message }}
+            </mat-error>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row mb-3">
+          <label for="feStatus" class="col-sm-3 col-form-label"
+            >Status <span class="mendatory">*</span></label
+          >
+          <div class="col-md-9">
+            <select class="form-control" formControlName="status">
+              <option value="active" selected>Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+            <mat-error *ngFor="let message of showValidationMessages('status')">
+              {{ message }}
+            </mat-error>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+    </div>
+    <footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+        <button (click)="onSubmit()" class="btn btn-sm btn-primary-dark px-3">
+            {{"complex_Details.Save" |translate}}
+        </button>
+        <button (click)="onCancel()" class="btn btn-sm btn-white px-3">
+            {{"complex_Details.Cancel" |translate}}
+        </button>
+    </footer>
+</form>

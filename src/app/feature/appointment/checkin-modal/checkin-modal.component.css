@@ -1,0 +1,38 @@
+.success-color {
+    color: green;
+}
+
+.input-style.unicode-phone-number {
+    unicode-bidi: isolate-override;
+}
+
+::ng-deep .select2-container {
+    top: -4px;
+}
+
+::ng-deep .select2-container--default .select2-selection--single {
+    border: none;
+    border-bottom: 1px solid #aaa;
+    border-radius: 0px;
+}
+
+::ng-deep .select2-results__option {
+    cursor: pointer;
+}
+
+.sample {
+    padding-left: 50%;
+}
+
+.w50 {
+    width: 40px;
+}
+
+.screen-outside {
+    padding: 10px;
+}
+
+.zxing-scanner-cl {
+    height: 50%;
+    width: 50%;
+}

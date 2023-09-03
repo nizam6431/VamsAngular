@@ -1,0 +1,34 @@
+{
+    "data": [
+        {
+            "name": "Josh Private Limited Department x",
+            "status":"Active",
+            "action":""
+        },
+        {
+            "name": "Josh Private Limited Department y",
+            "status":"Active",
+            "action":""
+        },
+        {
+            "name": "Josh Private Limited Department z",
+            "status":"Active",
+            "action":""
+        },
+        {
+            "name": "Josh Private Limited Department",
+            "status":"Active",
+            "action":""
+        },
+        {
+            "name": "Josh Private Limited Department" ,
+            "status":"Active",
+            "action":""
+        },
+        {
+            "name": "Josh Private Limited Department",
+            "status":"Active",
+            "action":""
+        }
+    ]
+}

@@ -1,0 +1,350 @@
+<ng-container *ngIf="currentSlide == 1">
+    <div class="d-flex flex-column flex-1 scroll-y">
+        <div class="popup-header">
+            <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+            <div class="popup-title-wrapper d-flex align-items-center">
+                <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">Add
+                    Account</span>
+            </div>
+        </div>
+        <form class="popup-form" [formGroup]="accountForm" novalidate>
+            <div class="popup-content">
+                <div class="row gx-5">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label">{{'labels.name' | translate}}<span
+                                    class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="250" type="text" class="form-control" formControlName="name" id="name"
+                                    placeholder="{{'placeholders.add_name' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('name')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="shortName" class="col-md-4 col-form-label">{{'labels.short_name' |
+                                translate}}<span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="10" type="text" class="form-control" id="shortName"
+                                    formControlName="shortName"
+                                    placeholder="{{'placeholders.add_short_name' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('shortName')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row gx-5">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="subDomain" class="col-md-4 col-form-label">{{'labels.sub_domain' |
+                                translate}}<span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="10" type="text" class="form-control" formControlName="subDomain"
+                                    id="subDomain" placeholder="{{'placeholders.add_sub_domain' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('subDomain')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="dbDomain" class="col-md-4 col-form-label">{{'labels.db_domain' |
+                                translate}}<span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input maxlength="10" type="text" class="form-control" id="dbDomain"
+                                    formControlName="DBDomain"
+                                    placeholder="{{'placeholders.add_db_domain' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('DBDomain')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row gx-5">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="productType" class="col-md-4 col-form-label">{{'labels.product_type' |
+                                translate}}<span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <mat-select class="form-control" formControlName="productType"
+                                    placeholder="{{'placeholders.add_product_type' | translate}}"
+                                    (selectionChange)="onProductChanges($event.value)">
+                                    <mat-option selected *ngFor="let product of productTypes" [value]="product.id">{{
+                                        product.name }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngFor="let message of showValidationMessages('productType')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="isCommercial" class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="feStartDateandTime" class="col-sm-4 col-form-label">{{'labels.is_excel' |
+                                translate}}</label>
+                            <div class="col-sm-8">
+                                <mat-checkbox labelPosition="before" (change)="isExcelclick()"
+                                    formControlName="isExcel">
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row gx-5">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label for="licenseCount" class="col-md-4 col-form-label">{{'labels.license_count' |
+                                translate}}<span class="mendatory">*</span></label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="licenseCount" formControlName="licenseCount"
+                                    placeholder="{{'labels.license_count' | translate}}" />
+                                <mat-error *ngFor="let message of showValidationMessages('licenseCount')">
+                                    {{ message }}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- upload poweredby image -->
+               
+                    <!-- upload partner image image -->
+                <!-- </div> -->
+
+                <div class="card bg-floral-white">
+                    <div class="card-body pb-0">
+                        <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                            {{'titles.admin_details' | translate}}
+                        </h6>
+                        <div class="row gx-5">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="feFirstName" class="col-md-3 col-form-label">{{'labels.first_name' |
+                                        translate}}<span class="mendatory">*</span></label>
+                                    <div class="col-md-9">
+                                        <input type="text" autocomplete="off" class="form-control"
+                                            formControlName="firstName"
+                                            placeholder="{{'placeholders.add_first_name' | translate}}" />
+                                        <mat-error *ngFor="let message of showValidationMessages('firstName')">
+                                            {{ message }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="feFirstName" class="col-md-3 col-form-label">{{'labels.last_name' |
+                                        translate}}<span class="mendatory">*</span></label>
+                                    <div class="col-md-9">
+                                        <input type="text" autocomplete="off" class="form-control"
+                                            formControlName="lastName"
+                                            placeholder="{{'placeholders.add_last_name' | translate}}" />
+                                        <mat-error *ngFor="let message of showValidationMessages('lastName')">
+                                            {{ message }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row gx-5">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="feTimeZone" class="col-sm-3 col-form-label">{{'labels.contact_number' |
+                                        translate}}<span class="mendatory">*</span></label>
+                                    <div class="col-md-9">
+                                        <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                                            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                                            [enablePlaceholder]="true" [searchCountryFlag]="true"
+                                            [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                                            [selectedCountryISO]="selectedCountry" [phoneValidation]="true"
+                                            [separateDialCode]="separateDialCode" [maxLength]="maxLength"
+                                            formControlName="contactDetails" (countryChange)="checkNumber($event)"
+                                            appMobileNumberFormat name="phone">
+                                        </ngx-intl-tel-input>
+                                        <mat-error
+                                            *ngIf="accountForm.get('contactDetails').hasError('validatePhoneNumber')">
+                                            {{ "error_messages.invalid_contact_format" |translate }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="feFirstName" class="col-md-3 col-form-label">{{'labels.email' |
+                                        translate}}<span class="mendatory">*</span></label>
+                                    <div class="col-md-9">
+                                        <input type="email" autocomplete="off" class="form-control"
+                                            formControlName="adminEmail" placeholder="Please enter email address" />
+                                        <mat-error *ngFor="let message of showValidationMessages('adminEmail')">
+                                            {{ message }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isExcel" class="row gx-5">
+                            <div class="col-md-6">
+                                <div class="row mb-3">
+                                    <label for="feFirstName" class="col-md-3 col-form-label">{{'labels.user_name' |
+                                        translate}}<span class="mendatory">*</span></label>
+                                    <div class="col-md-9">
+                                        <input type="text" autocomplete="off" class="form-control"
+                                            formControlName="userName"
+                                            placeholder="{{'placeholders.add_user_name' | translate}}" />
+                                        <mat-error *ngFor="let message of showValidationMessages('userName')">
+                                            {{ message }}
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popup-footer d-flex align-items-center gap-3">
+                <button class="btn btn-sm btn-primary-dark px-3" (click)="onSubmit()"> {{'buttons.add' | translate}}
+                </button>
+                <button class="btn btn-sm btn-white px-3" (click)="resetForm()">{{'buttons.clear' | translate}}
+                </button>
+            </div>
+
+        </form>
+    </div>
+</ng-container>
+<!-- && ComplexDetailsForQRCode -->
+<ng-container *ngIf="currentSlide == 2 && ComplexDetailsForQRCode">
+    <div class="d-flex flex-column flex-1 scroll-y">
+        <div class="popup-header">
+            <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+            <div class="popup-title-wrapper d-flex align-items-center">
+                <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                    "EmployeeForm.EmployeeDetails" | translate }}</span>
+            </div>
+        </div>
+        <div class="popup-content">
+            <div class="row">
+                <div class="row mb-4">
+                    <label class="col-md-4 col-form-label">{{'labels.complex_name' | translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ ComplexDetailsForQRCode?.complexName }}" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row mb-4">
+                    <label for="subDomain" class="col-md-4 col-form-label">{{'labels.sub_domain' | translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ ComplexDetailsForQRCode?.subdomain }}" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row mb-4">
+                    <label class="col-md-4 col-form-label">{{'labels.dispay_id' | translate}}</label>
+                    <div class="col-md-8">
+                        <input type="text" readonly class="form-control-plaintext"
+                            value="{{ ComplexDetailsForQRCode?.level1Did }}" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row mb-4">
+                    <label for="lightThemeLogo"
+                        class="col-md-4 col-form-label">{{'labels.qr_code_image'|translate}}</label>
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="d-grid">
+                                <div class="d-grid">
+                                    <button class="btn btn-sm btn-white px-3 "
+                                        onclick="document.getElementById('getFile').click()">{{'buttons.Upload_qr_code' |
+                                        translate}}</button>
+                                    <input type='file' id="getFile" accept="image/x-png,image/jpeg"
+                                        onclick="this.value = null" class="custom-file-input"
+                                        (change)="onFileChange($event)" style="display:none">
+                                 </div>
+                            <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"upload_image.qr_code" | translate}}</p>
+                            </div>
+                            <div *ngIf="imgpreview"
+                                class=" theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                <img [src]="QRCodeImageUrl" class="img-fluid" alt="Qr-code" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="row mb-4">
+                    <label for="poweredbyImage" class="col-md-4 col-form-label">{{'Common_Tabs.PoweredByImage'|translate}}</label>
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="d-grid">
+                                <div class="d-grid">
+                                    <button class="btn btn-sm btn-white px-3 "
+                                        onclick="document.getElementById('poweredby').click()">{{'buttons.poweredby_image' |
+                                        translate}}</button>
+                                    <input type='file' id="poweredby" accept="image/x-png,image/jpeg" onclick="this.value = null"
+                                        class="custom-file-input" (change)="poweredbyImageUpload($event)" style="display:none">
+                                </div>
+                                <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"upload_image.poweredBy" | translate}}</p>
+                            </div>
+                            <div *ngIf="poweredByImage"
+                                class=" theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                <img [src]="poweredByImage" class="img-fluid" alt="Logo" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="row mb-4">
+                    <label for="partnerImage" class="col-md-4 col-form-label">{{'Common_Tabs.PartnerImage'|translate}}</label>
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="d-grid">
+                                <div class="d-grid">
+                                    <button class="btn btn-sm btn-white px-3 "
+                                        onclick="document.getElementById('partnerImage').click()">{{'buttons.partner_image' |
+                                        translate}}</button>
+                                    <input type='file' id="partnerImage" accept="image/x-png,image/jpeg" onclick="this.value = null"
+                                        class="custom-file-input" (change)="partnerImageUpload($event)" style="display:none">
+                                </div>
+                                <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{"upload_image.partner_image" | translate}}</p>
+                            </div>
+                            <div *ngIf="partnerImage"
+                                class=" theme-logo-wrapper d-flex align-items-center justify-content-center border overflow-hidden p-1">
+                                <img [src]="partnerImage" class="img-fluid" alt="Logo" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-primary-dark px-3" [disabled]="!QRCodeLocation" (click)="updateQrCodeLink()">
+                {{'buttons.send_invitation' | translate}}
+            </button>
+        </div>
+    </div>
+</ng-container>

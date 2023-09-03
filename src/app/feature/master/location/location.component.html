@@ -1,0 +1,31 @@
+<ng-container *ngIf="!isL2Admin">
+    <div class="vams-grid-wrapper" *ngIf="!isLocationDetails">
+        <app-grid [dataSource]="dataSource" (companyValueChange)="toggleTabs($event)" [totalData]="totalData" [locationLevel2Id] = "locationLevel2Id"
+            type="location" (onDataChange)="companyDataChange($event)" (valueChange)="displayCounter($event)"
+            [displayedColumns]="displayedColumns" (deleteAction)="deleteLocation($event)" [showToggle]="true"
+            (dialogClose)="dialogClosed($event)" (locationDetails)="showLocationDetails($event)" >
+        </app-grid>
+    </div>
+    <!-- <div class="vams-grid-wrapper" *ngIf="isLocationDetails"> 
+        <app-location-detail [locationLevel2Id]="locationLevel2Id"></app-location-detail> 
+    </div> -->
+    <div *ngIf="this.level2RoleName != 'Level2Admin' && !isLocationDetails">
+        <footer class="vams-grid-footer bg-floral-white">
+            <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+                (click)="openDialog('location')">
+                {{ "Common_Tabs.Add_New_Location" | translate }}
+            </button>
+        </footer>
+    </div>
+    <div *ngIf="this.level2RoleName != 'Level2Admin' && isLocationDetails">
+        <!-- <footer class="vams-grid-footer bg-floral-white">
+            <button *isPermissible="permissionKeyObj.MASTERVIEWEDIT" class="btn btn-sm btn-primary-dark px-3"
+                (click)="openDialog('location')">
+                {{ "Common_Tabs.Add_New_Location" | translate }}
+            </button>
+        </footer> -->
+    </div>
+</ng-container>
+<ng-container *ngIf="isL2Admin">
+    <app-common-tab [type]="'location'"></app-common-tab>
+</ng-container>

@@ -1,0 +1,60 @@
+{
+    "data":[
+        {
+            "name":"employee name x",
+            "cell":"9898987654",
+            "emailId":"employee@joshsoftware.com",
+            "department":"Sales and services",
+            "role":"Admin",
+            "status":"Active",
+            "action":"",
+            "notificationType":"Email",
+            "officeNumber": "9999999999"
+        },
+        {
+            "name":"employee name y",
+            "cell":"9898987654",
+            "emailId":"employee@joshsoftware.com",
+            "department":"Sales and services",
+            "role":"Admin",
+            "status":"Active",
+            "action":"",
+            "notificationType":"Email",
+            "officeNumber": "9999999999"
+        },
+        {
+            "name":"employee name z",
+            "cell":"9898987654",
+            "emailId":"employee@joshsoftware.com",
+            "department":"Sales and services",
+            "role":"Admin",
+            "status":"Active",
+            "action":"",
+            "notificationType":"Email",
+            "officeNumber": "9999999999"
+        },
+        {
+            "name":"employee name",
+            "cell":"9898987654",
+            "emailId":"employee@joshsoftware.com",
+            "department":"Sales and services",
+            "role":"Admin",
+            "status":"Active",
+            "action":"",
+            "notificationType":"Email",
+            "officeNumber": "9999999999"
+        },
+        {
+            "name":"employee name",
+            "cell":"9898987654",
+            "emailId":"employee@joshsoftware.com",
+            "department":"Sales and services",
+            "role":"Admin",
+            "status":"Active",
+            "action":"",
+            "notificationType":"Email",
+            "officeNumber": "9999999999"
+        }
+
+    ]
+}

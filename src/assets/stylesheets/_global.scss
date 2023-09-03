@@ -1,0 +1,987 @@
+body {
+    @extend .scroll-y;
+}
+
+html,
+body {
+    min-height: 100vh;
+}
+
+.vams-page-sub-header {
+    padding: 1rem 1rem 1rem 0.5rem;
+    box-shadow: inset 0 -12px 10px -10px rgba($color: $black, $alpha: 0.05);
+}
+
+.vams-page-sub-title {
+    padding: 0 1rem;
+}
+
+.vams-page-body {
+    background-color: $white;
+    padding: 1.5rem 1rem 1rem;
+}
+
+.vams-page-footer {
+    min-height: 4rem;
+    padding: 1rem;
+    border-top: 1px solid $primary;
+
+    .btn {
+        min-width: 8rem;
+    }
+}
+
+.vams-page-sidebar {
+    position: relative;
+    width: 18rem;
+    padding: 1.5rem 0;
+    border-right-color: $linen !important;
+    z-index: 3;
+}
+
+.nav-page-sidebar {
+    .nav-link {
+        font-size: 0.75rem;
+        color: $body-color;
+
+        &.active {
+            color: $primary;
+            background-color: $linen;
+        }
+    }
+}
+
+.vams-page-section-footer {
+    @extend .vams-page-footer;
+    border-top-color: $linen;
+}
+
+.vams-aside-nav {
+
+    .btn-link {
+        font-size: 0.75rem;
+        color: $body-color;
+        padding: 0.5rem 1rem;
+        text-align: left;
+        border: 0 none;
+        border-right: 3px solid transparent;
+        border-radius: 0;
+        transition: all 0.15s ease-in-out;
+
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+            background-color: $floral-white;
+            transition: all 0.15s ease-in-out;
+        }
+
+        &.active {
+            border-right-color: $primary;
+        }
+    }
+}
+
+.vams-page-preview {
+    padding: 1rem;
+}
+
+// Form Control
+.form-control {
+    border: 0 none;
+    box-shadow: $vams-input-shadow;
+
+    &.is-invalid:focus,
+    &:focus {
+        box-shadow: $vams-input-shadow;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    &[type=number] {
+        -moz-appearance: textfield;
+    }
+}
+
+.was-validated .form-control:invalid:focus {
+    box-shadow: $vams-input-shadow;
+}
+
+.input-group {
+    .btn {
+        border: 0 none;
+        box-shadow: $vams-input-shadow;
+    }
+}
+
+.search-group {
+    max-width: 15rem;
+
+    .form-control {
+        background-color: $linen;
+        padding-right: 2rem;
+        padding-left: 1rem;
+        font-size: 0.875rem;
+        box-shadow: none;
+        border-radius: 1rem;
+    }
+
+    .btn {
+        background-color: $linen;
+        color: $primary;
+        box-shadow: none;
+        border-radius: 1rem;
+    }
+
+    .btn-clean {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.875rem;
+        position: absolute;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        z-index: 3;
+        color: $light;
+
+        i {
+            font-size: 0.625rem;
+        }
+    }
+}
+
+.col-form-label,
+.form-control-plaintext {
+    padding: 0.375rem 0.75rem;
+}
+
+.col-form-label {
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+}
+
+.form-control-plaintext {
+    font-size: 0.875rem;
+    border: 0 none;
+}
+
+.invalid-feedback,
+.valid-feedback,
+.mat-error {
+    font-weight: $font-weight-bold;
+}
+
+.mat-error {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.625rem;
+    color: $danger;
+}
+
+.status-select-control-wrap {
+    border-radius: 1rem;
+
+    .addon-wrap {
+        padding: 0.375rem 0.375rem 0.375rem 0.75rem;
+        border-radius: 1rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .form-control {
+        padding: 0.375rem 0.75rem 0.375rem 0.375rem;
+        border-radius: 1rem;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}
+
+.status-select-control {
+    width: 10rem !important;
+}
+
+// Input Datepicker
+.input-datepicker {
+    .datepicker-toggle {
+        padding: 0 0.375rem;
+        border-radius: 0.5rem !important;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+        box-shadow: $vams-input-shadow;
+    }
+}
+
+// Select Control Group
+.select-control-group {
+    &::before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-left: 0.25rem solid transparent;
+        border-right: 0.25rem solid transparent;
+        border-top: 0.25rem solid rgba($color: $black, $alpha: 0.54);
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        margin-top: 1px;
+    }
+
+    .form-control {
+        padding-right: 1.5rem;
+    }
+}
+
+// Textarea
+textarea {
+    height: 4.75rem;
+    resize: none;
+}
+
+// Button
+:focus-visible {
+    outline: none;
+}
+
+.btn-primary {
+    // @include button-variant(background-color, border-color, text-color);
+    @include button-variant($primary, $primary, $white, darken($primary, 5%), darken($primary, 7.5%), $white, darken($primary, 5%), darken($primary, 7.5%), $white);
+}
+
+.btn-outline-primary {
+    @include button-outline-variant($primary, $white, $primary, $primary, $white);
+}
+
+.btn-primary-dark {
+    @include button-variant($primary-dark, $primary-dark, $white, darken($primary-dark, 5%), darken($primary-dark, 7.5%), $white, darken($primary-dark, 5%), darken($primary-dark, 7.5%), $white);
+
+    &:disabled,
+    &.disabled {
+        color: $white;
+    }
+}
+
+.btn-outline-primary-dark {
+    @include button-outline-variant($primary-dark, $white, $primary-dark, $primary-dark, $white);
+}
+
+.btn-white {
+    // @include button-variant(background-color, border-color, text-color);
+    @include button-variant($white, $primary-dark, $primary-dark, darken($white, 5%), darken($white, 7.5%), $primary-dark, darken($white, 5%), darken($white, 7.5%), $primary-dark);
+
+    &:hover,
+    &:focus {
+        border-color: darken($primary-dark, 7.5%);
+    }
+}
+
+.btn:active:focus,
+.btn:focus,
+.btn-close:focus {
+    box-shadow: none;
+}
+
+// Btn Check
+.btn-check {
+    +.btn-outline-primary {
+        &:hover {
+            background-color: rgba($color: $primary, $alpha: 0.625);
+        }
+    }
+}
+
+.btn-check:checked+.btn-outline-primary:focus,
+.btn-check:active+.btn-outline-primary:focus,
+.btn-check:focus+.btn-outline-primary {
+    box-shadow: none;
+}
+
+// Button Filter
+.btn-filter {
+    background-color: $linen;
+}
+
+// Wrapper
+.vams-grid-wrapper,
+.vams-form-wrapper {
+    @extend .host;
+}
+
+.vams-grid-filters {
+    background-color: $white;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1rem 0;
+}
+
+.vams-grid-footer {
+    @extend .vams-page-footer;
+}
+
+// Mat Table
+.vams-table-wrapper {
+    background-color: $white;
+    @extend .host;
+    margin: 1rem 0 0;
+}
+
+.mat-table-hover {
+
+    .mat-row:hover .mat-cell {
+        background-color: $gray-95;
+    }
+}
+
+th.mat-header-cell {
+    color: rgba($color: $body-color, $alpha: 1);
+    font-weight: 700;
+}
+
+mat-row,
+mat-footer-row,
+td.mat-cell,
+td.mat-footer-cell {
+    border-bottom-color: $border-color;
+}
+
+tr.mat-header-row,
+tr.mat-row,
+tr.mat-footer-row {
+    height: auto !important;
+}
+
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem !important;
+}
+
+@-moz-document url-prefix() {
+
+    th.mat-header-cell,
+    td.mat-cell,
+    td.mat-footer-cell {
+        background-clip: padding-box;
+    }
+}
+
+
+.mat-cell-sm {
+    width: 10rem;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.mat-form-field-infix {
+    padding: 0.375rem 0.5rem !important;
+    border: 1px solid $antique-white;
+    border-radius: 0.5rem;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+
+.mat-select-arrow {
+    border-width: 0.25rem !important;
+    margin-right: 0 !important;
+}
+
+.mat-icon-button {
+    width: 2rem !important;
+    height: 2rem !important;
+    line-height: 2rem !important;
+}
+
+.mat-paginator {
+    box-shadow: inset 0 12px 10px -10px rgba($color: $black, $alpha: 0.05);
+}
+
+.mat-paginator-range-actions {
+    border-left: 2px solid $antique-white;
+}
+
+.mat-paginator-range-label {
+    margin: 0 2rem 0 0.75rem !important;
+}
+
+.mat-form-field-underline {
+    display: none;
+}
+
+.mat-table-sticky-border-elem-top {
+  background-color: $gray-90 !important;
+}
+
+// Toggle Switch
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: $antique-white;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: $primary;
+}
+
+.mat-slide-toggle-content {
+    font-size: 0.75rem;
+}
+
+// Default Font for Angular Components
+.mat-tab-group,
+.mat-slide-toggle-content,
+.mat-table,
+.mat-tab-label,
+.mat-tab-link,
+.mat-list-option,
+.mat-button-toggle,
+.mat-checkbox,
+.mat-select {
+    font-family: $font-family-base;
+}
+
+// Theme Logo
+.theme-logo-wrapper {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.5rem;
+    border: 1px solid $border-color;
+    object-fit: scale-down;
+}
+
+// Card Password Rule
+.card-password-rules {
+    width: 100%;
+    max-width: 13rem;
+    border-color: rgba($color: $border-color, $alpha: 0.25);
+    border-radius: 0.75rem;
+}
+
+// Alert
+.vams-alert {
+    font-size: 0.75rem;
+    line-height: 1.5;
+}
+
+// mat-list
+.mat-list-text {
+    font-size: 0.875rem;
+}
+
+// Picture
+.picture {
+    width: 4rem;
+    height: 4rem;
+    border: 1px solid rgba($color: $black, $alpha: 0.0625);
+    border-radius: 0.5rem;
+
+    &.picture-lg {
+        width: 5.5rem;
+        height: 5.5rem;
+    }
+
+    img {
+        width: 100%;
+        object-fit: contain;
+        border-radius: calc(0.5rem - 5px);
+    }
+}
+
+// Status
+.status {
+    background-color: tint-color($success, 85%);
+    color: darken($success, 10%);
+    padding: 0.125rem 0.5rem;
+}
+
+// Mat Select
+.mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+    background: $primary;
+    color: $white;
+}
+
+.mat-option:hover:not(.mat-option-disabled),
+.mat-option:focus:not(.mat-option-disabled) {
+    background: $linen;
+}
+
+.mat-option.mat-active,
+.mat-option.mat-active:hover,
+.mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled) {
+    background: $primary;
+    color: $white;
+}
+
+.mat-autocomplete-panel,
+.mat-select-panel {
+    @include scrollbars();
+}
+
+.mat-autocomplete-panel .mat-option.mat-selected:not(.mat-active):not(:hover) {
+    background: $primary;
+}
+
+.mat-autocomplete-panel .mat-option.mat-selected:not(.mat-active):not(:hover):not(.mat-option-disabled) {
+    color: $white;
+}
+
+// Mat Calender Buttons
+.mat-calendar-previous-button::after,
+.mat-calendar-next-button::after {
+    margin: 0.75rem !important;
+}
+
+// Mat Option with Close
+.mat-option-with-close {
+    .mat-option-text {
+        display: flex;
+        align-items: center;
+    }
+}
+
+// Mat Option
+.mat-option {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    line-height: 1.5 !important;
+    height: auto !important;
+    padding: 0.5rem 1rem !important;
+
+    .mat-option-text {
+        overflow: visible !important;
+        text-overflow: unset !important;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+}
+
+// Mat Chips
+.mat-standard-chip.vams-chip {
+    min-height: unset;
+    height: auto;
+    padding: 0.25rem 0.75rem;
+}
+
+// Date Range Filter
+.date-rang-filter {
+    border-radius: 0.5rem;
+}
+
+// Mat Check
+.vams-checkbox-wrapper {
+    padding: 0.125rem 0.75rem;
+}
+
+.mat-checkbox-background,
+.mat-checkbox-frame {
+    border-radius: 0.1875rem !important;
+}
+
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-pseudo-checkbox-checked,
+.mat-pseudo-checkbox-indeterminate,
+.mat-accent .mat-pseudo-checkbox-checked,
+.mat-accent .mat-pseudo-checkbox-indeterminate {
+    background-color: $primary;
+}
+
+.mat-checkbox-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: $body-color;
+}
+
+.mat-list-base .mat-list-item,
+.mat-list-base .mat-list-option {
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+        border-bottom: 0 none;
+    }
+}
+
+.mat-select-panel:not([class*=mat-elevation-z]) {
+    box-shadow: 0 0 0.5rem 0 rgb(90 90 90 / 16%);
+}
+
+// Multiselect Dropdown
+.vams-multiselect-dropdown.form-control {
+
+    .multiselect-dropdown .dropdown-btn {
+        padding: 0 !important;
+        border: 0 none !important;
+        border-radius: 0 !important;
+
+        >span {
+            color: rgba(0, 0, 0, .42);
+        }
+
+        .dropdown-multiselect__caret {
+            width: auto !important;
+            height: auto !important;
+            top: 50% !important;
+            transform: translateY(-50%);
+            padding: 0 !important;
+
+            &::before {
+                position: absolute !important;
+                top: 50% !important;
+                transform: translateY(-50%);
+                border-width: 4px 4px 0 !important;
+                border-color: rgba(0, 0, 0, .54) transparent !important;
+                margin-top: 0 !important;
+            }
+        }
+    }
+
+    .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item {
+        background-color: $primary !important;
+        border-color: $primary !important;
+        max-width: unset !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    .dropdown-list {
+        width: calc(100% + 1.5rem);
+        left: -0.75rem;
+        border: 0 none;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 0.5rem 0 rgb(90 90 90 / 16%);
+        overflow: hidden;
+
+        ul {
+            @include scrollbars();
+        }
+    }
+
+    .multiselect-item-checkbox input[type=checkbox]:checked+div:before {
+        background-color: $primary !important;
+        border-color: $primary !important;
+    }
+
+    .multiselect-item-checkbox input[type=checkbox]+div:before {
+        border-color: rgba(0, 0, 0, .54) !important;
+        border-radius: 0.1875rem !important;
+    }
+
+    .multiselect-item-checkbox input[type=checkbox]+div:after {
+        width: 0.625rem !important;
+        height: 0.25rem !important;
+        left: 3px !important;
+        margin-top: -0.25rem !important;
+        border-width: 0 0 2px 2px !important;
+    }
+}
+
+// DL Photo Wrapper
+.dl-photo-wrapper {
+    width: 4.25rem;
+    height: 4.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+
+    img {
+        width: 100%;
+        object-fit: scale-down;
+    }
+}
+
+.intl-tel-input {
+    position: relative;
+    display: block;
+}
+
+.mat-divider {
+    border-top-color: $border-color;
+}
+
+// Mat Radio
+.mat-radio-button.mat-accent .mat-radio-inner-circle,
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+.mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+    background-color: $primary;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: $primary;
+}
+
+// PDF Viewer
+.card-pdf-viewer {
+    width: 37.1875rem;
+    max-height: 52.625rem;
+    margin: 0 auto;
+
+    .ng2-pdf-viewer-container {
+        border-radius: 0.25rem;
+        border: 1px solid $border-color;
+        @extend .scroll-y;
+    }
+}
+
+.card-document {
+
+    .ng2-pdf-viewer-container {
+        @extend .scroll-y;
+    }
+}
+
+// VAMS Autocomplete
+.vams-autocomplete {
+    position: relative;
+    background-color: $white;
+
+    .form-control {
+        position: relative;
+        background-color: transparent;
+        z-index: 1;
+    }
+
+    &::after {
+        content: '';
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 50%;
+        right: 0.5rem;
+        transform: translateY(-50%);
+        color: rgba(0, 0, 0, 0.54);
+        border-left: 0.25rem solid transparent;
+        border-right: 0.25rem solid transparent;
+        border-top: 0.25rem solid;
+        margin: 0 0 0 0.25rem;
+        z-index: 0;
+    }
+}
+
+// VAMS InputGroup
+.vams-input-group {
+
+    .btn-input-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        padding: 0;
+        border-color: $secondary;
+        color: $secondary;
+
+        &:hover {
+            background-color: $antique-white;
+            border-color: $primary;
+            color: $primary;
+        }
+
+        .mat-icon {
+            width: 0.875rem;
+            height: 0.875rem;
+            font-size: 0.875rem;
+        }
+    }
+
+    .form-control {
+        width: 4rem;
+    }
+}
+
+// Mat Slide Toggle Small
+.mat-slide-toggle-sm {
+
+    &.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+        transform: translate3d(0.75rem, 0, 0);
+    }
+
+    .mat-slide-toggle-bar {
+        width: 1.75rem;
+        height: 0.625rem;
+    }
+
+    .mat-slide-toggle-thumb-container {
+        width: 1rem;
+        height: 1rem;
+        z-index: 0;
+    }
+    
+    .mat-slide-toggle-thumb {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
+// Card Scanner
+.card-scanner {
+
+    video {
+        border-radius: 0.25rem;
+    }
+}
+
+.period-control__button:not(.period-control__button--disabled):focus:after {
+    bottom: -4px !important;
+}
+
+// Ripple Effect
+.recently-added {
+    overflow: hidden;
+
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -2rem;
+        left: -2rem;
+        width: 4rem;
+        height: 4rem;
+        background-color: $primary;
+        border-radius: 50%;
+        animation: ripple 1s ease-out infinite;
+    }
+      
+      @keyframes ripple {
+        from {
+          opacity: 0.75;
+          transform: scale(0);
+        }
+        to {
+          opacity: 0;
+          transform: scale(6);
+        }
+      }
+  }
+
+//   Mat ProgressBar
+.vams-progress-bar.mat-progress-bar {
+    height: 0.5rem;
+    border-radius: 50rem;
+
+    &.current {
+
+        .mat-progress-bar-buffer {
+            background-color: #ffe9ec;
+        }
+
+        .mat-progress-bar-fill::after {
+            background-color: #FF98A4;
+        }
+    }
+    
+    &.highest {
+
+        .mat-progress-bar-buffer {
+            background-color: #ffe9ec;
+        }
+
+        .mat-progress-bar-fill::after {
+            background-color: #B40014;
+        }
+    }
+
+    &.average {
+
+        .mat-progress-bar-buffer {
+            background-color: #ffe9ec;
+        }
+
+        .mat-progress-bar-fill::after {
+            background-color: #FF5F71;
+        }
+    }
+}
+
+.vams-progress-bar-legend {
+    width: 9rem;
+}
+
+.vams-progress-bar-legend-value {
+    &.current {
+        color: #FF98A4;
+    }
+    
+    &.highest {
+        color: #B40014;
+    }
+
+    &.average {
+        color: #FF5F71;
+    }
+}
+
+// Apex Chart
+.apexcharts-legend-series {
+    display: flex;
+    align-items: center;
+}
+
+// Angular Editor
+.vams-editor-wrapper {
+    
+    .angular-editor {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        @extend .scroll-y;
+    }
+
+    .angular-editor-wrapper {
+        display: flex;
+        flex: 1;
+        @extend .scroll-y;
+    }
+
+    .angular-editor-textarea {
+        flex: 1;
+        height: auto !important;
+        @extend .scroll-y;
+    }
+
+    .angular-editor-toolbar {
+        background-color: $floral-white !important;
+
+        .angular-editor-toolbar-set .angular-editor-button.active {
+            background: $primary !important;
+            color: $white !important;
+        }
+    }
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: $primary;
+}
+// Vams Webcam
+.vams-webcam {
+    width: 10rem;
+    height: 7.5rem;
+
+    .webcam-wrapper {
+        display: block !important;
+        width: 10rem;
+        height: 7.5rem;
+
+        video {
+            border-radius: 0.5rem;
+        }
+    }
+}
+
+.vams-photo {
+    width: 10rem;
+    height: 7.5rem;
+
+    img {
+        max-width: 10rem;
+        max-height: 7.5rem;
+    }
+}

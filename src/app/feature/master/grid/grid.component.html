@@ -1,0 +1,173 @@
+<div class="vams-grid-filters d-flex">
+    <app-toggle-button (onToggle)="onToggle($event)"></app-toggle-button>
+    <div class="input-group search-group">
+        <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+            class="form-control form-control-sm" />
+        <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+            (click)="cleanSearchBox(input)">
+            <i class="icon-cros-icon"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+            <i class="icon-search-icon"></i>
+        </button>
+    </div>
+</div>
+<div class="vams-table-wrapper vams-table-responsive">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="mat-table-hover">
+        <ng-container *ngFor="let colName of gridColumn; let i = index" [matColumnDef]="gridColumn[i].key"
+            [stickyEnd]="isSticky(colName.key)">
+            <ng-container *ngIf="colName.value !== '' ; else noSort">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{ colName.value | translate }}
+                </th>
+            </ng-container>
+            <td mat-cell *matCellDef="let element">
+                <div class="d-inline-block"
+                    *ngIf="(type == 'company' || type == 'contractor_company') &&showListColumn.includes(gridColumn[i].key )">
+                    <!-- <button class="btn btn-mini btn-white" (click)="
+                            showList({
+                                rowData: element,
+                                event: $event,
+                                columnName: gridColumn[i].key
+                            })
+                            ">
+                        {{ "masterGrid.ShowList" | translate }}
+                    </button> -->
+                    <button class="btn btn-link btn-icon"
+                        (click)="showList({rowData: element, event: $event, columnName: gridColumn[i].key})">
+                        <i class="icon-show-list fs-5 text-primary"></i>
+                    </button>
+                </div>
+
+                <div class="d-inline-block" *ngIf="type == 'building'  && gridColumn[i].key == 'showCompanyList'">
+                    <!-- <button class="btn btn-mini btn-white" (click)="
+                                        showOfficeList({
+                                            rowData: element,
+                                            event: $event, 
+                                            columnName: gridColumn[i].key
+                                        })
+                                        ">
+                        {{ "masterGrid.ShowList" | translate }}
+                    </button> -->
+                    <button class="btn btn-link btn-icon"
+                        (click)="showOfficeList({rowData: element, event: $event, columnName: gridColumn[i].key})">
+                        <i class="icon-show-list fs-5 text-primary"></i>
+                    </button>
+                </div>
+
+                <div class="d-inline-block" *ngIf="type == 'building'  && gridColumn[i].key == 'showHospitalList'">
+                    <button class="btn btn-mini btn-white" (click)="
+                    showOfficeList({
+                        rowData: element,
+                        event: $event, 
+                        columnName: gridColumn[i].key
+                    })
+                    ">
+                        {{ "masterGrid.ShowList" | translate }}
+                    </button>
+                </div>
+                
+
+                <div class="d-inline-block" *ngIf="type == 'contractor_company'&& gridColumn[i].key == 'country'">
+                    <p class="form-control-plaintext d-flex align-items-center mb-0">
+                        <span>{{element?.country}}</span>
+                    </p>
+                </div>
+
+                <ng-container *ngIf="type == 'contractors' && gridColumn[i].key == 'printPass'">
+                    <ng-container *ngIf="element[gridColumn[i].key]; else createPass">
+                        <button class="btn btn-link btn-icon"
+                            (click)="contractorPassAction($event, element,'print_pass')">
+                            <mat-icon class="fs-5">print</mat-icon>
+                        </button>
+                    </ng-container>
+                    <ng-template #createPass>
+                        <!-- <button class="btn btn-mini btn-white"
+                            (click)="contractorPassAction($event, element,'create_pass')">{{ "masterGrid.create_pass"
+                            | translate }}</button> -->
+                        <button class="btn btn-link btn-icon"
+                            (click)="contractorPassAction($event, element,'create_pass')">
+                            <i class="icon-create-pass fs-5 text-primary"></i>
+                        </button>
+                    </ng-template>
+                </ng-container>
+
+                <div class="d-inline-flex align-items-center gap-2" *ngIf="gridColumn[i].key == 'action'">
+                    <ng-container *isPermissible="permissionKeyObj.MASTERVIEWEDIT">
+                        <button class="btn btn-link btn-icon" (click)="showAction('edit', $event, element, type)">
+                            <i class="icon-edit"></i>
+                        </button>
+                        <button class="btn btn-link btn-icon" (click)="showAction('delete', $event, element, type)">
+                            <i class="icon-delete"></i>
+                        </button>
+                    </ng-container>
+                </div>
+                <div class="mat-cell-sm d-inline-block"
+                    *ngIf="gridColumn[i].key != 'action' && gridColumn[i].key != 'mobile' && !showListColumn.includes(gridColumn[i].key ) && gridColumn[i].key != 'userName' && gridColumn[i].key != 'showCompanyList' && gridColumn[i].key != 'dateformat'&& gridColumn[i].key != 'timeformat' && gridColumn[i].key != 'timezone' && gridColumn[i].key != 'country' && gridColumn[i].key != 'contactIsd' && gridColumn[i].key != 'showHospitalList' && gridColumn[i].key != 'printPass'">
+                    {{ element[gridColumn[i].key] ? element[gridColumn[i].key] : "-" }}
+                </div>
+
+
+                <div class="d-inline-block" *ngIf="type == 'location' && gridColumn[i].key == 'contactIsd'">
+                    <p class="form-control-plaintext d-flex align-items-center mb-0">
+                        <span>{{element.address?.contactIsd}}</span>
+                    </p>
+                </div>
+
+                <div class="d-inline-block" *ngIf="type == 'location'&& gridColumn[i].key == 'country'">
+                    <p class="form-control-plaintext d-flex align-items-center mb-0">
+                        <span>{{element.address?.country}}</span>
+                    </p>
+                </div>
+                <div class="d-inline-block" *ngIf="type == 'location'&& gridColumn[i].key == 'dateformat'">
+                    <p class="form-control-plaintext d-flex align-items-center mb-0">
+                        <span>{{element.accountConfig?.dateFormat}}</span>
+                    </p>
+                </div>
+
+                <div class="d-inline-block" *ngIf="type == 'location'&& gridColumn[i].key == 'timeformat'">
+                    <p class="form-control-plaintext d-flex align-items-center mb-0">
+                        <span>{{element.accountConfig?.timeFormat}}</span>
+                    </p>
+                </div>
+                <div class="d-inline-block" *ngIf="type == 'location'&& gridColumn[i].key == 'timezone'">
+                    <p class="form-control-plaintext d-flex align-items-center mb-0">
+                        <span>{{element.accountConfig?.timezone}}</span>
+                    </p>
+                </div>
+
+                <div class="d-inline-block" *ngIf="gridColumn[i].key == 'mobile'">
+                    <p class="form-control-plaintext d-flex align-items-center mb-0"
+                        *ngIf="element[gridColumn[i].key] else cellNotAvailable">
+                        <span>+{{
+                            element?.isd +
+                            " " +
+                            formatCellNumber(element[gridColumn[i].key])
+                            }}</span>
+                    </p>
+                    <ng-template #cellNotAvailable>
+                        <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                    </ng-template>
+                </div>
+                <div *ngIf="isExcel">
+                    <div class="d-inline-block" *ngIf="gridColumn[i].key == 'userName'">
+                        <p class="form-control-plaintext d-flex align-items-center mb-0"
+                            *ngIf="element[gridColumn[i].key]  else usernameNotAvailable">
+                            <span>{{ element?.userName}}</span>
+                        </p>
+                        <ng-template #usernameNotAvailable>
+                            <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                        </ng-template>
+                    </div>
+                </div>
+            </td>
+            <ng-template #noSort>
+                <th mat-header-cell *matHeaderCellDef>{{ colName.value | translate}}</th>
+            </ng-template>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns" (click)="getRowData(row, type)"></tr>
+    </table>
+</div>
+<mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalData"
+    (page)="getPaginationData($event)" aria-label="Select page of users"></mat-paginator>

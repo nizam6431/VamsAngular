@@ -1,0 +1,33 @@
+.custom-file-input {
+  width: 8rem;
+  height: 1.75rem;
+  vertical-align: middle;
+  color: transparent;
+
+  &::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+
+  &::before {
+    content: "Choose File";
+    color: $primary-dark;
+    display: block;
+    background: $white;
+    border: 1px solid $primary-dark;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  &:active {
+    outline: 0;
+
+    &::before {
+      background: darken($white, 5%);
+    }
+  }
+}

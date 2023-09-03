@@ -1,0 +1,21 @@
+<div class="dialog-content d-grid gap-4">
+    <div class="dialog-body d-grid gap-4">
+        <!-- TODO need to handle string wrt language 
+      <div class="img-wrapper text-center">
+        <img src="assets/images/delete-icon.png" alt="Delete" width="48px" />
+      </div> -->
+        <p class="text-center fw-bold mb-0">{{"syncronized.appointmentData" |translate}}</p>
+        <div class="d-grid gap-2">
+            <p class="mb-0">{{"syncronized.sucessfull" |translate}} <b>{{data?.type?.successCount}}</b>
+                <!-- User is already logged in with different machine, would you like to log out? -->
+            </p>
+            <p class="mb-0">{{"syncronized.unsucessfull" |translate}}<b>{{data?.type?.unScuccessCount}} </b></p>
+        </div>
+    </div>
+    <div class="d-grid gap-1">
+        <p class="mb-0">{{"syncronized.log" |translate}}</p>
+    </div>
+    <div class="dialog-actions gap-3">
+        <button class="btn btn-sm btn-white px-3" (click)="close(false)">{{"syncronized.ok" |translate}}</button>
+    </div>
+</div>

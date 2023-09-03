@@ -1,0 +1,93 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                <ng-container *ngIf="type == 'IN' else out">{{"ContractorPass.DialogTitle.check_in" | translate }}
+                </ng-container>
+                <ng-template #out>{{"ContractorPass.DialogTitle.check_out" | translate }}</ng-template>
+            </span>
+        </div>
+    </div>
+
+    <div class="popup-content">
+        <div class="popup-form">
+            <ng-container *ngIf="currentSlide == 1">
+                <div class="card card-scanner card-body p-2 border-primary overflow-hidden mb-2">
+                    <zxing-scanner #scanner (scanSuccess)="scanSuccessHandler($event)">
+                    </zxing-scanner>
+                </div>
+                <div class="text-center my-3">
+                    {{"labels.OR" | translate }}
+                </div>
+                <div class="p-2">
+                    <input type="number" (keyup.enter)="scanSuccessHandler(qrcode.value)" maxlength="100" id="feCompany"
+                        #qrcode [(ngModel)]="qrCode" placeholder="{{ 'placeholders.enter_qr_code' | translate }}"
+                        class="form-control text-capitalize" />
+                </div>
+            </ng-container>
+            <ng-container *ngIf="currentSlide == 2">
+                <div class="row">
+                    <label for="employeeFirstName" class="col-md-4 col-form-label">
+                        {{"ContractorPass.popup.Name"|translate}}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">{{getContractorDetailsByQrCodeRes.firstName+"
+                            "+getContractorDetailsByQrCodeRes.lastName}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="employeeFirstName" class="col-md-4 col-form-label">
+                        {{"ContractorPass.popup.email"|translate}}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">{{getContractorDetailsByQrCodeRes.email}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="employeeFirstName" class="col-md-4 col-form-label">
+                        {{"ContractorPass.popup.phone"|translate}}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">{{getContractorDetailsByQrCodeRes.phone}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="employeeFirstName" class="col-md-4 col-form-label">
+                        {{"ContractorPass.popup.appointmentDate"|translate}}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">
+                            {{getContractorDetailsByQrCodeRes.appointmentDate}}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="employeeFirstName" class="col-md-4 col-form-label">
+                        {{"ContractorPass.popup.startTime"|translate}}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">{{getContractorDetailsByQrCodeRes.startTime}}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="employeeFirstName" class="col-md-4 col-form-label">
+                        {{"ContractorPass.popup.endTime"|translate}}
+                    </label>
+                    <div class="col-md-8">
+                        <p class="form-control-plaintext text-break mb-0">{{getContractorDetailsByQrCodeRes.endTime}}
+                        </p>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <footer class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 2">
+        <button class="btn btn-sm btn-white px-3" (click)="currentSlide = currentSlide-1">{{ "buttons.Back" |
+            translate}}</button>
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="checkInOut()">
+            <ng-container *ngIf="type == 'IN' else out">{{"ContractorPass.DialogTitle.check_in" | translate }}
+            </ng-container>
+            <ng-template #out>{{"ContractorPass.DialogTitle.check_out" | translate }}</ng-template>
+        </button>
+    </footer>

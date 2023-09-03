@@ -1,0 +1,33 @@
+<div class="vams-page-body d-flex flex-column flex-1 p-0 scroll-y">
+    <ng-container [ngSwitch]="type">
+        <app-hardware-setting *ngSwitchCase="'hardware_setting'"></app-hardware-setting>
+        <app-employee-setting *ngSwitchCase="'employee_setting'" [employeeData]="updateEmployeeData" [action]="action">
+        </app-employee-setting>
+        <app-appointment-setting *ngSwitchCase="'appoinement_setting'" [appointmentData]="appointmentData"
+            [actionAppointment]="actionAppointment">
+        </app-appointment-setting>
+        <app-notification-setting *ngSwitchCase="'notification_setting'" [notificationData]="notificationData"
+            [notifcationAction]="notifcationAction">
+        </app-notification-setting>
+        <app-general-setting *ngSwitchCase="'general_setting'" [updateGeneralSetting]="updateGeneralSetting">
+        </app-general-setting>
+        <app-provider-master *ngSwitchCase="'provider_master'"></app-provider-master>
+        <app-visitor-setting *ngSwitchCase="'visitor_setting'" [updateVisitorSetting]="updateVisitorSetting"
+            [action]="action" (invalid)="showInvalid($event)"></app-visitor-setting>
+        <footer class="vams-page-footer d-flex align-items-center gap-3 bg-floral-white">
+            <!-- <button *ngIf="type == 'provider_master'" class="btn btn-sm btn-primary-dark px-3"
+                (click)="openDialog('provider_master')">
+                Add New Provider
+            </button> -->
+            <!-- add new provider remove as per robin and nilesh -->
+            <button *ngIf="type != 'provider_master'" class="btn btn-sm btn-primary-dark px-3"
+                (click)="updateButton('update')" [disabled]="invalidEmail">
+                {{"CommonToken.Update" | translate}}
+            </button>
+            <button class="btn btn-sm btn-white px-3" (click)="updateButton('reset')"
+                *ngIf="type !='general_setting' && type !='provider_master' ">
+                {{"CommonToken.Reset"| translate}}
+            </button>
+        </footer>
+    </ng-container>
+</div>

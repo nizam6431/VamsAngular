@@ -1,0 +1,61 @@
+<!-- TODO: Question for visitors should be configurable -->
+<div class="d-flex flex-column flex-1 scroll-y">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+    <div class="popup-header">
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <div>
+                <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative"
+                    *ngIf="unblockVisitorData.isRestricted && unblockVisitorData.isRestricted == 'No' ;else elseSpan">
+                    {{ "restricted_Visitor.block_Visitors_Title" | translate }}
+                </span>
+                <ng-template #elseSpan>
+                    <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                        {{ "restricted_Visitor.unblock_Visitors_Title" | translate }}
+                    </span>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="reasonForm" novalidate autocomplete="off">
+        <!-- <h6 class="popup-subtitle fs-sm fw-bold mb-4">
+            {{ "Schedule.VisitorDetails" | translate }}
+        </h6> -->
+        <div class="popup-content">
+            <div class="row mb-3">
+                <label for="feRemark" class="col-md-3 col-form-label">
+                    {{ "restricted_Visitor.remark" | translate }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-9">
+                    <textarea class="form-control text-capitalize" maxlength="250" formControlName="remark" rows="3"
+                        placeholder="{{ 'restricted_Visitor.remark_Placeholder' | translate }}"
+                        (change)="changeReason($event)"></textarea>
+                    <ng-container *ngIf="reasonForm.controls['remark'].touched || reasonForm.controls['remark'].dirty">
+                        <mat-error
+                            *ngIf="reasonForm.controls['remark'].errors && reasonForm.controls['remark'].errors.whitespace">
+                            {{ "restricted_Visitor.remark_Error_Message" | translate }}
+                        </mat-error>
+                        <mat-error
+                            *ngIf="reasonForm.controls['remark'].errors && reasonForm.controls['remark'].errors.pattern">
+                            {{ "restricted_Visitor.remark_Error_Pattern_Message" | translate }}
+                        </mat-error>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3">
+            <button (click)="onSubmit()" class="btn btn-sm btn-primary-dark px-3"
+                *ngIf="unblockVisitorData.isRestricted && unblockVisitorData.isRestricted == 'No' ; else elseBtn">
+                {{ "restricted_Visitor.button_Label_block" | translate }}
+            </button>
+            <ng-template #elseBtn>
+                <button (click)="onSubmit()" class="btn btn-sm btn-primary-dark px-3">
+                    {{ "restricted_Visitor.button_Label_Yes" | translate }}
+                </button>
+            </ng-template>
+            <button (click)="cancel()" type="button" class="btn btn-sm btn-white px-3">
+                {{ "restricted_Visitor.button_Label_No" | translate }}
+            </button>
+        </div>
+    </form>
+</div>

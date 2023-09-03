@@ -1,0 +1,103 @@
+<div class="vams-grid-filters d-flex align-items-start gap-3" *ngIf="SeepzWorkFlow">
+    <!-- <form class="popup-form" novalidate [formGroup]="filterFormMain"> -->
+    <div class="d-grid gap-12">
+        <div class="col-md-8">
+            <mat-select disableOptionCentering placeholder="{{'placeholders.select_type' | translate}}" [(ngModel)]="selectedReport"
+                 class="form-control status-select-controls" name="status" (selectionChange)="onReportTypeSelect($event)">
+                <mat-option class="mat-option-with-close" *ngFor="let status of reportTypes" [value]="status">
+                    {{status.viewValues}}
+                </mat-option>
+            </mat-select>
+        </div>
+        <button class="btn btn-link fs-sm text-start border-0 text-decoration-none" (click)="applyFilter()" *ngIf="walkinVisitorReport != 'VisitorReport'">
+            <i class="icon-filter"></i>
+            <span class="ms-2 fw-semi-bold" *ngIf="!filterApplied">{{'report_common.apply_filter' |translate}}</span>
+            <span class="ms-2 fw-semi-bold" *ngIf="filterApplied">{{'report_common.applied_filter' |translate}}</span>
+        </button>
+
+        <button class="btn btn-link fs-sm text-start border-0 text-decoration-none" (click)="applyFilterVisitorReport()" *ngIf="walkinVisitorReport == 'VisitorReport'">
+            <i class="icon-filter"></i>
+            <span class="ms-2 fw-semi-bold" *ngIf="!filterApplied">{{'report_common.apply_filter' |translate}}</span>
+            <span class="ms-2 fw-semi-bold" *ngIf="filterApplied">{{'report_common.applied_filter' |translate}}</span>
+        </button>
+    </div>
+    <!-- </form> -->
+    <div class="d-flex bg-floral-white p-2 gap-3 rounded-4">
+        <div class="d-grid">
+            <label class="form-label fs-sm">{{'report_common.format'|translate|titlecase}}</label>
+            <mat-select disableOptionCentering placeholder="{{'placeholders.select_excel_type' | translate}}"
+                class="form-control status-select-control" name="status" [(ngModel)]="selectedFiletype">
+                <mat-option class="mat-option-with-close" (click)="onFileFormatSelect(status)"
+                    *ngFor="let status of filetype |keyvalue" [value]="status.value">
+                    <span class="me-2">{{ 'report_type.'+status.value| translate |titlecase }}</span>
+                </mat-option>
+            </mat-select>
+        </div>
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="exportFile(selectedReport)"
+            [disabled]="!isExcel">{{'report_common.export' | translate}}</button>
+    </div>
+</div>
+<div class="vams-grid-filters d-flex align-items-center gap-3 pb-4 mt-4 bg-bright-gray shadow-bottom-inset"
+    *ngIf="selectedReport != 'first_password'">
+    <div class="d-flex align-items-center gap-3">
+        <p class="fs-sm fw-bold mb-0" *ngIf="advanceFilter && advanceFilter.timeRange">
+            {{"reportFilterView."+advanceFilter.timeRange | translate}}
+        </p>
+    </div>
+    <div class="d-flex justify-content-center align-items-center flex-1 visitor-stats">
+        <p class="visitor-stats-item d-flex justify-content-center align-items-center flex-1 gap-3 fs-sm border-start border-2 border-secondary mb-0"
+            *ngFor="let details of visitorReportDetails">
+            <span class="fw-medium">{{details.show}}</span>
+            <strong>{{details.value}}</strong>
+        </p>
+    </div>
+</div>
+<ng-container *ngIf="SeepzWorkFlow">
+    <div class="vams-table-wrapper vams-table-responsive" >
+        <table mat-table [dataSource]="dataSource" class="mat-table-hover">
+            <ng-container *ngFor="let colName of columns; let i = index" [matColumnDef]="columns[i].key">
+                <th mat-header-cell *matHeaderCellDef> {{colName.value |translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="columns[i].key != 'cellNumber' && columns[i].key != 'visitorPhone' && columns[i].key != 'hostPhone'">
+                        <ng-container *ngIf=" element[colName.key] else otherContent">
+                            <p class="mb-0">
+                                {{element[colName.key]}}
+                            </p>
+                        </ng-container>
+                        <ng-template #otherContent class="text-center">
+                            <p class="text-center mb-0">-</p>
+                        </ng-template>
+                    </ng-container>
+                    <ng-container *ngIf="columns[i].key == 'cellNumber'">
+                        <span>+{{ element?.isdCode + " " + formatCellNumber(element['cellNumber']) }}</span>
+                        <ng-template #otherContent>-</ng-template>
+                      </ng-container>
+
+                      <div class="d-inline-block" *ngIf="columns[i].key == 'visitorPhone'">
+                        <p class="form-control-plaintext d-flex align-items-center mb-0"
+                            *ngIf="element[columns[i].key] else cellNotAvailable">
+                            <span>+{{element?.visitorIsd +" " + formatCellNumber(element[columns[i].key])}}</span>
+                        </p>
+                        <ng-template #cellNotAvailable>
+                            <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                        </ng-template>
+                    </div>
+
+                      <div class="d-inline-block" *ngIf="columns[i].key == 'hostPhone'">
+                        <p class="form-control-plaintext d-flex align-items-center mb-0"
+                            *ngIf="element[columns[i].key] else cellNotAvailable">
+                            <span>+{{element?.hostIsd +" " + formatCellNumber(element[columns[i].key])}}</span>
+                        </p>
+                        <ng-template #cellNotAvailable>
+                            <p class="form-control-plaintext d-flex align-items-center mb-0">-</p>
+                        </ng-template>
+                    </div>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnKeys; sticky: true" (click)="getRowData(row)"></tr>
+        </table>
+    </div>
+</ng-container>
+<mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalRecords"
+    (page)="getPaginationData($event)" aria-label="Select page of users"></mat-paginator>

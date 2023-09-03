@@ -1,0 +1,72 @@
+<div class="vams-grid-filters d-flex align-items-start gap-3">
+    <form novalidate [formGroup]="formGeneralLedger" novalidate autocomplete="off" class="popup-form">
+     <div class="row">
+        <div class="row col-md-4"  *ngIf="roleName != 'Level3Admin'">
+                <label for="tenantList" class="col-md-5 col-form-label">{{'general_ledger.select_Unit_Name' |translate}}
+                    <span class="mendatory" style="margin-left: -2px;">*</span></label>
+                <div class="col-md-7">
+                    <ng-container>
+                        <input type="text" #tenantInput (input)="getValue(tenantInput.value)" 
+                            placeholder="{{ 'general_ledger.select_Unit_Name' | translate }}" formControlName="tenantName"
+                            aria-label="Number" matInput [matAutocomplete]="auto" class="form-control">
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                            <mat-option *ngFor="let tenant of tenantList" [value]="tenant" class="fs-sm"
+                            (onSelectionChange)="getTenantId($event)">
+                                {{tenant.name}} | {{tenant.shortName}} | {{tenant.buildingName}} | {{tenant.officeNumber}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngFor="let message of showValidationMessages('tenantName')">
+                            {{ message }}
+                        </mat-error>
+                        <mat-error *ngIf="isUserInput">
+                            {{'general_ledger.validInput' | translate}}
+                        </mat-error>
+                     </ng-container>              
+                </div>
+        </div>
+        <div class="row col-md-3" >
+            <label class="col-md-4 form-label" style="margin-top: 6px;">{{'general_ledger.fromDate' | translate}}</label>
+            <div class="col-md-8" style="margin-left: -1rem;">
+                <div class="input-group input-datepicker">
+                    <input  [min]="lastYear" [max]="nextOneYear"  type="text" #input (dateChange)="nextOneYearCalculate($event)"
+                        placeholder="{{'general_ledger.fromDate' | translate}}"
+                        class="form-control" theme="dp-material" [matDatepicker]="picker1"
+                        name="fromDate" formControlName="fromDate" readonly>
+                    <div class="datepicker-toggle">
+                    <mat-datepicker-toggle [for]="picker1"></mat-datepicker-toggle>
+                    </div>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </div>
+            </div>
+        </div>
+        <div class="row col-md-3" >
+            <label class="col-md-4 form-label" style="margin-top: 6px;">{{'general_ledger.ToDate' | translate}}</label>
+            <div class="col-md-8" style="margin-left: -2.5rem;">
+                <div class="input-group input-datepicker">
+                    <input [max]="nextOneYear" [min]="lastYear"  type="text" #input (dateChange)="lastYearCalculate()"
+                        placeholder="{{'general_ledger.ToDate' | translate}}"
+                        class="form-control" theme="dp-material" [matDatepicker]="picker"
+                        name="toDate" formControlName="toDate" readonly >
+                    <div class="datepicker-toggle">
+                    <mat-datepicker-toggle [for]="picker" (click)="lastYearCalculate()"></mat-datepicker-toggle>
+                    </div>
+                    <mat-datepicker #picker></mat-datepicker>
+                </div>
+            </div>
+        </div>
+        <div class="btnStyle row col-md-1" style="margin-left: -1rem;">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="getAllLedgerReport()">
+                {{ "report_common.apply_filter" | translate }}</button>
+        </div>
+        <div class="btnStyle row col-md-1" style="margin-left: 1rem;">
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="exportFile()">
+                {{ "report_common.export" | translate }}</button>
+        </div>
+     </div>
+    </form>
+</div>
+
+    <app-seepz-general-ledger-grid [dataSource]="dataSource" [columns]="columns"
+        (modeEmmiter)="changeMode($event)" (onDataChange)="paginate($event)"  [totalCount]="totalCount"
+        [pageSizeCount]="pageSize"></app-seepz-general-ledger-grid>
+

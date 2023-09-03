@@ -1,0 +1,346 @@
+<div class="bottom-floating-box">
+    <div class="bottom-floating-right">
+        <ul>
+            <li>
+                <!-- <a *ngIf="hasPermission('schedule')" href="javascript:void(0)" (click)="scheduleAppointment()" class="bottom-floating-schedule-btn"><img src="assets/images/plus-icon.png"></a> -->
+            </li>
+            <!-- <li>
+                <a href="javascript:void(0)" class="bottom-floating-contact"><img src="assets/images/contact.png"></a>
+            </li> -->
+            <li>
+                <!-- <a href="javascript:void(0)" *ngIf="hasPermission('createWalkIn')" (click)="showWalkin(walkinAppointment)" class="bottom-floating-contact"><img src="assets/images/walkin.png"></a> -->
+            </li>
+        </ul>
+    </div>
+    <div class="bottom-floating-left">
+        <ul>
+            <li>
+                <a href="javascript:void(0)" class="bottom-floating-location-btn"><img src="assets/images/edit-location.png"></a>
+                <!-- <select class="bottom-floating-left-select" [(ngModel)]="locationId" *ngIf="locations.length>1">
+                    <option *ngFor="let location of locations" value="{{location.LocationId}}">
+                        {{location.LocationName}}</option>
+                </select> -->
+                <!-- <input type="text" disabled readonly [value]="locations[0].LocationName" *ngIf="locations.length == 1" class="bottom-floating-left-input" name="" placeholder="{{locations[0].LocationName}}"> -->
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- <div class="onscroll-header" *ngIf="showScrollableHeader" style="position: fixed;z-index: 12;">
+    <div class="onscroll-header-date">{{ selectedDate | date: dateFormat }}</div>
+    <div class="onscroll-header-notification"><i class="far fa-bell"></i><span class="notification-dot"></span></div>
+</div> -->
+<!-- <div class="top-float-calendar">
+    <div class="mobilemenu-section-static">
+        <div class="header-date">
+            <i class="far fa-calendar-alt"></i> {{ selectedDate | date: dateFormat }}
+        </div>
+    </div>
+</div> -->
+<!-- <br><br><br> -->
+
+<!-- Added navigation bar from component -->
+<!-- <app-header></app-header> -->
+
+
+<!-- <div class="walkin-web" *ngIf="hasPermission('createWalkIn')">
+    <div class="walkin-web-box" *ngIf="isShowWalkin">
+        <img src="assets/images/redbox.png">
+        <app-walkin [locationId]="locationId" (walkinActionCompleted)="appointmentScheduled($event)"></app-walkin>
+        <img src="assets/images/redbox.png">
+    </div>
+    <a href="javascript:void(0)" *ngIf="hasPermission('createWalkIn')" (click)="toggleWalkin()"><img
+            src="assets/images/walkin-web.png" class="walkin-img"></a>
+</div>
+<a href="javascript:void(0)" [routerLink]="['../appointment/prescheduled']"
+    *ngIf="hasPermission('PrescheduleScanQRCode')" class="pre-schedule-button"><span>pre schedule </span></a>
+<header> -->
+<!-- <div class="container-fluid p-0">
+        <div class="mobilemenu-section">
+            <li>
+                <a href="javascript:void(0)" #mobileMenuBtn (click)="isShowMobileMenu = !isShowMobileMenu" class="burger-menu-icon"><i class="fas fa-bars"></i></a>
+            </li>
+            <li>
+                <app-dashboard-filters (sendStatus)="statusChanged($event)"
+                    (sendSearchTexts)="searchTextEnterKey($event)"></app-dashboard-filters>
+            </li> -->
+<!-- <li><a href="javascript:void(0)" class="notification-icon"><i class="far fa-bell"></i></a></li> -->
+<!-- <li *ngIf="hasPermission('sos')">
+                <a href="javascript:void(0)" class="sos-menu-icon"><img src="assets/images/sos-mobile.png"></a>
+            </li> -->
+<!-- <div class="header-date" theme="dp-material" [dpDayPicker]="datePickerConfig"
+                (onSelect)="selectDate($event)">
+                {{ selectedDate | date: dateFormat }}
+                <div class="date-switch-btn" (click)="allCheckBoxClick($event)">
+                    <div class="alltext">{{'Dashboard.All' | translate}}</div>
+                    <label class="switch-date">
+                        <input type="checkbox" [(ngModel)]="isAllChecked">
+                        <span class="slider-date round-date"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-boxes">
+            <li class="box1">
+                <div class="header-logo"><img [src]="logoUrl"></div>
+            </li>
+            <li class="box2">
+                <ul>
+                    <li>
+                        <div class="left-menu">
+                            <a [routerLink]="['../dashboard']">{{'Dashboard.Dashboard' | translate}}</a> -->
+<!-- <a href="javascript:void(0)">{{'Dashboard.Reports_And_Analytics' | translate}}<i
+                                    class="fas fa-chevron-down filter-arrow"></i></a> -->
+<!-- </div>
+                    <li>
+                    <li>
+                        <a *ngIf="hasPermission('schedule')" href="javascript:void(0)" (click)="scheduleAppointment()"
+                            class="primary-button"><i class="fas fa-plus"></i>
+                            {{'Dashboard.Schedule' | translate}}</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="box3">
+                <div class="share-form" *ngIf="hasPermission('share')"><a
+                        [routerLink]="['../appointment/shareappointment']">{{'Dashboard.Share_Appointment_Form' |
+                        translate}}</a></div>
+            </li>
+            <li class="box4">
+                <ul>
+                    <li>
+                        <ul class="headericon">
+                            <li #profilebutton (click)="isShowProfileMenu = !isShowProfileMenu">
+                                <a class="user-name">{{userShortName}}</a>
+                            </li> -->
+<!-- <li #settingbutton (click)="isShowSettingMenu=!isShowSettingMenu"> <a
+                                    href="javascript:void(0)"><i class="fas fa-cog"></i></a></li> -->
+<!-- <li><a href="javascript:void(0)"><i class="far fa-question-circle"></i></a></li> -->
+<!-- <li><a href="javascript:void(0)"><i class="far fa-bell"></i></a></li> -->
+<!-- <div class="profile-menu" #profileMenu *ngIf="isShowProfileMenu">
+                                <div class="text-center">
+                                    <div class="qrcode-profile"><img src="assets/images/qrcode.png"></div>
+                                    <div class="your-pass">Your Pass</div>
+                                    <hr>
+                                </div>
+                                <div class="menu-list" *ngIf="hasPermission('updateProfile')">
+                                    <picture>
+                                        <source srcset="assets/images/profile-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="{{!isDarkTheme ? 'assets/images/profile-default.png' : 'assets/images/profile-dark.png'}}">
+                                    </picture>
+                                    <a [routerLink]="['../user/updateprofile']">Profile</a>
+                                </div> -->
+<!-- <div class="menu-list">
+                                    <picture>
+                                        <source srcset="images/star-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/star-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)">Manage Favourites</a>
+                                </div> -->
+<!-- <div class="menu-list" *ngIf="hasPermission('ReAuthenticateVisitor')">
+                                    <picture>
+                                        <source srcset="assets/images/re-authenticate.png" media="(prefers-color-scheme: dark)">
+                                        <img src="{{!isDarkTheme ? 'assets/images/re-authenticate.png' : 'assets/images/white-images/re-authenticate-white.png'}}">
+                                    </picture>
+                                    <a href="javascript:void(0)" style="width: 89%;"
+                                        [routerLink]="['../appointment/re-authenticate']">Re-authenticate</a>
+                                </div>
+                                <div class="menu-list" *ngIf="hasPermission('locationhsqqr')">
+                                    <picture>
+                                        <source srcset="images/re-authenticate.png" media="(prefers-color-scheme: dark)">
+                                        <img src="{{!isDarkTheme ? 'assets/images/hsq-icon.png' : 'assets/images/white-images/hsq-icon-white.png'}}">
+                                    </picture>
+                                    <a href="javascript:void(0)" style="width: 89%;"
+                                        [routerLink]="['../wizard/hsq-qrcode']">Generate HSQ QR</a>
+                                </div>
+                                <div class="menu-list" (click)="openChangeLanguage(changelanguage)">
+                                    <picture>
+                                        <source srcset="assets/images/change-language-dark.png"
+                                            media="(prefers-color-scheme: dark)">
+                                        <img src="{{!isDarkTheme ? 'assets/images/change-language-default.png' : 'assets/images/white-images/change-language-default-white.png'}}">
+                                    </picture>
+                                    <a href="javascript:void(0)">Change Language</a>
+                                </div>
+                                <div class="menu-list">
+                                    <picture>
+                                        <source srcset="assets/images/password-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="{{!isDarkTheme ? 'assets/images/password-default.png' : 'assets/images/password-dark.png'}}">
+                                    </picture>
+                                    <a [routerLink]="['../user/change-password']">Change Password</a>
+                                </div>
+                                <div class="menu-list">
+                                    <picture>
+                                        <source srcset="assets/images/theme-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="{{!isDarkTheme ? 'assets/images/theme-default.png' : 'assets/images/white-images/theme-default-white.png'}}">
+                                    </picture>
+                                    <a href="javascript:void(0)">Dark Theme</a>
+                                    <div class="menu-list-switch">
+                                        <label class="switch">
+                                            <input type="checkbox" [(ngModel)]="isDarkTheme"
+                                                (change)="themeChange($event)">
+                                            <span class="slider round" checked=""></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div style="clear: both;"></div>
+                                <hr> -->
+<!-- <div class="menu-list">
+                                    <picture>
+                                        <source srcset="images/selected-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/selected-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)">Viraat Authentication System</a>
+                                </div> -->
+<!-- <div class="menu-list">
+                                    <picture>
+                                        <source srcset="images/uncheck-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/uncheck-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)">Singh Estate</a>
+                                </div> -->
+<!-- <div class="menu-list">
+                                    <picture>
+                                        <source srcset="images/location-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/location-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)">Add Premises
+                                        <div class="fontsmall">Scan another QR code & setup a new premise.</div>
+                                    </a>
+                                </div> -->
+<!-- <div style="clear: both;"></div>
+                                <hr>
+                                <div class="menu-list">
+                                    <picture>
+                                        <source srcset="assets/images/logout-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="{{!isDarkTheme ? 'assets/images/logout-default.png' : 'assets/images/logout-dark.png'}}">
+                                    </picture>
+                                    <a (click)="logout()" href="javascript:void(0)">Sign Out</a>
+                                </div>
+                            </div> -->
+
+<!-- Menu Setting start -->
+<!-- <div class="setting-menu" #settingMenu *ngIf="isShowSettingMenu">
+                                <div class="setting-list">
+                                    <picture>
+                                        <source srcset="images/company-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/company-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)" [routerLink]="['../wizard/company']">Company</a>
+                                </div>
+                                <div class="setting-list">
+                                    <picture>
+                                        <source srcset="images/location-setting-dark.png"
+                                            media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/location-setting-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)">Location</a>
+                                    <div class="setting-up-down-arrow"><a href="javascript:void(0)"><i
+                                                class="fas fa-chevron-up"></i></a>
+                                    </div>
+                                    <div class="location-listing-area">
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Address</a>
+                                        </div>
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Default Settings</a>
+                                        </div>
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Purpose Of Visit</a>
+                                        </div>
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Business Hours</a>
+                                        </div>
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Other Settings</a>
+                                        </div>
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Health Screening
+                                                Questionnaire</a>
+                                        </div>
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Setup Device</a>
+                                        </div>
+                                        <div class="location-listing">
+                                            <a href="javascript:void(0)">Holiday Calendar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="setting-list">
+                                    <picture>
+                                        <source srcset="images/groups-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/groups-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)">Groups & Permissions</a>
+                                </div>
+                                <div class="setting-list">
+                                    <picture>
+                                        <source srcset="images/billing-dark.png" media="(prefers-color-scheme: dark)">
+                                        <img src="assets/images/billing-default.png">
+                                    </picture>
+                                    <a href="javascript:void(0)">Billing</a>
+                                </div>
+                            </div> -->
+<!-- Menu Setting start -->
+<!-- </ul>
+                    </li> -->
+<!-- <li *ngIf="hasPermission('sos')">
+                        <div class="sos-button"><img src="assets/images/sos.png"></div>
+                    </li> -->
+<!-- <li>
+                        <div class="status-select-button">
+                            <div class="flag">
+                                <div class="top-links">
+                                    <ul class="main-wrapper" (mouseenter)="menuMouseAction($event, true)"
+                                        (mouseleave)="menuMouseAction($event, false)">
+                                        <li class="dropheader">
+                                            <a href="javascript:void(0)" class="headerinner flagtitle"><img class=""
+                                                    src="assets/images/checkin-icon.png"><span>{{locationName}}</span>
+                                                <i class="fa fa-chevron-down countryarrow" aria-hidden="true"></i></a>
+                                            <ul class="optionlist" #mainwrapper>
+                                                <li *ngFor="let location of locations"
+                                                    (click)="locationChange($event, location.LocationId, mainwrapper)"
+                                                    attr.data-value="{{location.LocationId}}">
+                                                    <a href="javascript:void(0)">{{location.LocationName}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="dark-light-switch">
+                            <label class="switch">
+                                <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="themeChange($event)">
+                                <span class="slider round" checked=""></span>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </div>
+    </div> -->
+<!-- </header> -->
+<app-header></app-header>
+<app-sidebar></app-sidebar>
+
+
+<div class="main-content">
+    <!-- <app-dashboard-content #dashboardContent [selectedDate]="selectedDate" [isAllChecked]="isAllChecked"
+    [searchTexts]="searchTexts" [status]="status" [locationId]="locationId">
+</app-dashboard-content> -->
+    <!-- <app-footer></app-footer> -->
+    <router-outlet></router-outlet>
+    <!-- <ng-template #scheduleappointment>
+        <app-shedule-modal (appointmentScheduled)="appointmentScheduled($event)"></app-shedule-modal>
+    </ng-template>
+    <ng-template #walkinAppointment>
+        <app-walkin [locationId]="locationId" [IsPopup]="true" (walkinActionCompleted)="appointmentScheduled($event)">
+        </app-walkin>
+     </ng-template> -->
+
+    <ng-template #changelanguage>
+        <app-change-language></app-change-language>
+    </ng-template> 
+</div>
+<app-footer></app-footer>

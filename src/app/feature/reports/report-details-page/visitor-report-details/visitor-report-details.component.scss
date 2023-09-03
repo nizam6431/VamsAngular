@@ -1,0 +1,11 @@
+@import "src/assets/stylesheets/core";
+:host {
+    @extend .host;
+}
+
+.picture{
+    img{
+      object-fit: cover;
+      max-height: 78px;
+    }
+} 

@@ -1,0 +1,30 @@
+<div class="dialog-content d-grid dialg-popup-content" [ngClass]="hidden ? 'dialog-Pdf-content' : 'dialog-Pdf-content2' ">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100 view-popup-close"
+        style="position: fixed;"></button>
+    <div class="email-banner p-1 border rounded-4 pdf-hide-image">
+        
+            <pdf-viewer *ngIf="docUrls" [src]="docUrls" [render-text]="true" [original-size]="false"
+                class="view-document-pdf" style="width: 390px; height: 490px">
+            </pdf-viewer>
+        
+        <span class="view-document-image">
+            <img id="blobImg" class="img-fluid" alt="Document" />
+        </span>
+    </div>
+
+</div>
+
+
+<!--<div class="dialog-content d-grid dialg-popup-content">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100 view-popup-close"
+        style="position: fixed;"></button>
+    <div class="email-banner p-1 border rounded-4 pdf-hide-image">
+        <pdf-viewer *ngIf="docUrls" [src]="docUrls" [render-text]="true" [original-size]="false"
+            class="view-document-pdf" style="width: 390px; height: 500px">
+        </pdf-viewer>
+        <span class="view-document-image">
+            <img id="blobImg" class="img-fluid" alt="Document" />
+        </span>
+    </div>
+
+</div>-->

@@ -1,0 +1,75 @@
+/*.up{
+    padding-top: 20px;
+}*/
+
+.complex-spacing{
+	padding: 20px 50px;
+	display: inline-block;
+	width: 100%;
+}
+
+.complex{
+	width: 100%;
+	float: left;
+	padding-bottom: var(--input-label-common-space);
+}
+.complex-set1{
+	width: 30%;
+	float:left;
+}
+.complex-set1 label{
+	color: var(--label-color);
+	font-size: var(--label-font-size);
+	font-weight: var(--label-color);
+	padding-top:var(--input-padding-top);
+}
+
+.complex-set2{
+	width: 52%;
+	float:left;
+	position: relative;	
+}
+.complex-set2 input{
+	border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;    
+}
+.complex-set2 select{
+	border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;
+}
+
+.complex-set3{
+	width: 100%;
+	float:left;
+}
+
+
+
+.mat-select-panel{
+	position: absolute;
+	left: 6px !important;
+    top: 40px !important;
+	max-width:100% !important;
+	box-shadow: var(--input-box-style) !important;
+}
+
+/* .select-box{
+	position: relative;
+}
+
+.select-box mat-select .mat-select-panel{
+	position: absolute;
+	left: 30px !important;
+    top: 40px !important;
+	max-width:100% !important;
+} */

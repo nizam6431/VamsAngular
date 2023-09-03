@@ -1,0 +1,93 @@
+<!-- Show Provider -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'show'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'show' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "cotract_configure_fields.showTitle" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" novalidate>
+        <div class="popup-content">
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'cotract_configure_fields.config_name' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(contractorConfigRow?.configFieldName)}}</p>
+                </div>
+            </div>
+            <!-- <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'cotract_configure_fields.config_value' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(contractorConfigRow?.configValue)}}</p>
+                </div>
+            </div> -->
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="formData.mode ='edit'" [disabled]="false">
+            {{ "CommonToken.Edit" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>
+
+<!-- Add/Edit email -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'edit' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "cotract_configure_fields.editTitle" | translate }}</span>
+            <span *ngIf="formData.mode == 'add' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "cotract_configure_fields.addTitle" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="contractorConfigForm" novalidate>
+        <div class="popup-content d-flex flex-column">
+            <div class="row  mb-3">
+                <label for="feFirstName" class="col-md-3 col-form-label">
+                    {{ "cotract_configure_fields.config_name" | translate }} <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" maxlength="100"
+                        placeholder="{{ 'cotract_configure_fields.config_name_placeholder' | translate }}"
+                        formControlName="configFieldName" />
+                    <mat-error *ngFor="let message of showValidationMessages('configFieldName')">
+                        {{ message | titlecase}}
+                    </mat-error>
+                </div>
+            </div>
+            <!-- <div class="row  mb-3">
+                <label for="feFirstName" class="col-md-3 col-form-label">
+                    {{ "cotract_configure_fields.config_value" | translate }} <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" maxlength="150"
+                        placeholder="{{ 'cotract_configure_fields.config_value_placeholder' | translate }}"
+                        formControlName="configValue" />
+                    <mat-error *ngFor="let message of showValidationMessages('configValue')">
+                        {{ message | titlecase}}
+                    </mat-error>
+                </div>
+            </div> -->
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData.mode =='edit'"
+            (click)="updateContractorConfig()" [disabled]="contractorConfigForm.invalid">
+            {{ "CommonToken.Update" | translate }}
+        </button>
+        <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData.mode =='add'" (click)="addContractorConfig()"
+            [disabled]="contractorConfigForm.invalid">
+            {{ "CommonToken.Save" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>

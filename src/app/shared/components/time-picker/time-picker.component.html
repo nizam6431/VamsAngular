@@ -1,0 +1,15 @@
+    <!-- <div class="ngx-timepicker-field-example">
+        <label for="feStartDateandTime" class="col-md-3 col-form-label">{{startLabel | translate}}<span
+                class="mendatory">*</span></label>
+        <ngx-timepicker-field [(ngModel)]="startTimePickerValue" [defaultTime]="startTimeValue" name="start" #startTime 
+        (timeChanged)="timechange()" 
+            [format]="timeFormat"> </ngx-timepicker-field>
+        <label for="feStartDateandTime" class="col-md-3 col-form-label">{{endLabel | translate}}<span
+                class="mendatory">*</span></label>
+        <ngx-timepicker-field [(ngModel)]="endTimePickerValue" name="end" #endTime [format]="timeFormat">
+        </ngx-timepicker-field>
+    </div> -->
+    <ng-container [formGroup]="timePickerForm">
+        <ngx-timepicker-field [defaultTime]="defaultTime" (timeChanged)="timechange()"  formControlName="time" name="end" #endTime [format]="format"  [controlOnly]="true" [disabled]="isDisabled">
+        </ngx-timepicker-field>  
+    </ng-container>

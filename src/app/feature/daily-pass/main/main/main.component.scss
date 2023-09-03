@@ -1,0 +1,8 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+.ml-1 {
+  margin-left:1em
+}

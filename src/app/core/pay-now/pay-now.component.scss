@@ -1,0 +1,17 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.picture-lgs{
+  width: 7.5rem;
+  height: 7.5rem;
+}
+.uploadPhoto{
+  margin-top: 1px;
+  margin-bottom: 11px;
+}

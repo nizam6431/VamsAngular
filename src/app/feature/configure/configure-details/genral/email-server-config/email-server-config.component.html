@@ -1,0 +1,16 @@
+<div class="vams-grid-filters d-flex gap-3">
+    <div class="status-select-control-wrap bg-linen d-flex align-items-center">
+    </div>
+    <div class="input-group search-group">
+      <input (keyup)="applyFilter(serchKeyValue.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #serchKeyValue class="form-control form-control-sm" />
+      <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+        (click)="cleanSearchBox(serchKeyValue)">
+        <i class="icon-cros-icon"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter_(serchKeyValue.value)">
+        <i class="icon-search-icon"></i>
+      </button>
+    </div>
+</div>
+<app-configure-grid [dataSource]="dataSource" [columns]="columns" (rowData)="rowData($event)" (modeEmmiter)="changeMode($event)" (onDataChange)="emailDataChange($event)" [totalCount]="totalCount" [pageSizeCount]="pageSize" ></app-configure-grid>
+

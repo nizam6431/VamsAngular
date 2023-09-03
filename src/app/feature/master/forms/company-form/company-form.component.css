@@ -1,0 +1,166 @@
+/*Chetan 25 November 2021*/
+.createCompany-add-company{
+	padding: 20px 50px;
+	display: inline-block;
+	width: 100%;
+}
+.createCompany-button-space{
+  padding: 0px 50px 0px 78px;
+  display: inline-block;
+  width: 100%;
+}
+
+
+.createCompany-officelocationbg{
+	background: var(--opoup-createCompany-officelocationBg-color);
+	padding: 20px 0px 20px 78px;
+  margin-bottom: 30px;
+}
+.createCompany{
+	width: 100%;
+	float: left;
+	padding-bottom: var(--input-label-common-space);
+}
+.createCompany-set1{
+	width: 30%;
+	float:left;
+}
+.createCompany-set1 label{
+	color: var(--label-color);
+	font-size: var(--label-font-size);
+	font-weight: var(--label-color);
+	padding-top:var(--input-padding-top);
+}
+
+.createCompany-set2{
+	width: 70%;
+	float:left;
+	position: relative;	
+}
+:host ::ng-deep .createCompany-set2 input{
+	border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;    
+}
+:host ::ng-deep .createCompany-set2 select{
+	border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;
+}
+
+
+
+.divider-line{
+  border-top: solid 1px #E5E5E5;
+  padding-top: 30px;
+}
+
+.createCompany-label{
+    width: 30%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--label-font-size) !important;
+    color: var(--label-color) !important;   
+}
+.createCompany-value{
+    width: 70%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--input-view-text-size) !important;
+    color: var(--input-view-color) !important;
+    font-weight:var(--input-font-weight);
+}
+:host ::ng-deep  iti {
+	display: block !important;
+	margin-bottom: 20px;
+}
+
+:host ::ng-deep  .iti .dropdown-menu.country-dropdown {
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-color: #c7cace;
+	margin-top: -1px;
+}
+
+:host ::ng-deep .iti .iti__country-list {
+	box-shadow: none;
+	font-size: 14px;
+	margin-left: 0;
+	width: 244px;
+	max-height: 170px;
+}
+
+:host ::ng-deep .iti__flag-container.open + input {
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+:host ::ng-deep .iti .search-container input {
+	font-size: 14px;
+	border-color: #c7cace;
+	border-radius: 0;
+	padding: 5px 10px;
+}
+
+:host ::ng-deep .iti .search-container input:focus {
+	outline: none;
+}
+
+@media screen and (max-width: 479px) {
+	.iti .iti__country-list {
+		width: 88.3vw;
+	}
+}
+
+:host ::ng-deep ngx-intl-tel-input input {
+	height: 44px;
+	margin-bottom: 20px;
+	padding: 10px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #c7cace;
+	border-radius: 4px;
+	font-size: 18px;
+}
+
+:host ::ng-deep ngx-intl-tel-input.ng-invalid.ng-touched input {
+	border: 1px solid #c0392b;
+}
+
+:host ::ng-deep ngx-intl-tel-input input:hover {
+	box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.24);
+}
+
+:host ::ng-deep ngx-intl-tel-input input:focus {
+	outline: none !important;
+	border-color: #3498db;
+	box-shadow: 0 0 0 0 #000;
+}
+
+:host ::ng-deep ngx-intl-tel-input input::-webkit-input-placeholder {
+	color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input:-ms-input-placeholder {
+	color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input::-ms-input-placeholder {
+	color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input::placeholder {
+	color: #bac2c7;
+}
+
+:host ::ng-deep ngx-intl-tel-input input[disabled] {
+	background-color: #e5eaf1;
+}

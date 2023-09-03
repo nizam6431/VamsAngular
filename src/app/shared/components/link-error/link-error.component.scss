@@ -1,0 +1,7 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+  height: 100vh;
+  background: $floral-white;
+}

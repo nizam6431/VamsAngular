@@ -1,0 +1,71 @@
+<div class="app-details-wrapper d-flex flex-column vh-100 scroll-y">
+  <div class="app-details d-flex flex-column position-relative mx-auto">
+    <header class="page-header bg-white p-4 text-center w-100">
+      <img [src]="logoUrl" alt="Vams-Logo" height="56px" />
+    </header>
+    <section class="page-main-content w-100 flex-1">
+      <div class="page-banner">
+        <img class="w-100" [src]="bannerImage" alt="team" />
+      </div>
+      <div *ngIf="apntDetails" class="page-content w-100">
+        <div class="qr-code mx-auto text-center p-3 position-relative">
+          <img [src]="apntDetails.qrCodeUrl" width="100%" alt="Qr code" />
+        </div>
+        <h3 class="content-heading fw-bold text-center p-4">
+          {{ apntDetails.firstName + " " + apntDetails.lastName }}
+        </h3>
+        <div class="customer-meeting p-4">
+          <div class="py-2 page-title fw-bold">
+            {{ "appointment_details.scheduled_appointment" | translate }}
+          </div>
+          <div class="row">
+            <div class="col customer-details" *ngIf="isShow(apntDetails)">
+              <p class="m-0">{{ "appointment_details.with" | translate }}</p>
+              <ng-container *ngIf="apntDetails.hostFirstName!=null || apntDetails.hostLastName!=null">
+                <div class="customer-name fw-bold text-truncate">
+                  <!-- {{ apntDetails.hostFirstName + " " + apntDetails.hostLastName }} -->
+                  <span>
+                    <span *ngIf="apntDetails.hostFirstName"> {{apntDetails.hostFirstName}}</span>
+                    <span *ngIf="apntDetails.hostLastName"> {{" " +apntDetails.hostLastName}}</span>
+                  </span>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="apntDetails.hostFirstName==null && apntDetails.hostLastName== null">
+                <div class="customer-name fw-bold text-truncate" *ngIf="apntDetails.hostCompany">
+                  {{apntDetails.hostCompany}}</div>
+              </ng-container>
+            </div>
+            <div class="col ps-3">
+              <p class="m-0">{{ apntDetails.date }}</p>
+              <p class="m-0">
+                {{ apntDetails.startTime + " to " + apntDetails.endTime }} ({{apntDetails.shortTimeZone}})
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+        <!-- <div class="py-3 px-2 fw-semi-bold text-center">
+          <a [href]="apntDetails?.mapLink"
+            target=”_blank”>{{ "appointment_details.mapLink" | translate }}</a>
+        </div>  -->
+      <div class="py-3 px-2 fw-semi-bold text-center">
+        {{ "appointment_details.pp_tc" | translate }} <a  target="_blank"  href="auth/show-policy/privacy-policy">{{
+          "appointment_details.pp" | translate }}</a> & <a target="_blank" href="auth/show-policy/terms-condition"
+          class="primary-button mt-20">{{ "appointment_details.tc"
+          | translate }} </a>
+      </div>
+    </section>
+
+    <footer class="page-footer w-100 p-3">
+      <div class="row">
+        <div class="col">
+          <img [src]="partnerImage" height="18" alt="partenr-logo" />
+        </div>
+        <div class="col text-end">
+          <img [src]="poweredByImage" height="18" alt="powerd by vams" />
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

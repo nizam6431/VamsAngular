@@ -1,0 +1,541 @@
+<pdf-viewer [src]="printPassDocu"
+              [render-text]="true"
+              [original-size]="false" (after-load-complete)="onLoaded($event)"
+              style="width:100%; height:300px;position:absolute;top:-100000000px;left:-100000000px;" id="printThis"
+  ></pdf-viewer>
+<!--TODO: Grid Search if require uncomment it.-->
+<!-- <div class="input-group search-group">
+  <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+    class="form-control form-control-sm" />
+  <button class="btn btn-mini btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+    (click)="cleanSearchBox(input)">
+    <i class="icon-cros-icon"></i>
+  </button>
+  <button class="btn btn-mini btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+    <i class="icon-search-icon"></i>
+  </button>
+</div> -->
+
+<div class="vams-table-wrapper vams-table-responsive">
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="mat-table-hover">
+    <ng-container *ngFor="let colName of displayedColumns; let i = index" [matColumnDef]="displayedColumns[i].key"
+      [stickyEnd]="isSticky(colName.key)">
+      <ng-container *ngIf="displayedColumns[i].sortRequired else noSort">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <span>{{ colName.value | translate}}</span>
+        </th>
+      </ng-container>
+      <td mat-cell *matCellDef="let appointment; let j = index" class="cursor-pointer">
+        <ng-container *ngIf="!this.anchorTagColumn.includes(displayedColumns[i].key)">
+          <!-- <span class="mat-cell-sm" *ngIf="displayedColumns[i].key == 'hostFirstName'">
+            <span *ngIf="appointment.type != appointmentStatus.walkin">{{
+              appointment["hostFirstName"] +
+              " " +
+              appointment["hostLastName"]
+              }}</span>
+            <span *ngIf="appointment.type == appointmentStatus.walkin">-</span>
+          </span> -->
+          <span class="mat-cell-sm" *ngIf="displayedColumns[i].key == 'visitorFirstName'">
+            {{
+            appointment["visitorFirstName"] +
+            " " +
+            appointment["visitorLastName"]
+            }}
+          </span>
+          <span class="mat-cell-sm" *ngIf="displayedColumns[i].key == 'hostFirstName'">
+            <ng-container *ngIf="appointment['hostFirstName'] != null ">
+            {{
+            appointment["hostFirstName"] +
+            " " +
+            appointment["hostLastName"]
+            }}
+            </ng-container>
+          </span>
+          <span *ngIf="!this.specialColumn.includes(displayedColumns[i].key)">{{ appointment[displayedColumns[i].key]
+            }}</span>
+        </ng-container>
+        <div class="d-flex align-items-center gap-2" *ngIf="displayedColumns[i].key === 'action'">
+          <ng-container *ngIf="appointment.type == 'WALKIN' 
+          && appointment.status == 'AWAITINGAPPROVAL' 
+          && appointment.employeeId == loginUserId 
+          && productType == ProductType.Enterprise">
+            <button class="btn btn-mini btn-outline-primary" (click)="cancel(appointment, $event)" *ngIf="appointment.status == 'AWAITINGAPPROVAL' && appointment.type == 'WALKIN'">
+              {{'cardView.Reject' | translate}}
+            </button>
+            <button
+              class="btn btn-mini btn-outline-primary" (click)="approveWalkingAppointment(appointment, $event)"> 
+              {{'cardView.approve_walking' |translate}}
+            </button>
+          </ng-container>
+          <ng-container *isPermissible="permissionKeyObj.CREATEWALKIN || permissionKeyObj.CHECKIN">
+            <ng-container *ngIf="productType == ProductType.Commercial && appointment.type == 'WALKIN' && stringToDate(appointment.date, visitorSettings.dateFormat, '-')">
+              <i class="icon-print fs-5 text-success cursor-pointer" (click)="printVisitorInfo(appointment.id,$event)" *ngIf="appointment.status == appointmentStatus.inprogress && visitorSettings.isPrintPass == true"></i>
+              <i class="icon-print fs-5 text-success cursor-pointer" (click)="printVisitorInfo(appointment.id,$event)" *ngIf="appointment.status == appointmentStatus.scheduled && visitorSettings.walkinWithBioAuth == true && visitorSettings.isPrintPass == true"></i>
+            </ng-container>
+            <ng-container *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')">
+              <i class="icon-print fs-5 text-success cursor-pointer" (click)="printVisitorInfo(appointment.id,$event)" *ngIf="appointment.status == appointmentStatus.inprogress && visitorSettings.isPrintPass == true"></i>
+            </ng-container>
+          </ng-container>
+          <div class="d-flex align-items-center gap-2" *ngIf="
+            (l1SecurityGuard || l1SecurityHead || l2SecurityGuard || l2SecurityHead )&&
+            appointment.status == appointmentStatus.inprogress
+          ">
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="appointment.type == 'WALKIN'">
+              {{ appointment.hostCompany }}
+            </p> -->
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="
+          appointment.type == appointmentStatus.scheduled &&
+          !(appointment.employeeId == loginUserId)hostFirstName
+        ">
+              <ng-container
+                *ngIf="appointment && appointment?.hostFirstName && appointment?.hostLastName else showCompany">
+                {{
+                appointment.hostFirstName + " " + appointment.hostLastName }}</ng-container>
+              <ng-template #showCompany>{{ appointment.hostCompany }}</ng-template>
+            </p> -->
+            <ng-container *ngIf="!isSignleCheckOutAllowd">
+              <button *isPermissible="permissionKeyObj.CHECKOUT" class="btn btn-mini btn-outline-primary"
+                (click)="checkOut(appointment,$event)">
+                {{'cardView.CheckOut' | translate}}
+              </button>
+            </ng-container>
+          </div>
+
+          <ng-container *isPermissible="permissionKeyObj.SCHEDULE">
+            <div class="d-flex align-items-center gap-2" *ngIf="
+        (l1SecurityGuard || l1SecurityHead || l2SecurityGuard || l2SecurityHead )&&
+        appointment.type === appointmentStatus.scheduled &&
+        appointment.status == appointmentStatus.scheduled &&
+        appointment.employeeId == loginUserId
+      ">
+              <button class="btn btn-mini btn-outline-primary" (click)="reschedule(appointment,$event)">
+                {{'cardView.Reschedule' | translate}} 
+              </button>
+              <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+                <ng-container *ngIf="getStatus(appointment)">
+                  <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                    <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                    <!-- {{'cardView.DLScan' | translate}}  -->
+                  </button>
+                  <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    {{'cardView.CheckIn' |translate}}
+                  </button>
+                </ng-container>
+              </ng-container>
+              <button class="btn btn-mini btn-outline-primary" (click)="cancel(appointment,$event)">
+                {{'cardView.Cancel' | translate}}
+              </button>
+            </div>
+          </ng-container>
+
+          <!-- TODO need new permission to show hostcompany-->
+          <div class="d-flex align-items-center gap-2" *ngIf="
+        (l1SecurityGuard || l1SecurityHead || l2SecurityGuard || l2SecurityHead )&&
+        appointment.status == appointmentStatus.scheduled &&
+        appointment.employeeId != loginUserId
+      ">
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0"
+              *ngIf="appointment.type == 'WALKIN' && !(appointment.employeeId == loginUserId)">
+              {{ appointment.hostCompany }}
+            </p> -->
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0"
+              *ngIf="appointment.type == appointmentStatus.scheduled && !(appointment.employeeId == loginUserId)">
+              <ng-container
+                *ngIf="appointment && appointment?.hostFirstName && appointment?.hostLastName else showCompany">
+                {{
+                appointment.hostFirstName + " " + appointment.hostLastName }}</ng-container>
+              <ng-template #showCompany>{{ appointment.hostCompany }}</ng-template>
+            </p> -->
+            <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+              <ng-container *ngIf="getStatus(appointment)">
+                <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                  <!-- {{'cardView.DLScan' |translate}} -->
+                  <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                  <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                 </button>
+                 <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                  {{'cardView.CheckIn' |translate}}
+                 </button>
+              </ng-container>
+            </ng-container>
+          </div>
+          <!--  This section is for l2Reception -->
+          <div class="d-flex align-items-center gap-2" *ngIf="isReception">
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0"
+              *ngIf="appointment.type == 'WALKIN' && !(appointment.employeeId == loginUserId)">
+              {{ appointment.hostCompany }}
+            </p> -->
+            <ng-container *ngIf="appointment.status == 'APPROVED' && appointment.type == 'WALKIN'">
+              <div class="d-flex flex-1 justify-content-end">
+              <button
+                class="btn btn-mini btn-outline-primary" (click)="approveCheckIn(appointment, $event)"> 
+                {{'cardView.approve_chekin' |translate}}
+              </button>
+            </div>
+            </ng-container>
+            <ng-container *ngIf="
+        appointment.type == appointmentStatus.scheduled &&
+        appointment.status == appointmentStatus.scheduled &&
+        !(appointment.employeeId == loginUserId) 
+
+      ">
+              <!-- <p class="fs-xs fw-medium text-truncate mb-0">
+                {{ appointment.hostFirstName + " " + appointment.hostLastName }}
+              </p> -->
+              <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+                <ng-container *ngIf="getStatus(appointment)">
+                  <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    <!-- {{'cardView.DLScan'| translate}}ll  -->
+                    <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                  </button>
+                  <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    {{'cardView.CheckIn' |translate}}
+                  </button>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="
+        (appointment.type === appointmentStatus.scheduled ||
+          appointment.type == appointmentStatus.walkin) &&
+        appointment.status == appointmentStatus.inprogress &&
+        appointment.employeeId != loginUserId
+      ">
+              <ng-container *ngIf="!isSignleCheckOutAllowd">
+                <button *isPermissible="permissionKeyObj.CHECKOUT" class="btn btn-mini btn-outline-primary"
+                  (click)="checkOut(appointment,$event)">
+                  {{'cardView.CheckOut' | translate}}
+                </button>
+              </ng-container>
+            </ng-container>
+            <div class="d-flex align-items-center gap-2" *ngIf="
+            appointment.type === appointmentStatus.scheduled &&
+            appointment.status == appointmentStatus.scheduled &&
+            appointment.employeeId == loginUserId
+            ">
+              <button *isPermissible="permissionKeyObj.SCHEDULE" class="btn btn-mini btn-outline-primary"
+                (click)="reschedule(appointment,$event)">
+                {{'cardView.Reschedule' | translate}} 
+              </button>
+              <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+                <ng-container *ngIf="getStatus(appointment)">
+                  <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    <!-- {{'cardView.DLScan' |translate}} -->
+                    <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                    <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                  </button>
+                  <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    {{'cardView.CheckIn' |translate}}
+                  </button>
+                </ng-container>
+              </ng-container>
+              <button class="btn btn-mini btn-outline-primary" (click)="cancel(appointment,$event)">
+                {{'cardView.Cancel' | translate}}
+              </button>
+              <!-- TODO: UNCOMMENT FOR CHECKIN-->
+              <!-- <button *isPermissible="permissionKeyObj.CHECKIN" class="btn btn-mini btn-outline-primary d-none"
+                (click)="checkIn(appointment)"> {{'cardView.CheckIn' | translate}}</button> -->
+            </div>
+            <ng-container *ngIf="
+        appointment.type === appointmentStatus.scheduled &&
+        appointment.status == appointmentStatus.inprogress &&
+        appointment.employeeId == loginUserId
+      ">
+              <ng-container *ngIf="!isSignleCheckOutAllowd">
+                <button *isPermissible="permissionKeyObj.CHECKOUT" class="btn btn-mini btn-outline-primary"
+                  (click)="checkOut(appointment,$event)">
+                  {{'cardView.CheckOut' | translate}}
+                </button>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="
+        appointment.type === appointmentStatus.walkin &&
+        appointment.status == appointmentStatus.inprogress &&
+        appointment.employeeId == loginUserId
+      ">
+              <ng-container *ngIf="!isSignleCheckOutAllowd">
+                <button *isPermissible="permissionKeyObj.CHECKOUT" class="btn btn-mini btn-outline-primary"
+                  (click)="checkOut(appointment,$event)">
+                  {{'cardView.CheckOut' | translate}}
+                </button>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <!--  This section is for FrontDesk l3 Here checkin should be time in and timeout-->
+          <div class="d-flex align-items-center gap-2" *ngIf="isl3frontDesk">
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0"
+              *ngIf="appointment.type == 'WALKIN' && !(appointment.employeeId == loginUserId)">
+              {{ appointment.hostCompany }}
+            </p> -->
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="
+                    appointment.type == appointmentStatus.scheduled &&
+                    !(appointment.employeeId == loginUserId)
+                  ">
+              {{ appointment.hostFirstName + " " + appointment.hostLastName }}
+            </p> -->
+            <!-- <ng-container *ngIf="
+        (appointment.type === appointmentStatus.scheduled ||
+          appointment.type === appointmentStatus.walkin) &&
+        appointment.status == appointmentStatus.inprogress
+      ">
+              <button *isPermissible="permissionKeyObj.TIMEINOUT" class="btn btn-mini btn-outline-primary"
+                (click)="timeInTimeOut(appointment, 'in')">
+                {{'cardView.TimeOut' | translate}}
+              </button>
+            </ng-container> -->
+            <div class="d-flex align-items-center gap-2" *ngIf="
+    appointment.type === appointmentStatus.scheduled &&
+    appointment.status == appointmentStatus.scheduled &&
+    appointment.employeeId == loginUserId
+    ">
+              <button *isPermissible="permissionKeyObj.SCHEDULE" class="btn btn-mini btn-outline-primary"
+                (click)="reschedule(appointment,$event)">
+                {{'cardView.Reschedule' | translate}} 
+              </button>
+              <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+                <ng-container *ngIf="appointment.isBypass == null">
+                  <ng-container *ngIf="getStatus(appointment)">
+                    <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                    class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                      <!-- {{'cardView.DLScan' | translate}} -->
+                      <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                      <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                     </button>
+                     <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                     class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                      {{'cardView.CheckIn' |translate}}
+                     </button>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+              <button *isPermissible="permissionKeyObj.SCHEDULE" class="btn btn-mini btn-outline-primary"
+                (click)="cancel(appointment,$event)">
+                {{'cardView.Cancel' | translate}}
+              </button>
+            </div>
+            <ng-container *ngIf="appointment?.isTimeIn">
+              <!-- *ngIf="
+              appointment.type === appointmentStatus.scheduled &&
+              (appointment.status == appointmentStatus.inprogress ||
+              appointment.status == appointmentStatus.inprogress) &&
+              appointment.employeeId == loginUserId
+              " -->
+              <!-- sprint 11 this is just hide for now start -->
+              <ng-container *isPermissible="permissionKeyObj.TIMEINOUT">
+                <button class="btn btn-mini btn-outline-primary" (click)="timeInTimeOut(appointment, 'in', $event)">
+                  {{'cardView.TimeIn' | translate}}
+                </button>
+              </ng-container>
+              <!-- sprint 11 this is just hide for now end -->
+            </ng-container>
+            <!-- <div class="d-flex align-items-center gap-2" *ngIf="
+        appointment.type === appointmentStatus.scheduled &&
+        appointment.status == appointmentStatus.inprogress &&
+        appointment.employeeId == loginUserId
+      "> -->
+            <!-- sprint 11 this is just hide for now start -->
+            <ng-container *ngIf="appointment?.isTimeOut">
+              <button *isPermissible="permissionKeyObj.TIMEINOUT" class="btn btn-mini btn-outline-primary"
+                (click)="timeInTimeOut(appointment, 'out', $event)">
+                {{'cardView.TimeOut' | translate}}
+              </button>
+            </ng-container>
+            <!-- sprint 11 this is just hide for now end -->
+          </div>
+
+          <!-- This section is for L1,L2 and L3 admins -->
+          <div class="d-flex align-items-center gap-2" *ngIf="
+        (isL1Admin || isL2Admin || isL3Admin) &&
+        appointment.employeeId == loginUserId &&
+        appointment.status == appointmentStatus.scheduled
+        ">
+            <!-- TODO: UNCOMMENT FOR CHECKIN -->
+            <!-- <button *isPermissible="permissionKeyObj.CHECKIN" class="btn btn-mini btn-outline-primary d-none"
+              (click)="checkIn(appointment)">
+              {{'cardView.CheckIn' | translate}}
+            </button> -->
+            <ng-container *isPermissible="permissionKeyObj.SCHEDULE">
+              <button class="btn btn-mini btn-outline-primary" (click)="reschedule(appointment,$event)">
+                {{'cardView.Reschedule' | translate}} 
+              </button>
+              <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+                <ng-container *ngIf="getStatus(appointment)">
+                  <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    <!-- {{'cardView.DLScan' |translate}}  -->
+                    <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                  </button>
+                  <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    {{'cardView.CheckIn' |translate}}
+                  </button>
+                </ng-container>
+              </ng-container>
+              <button class="btn btn-mini btn-outline-primary " (click)="cancel(appointment,$event)">
+                {{'cardView.Cancel' | translate}}
+              </button>
+            </ng-container>
+          </div>
+
+          <div class="d-flex align-items-center gap-2" *ngIf="
+        (isL1Admin || isL2Admin || isL3Admin) &&
+        appointment.employeeId != loginUserId &&
+        appointment.status == appointmentStatus.scheduled
+      ">
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="appointment.type == 'WALKIN'">
+              {{ appointment.hostCompany }}
+            </p> -->
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="
+      appointment.type == appointmentStatus.scheduled &&
+      !(appointment.employeeId == loginUserId)
+    ">
+              <ng-container
+                *ngIf="appointment && appointment?.hostFirstName && appointment?.hostLastName else showCompany">
+                {{
+                appointment.hostFirstName + " " + appointment.hostLastName }}</ng-container>
+              <ng-template #showCompany>{{ appointment.hostCompany }}</ng-template>
+            </p> -->
+            <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+              <ng-container *ngIf="getStatus(appointment)">
+                <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                  <!-- {{'cardView.DLScan' | translate}}  -->
+                  <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                  <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                </button>
+                <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                  {{'cardView.CheckIn' |translate}}
+                </button>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div class="d-flex align-items-center gap-2" *ngIf="
+      (isL1Admin || isL2Admin || isL3Admin) &&
+      appointment.employeeId != loginUserId &&
+      appointment.status == appointmentStatus.inprogress
+    ">
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="appointment.type == 'WALKIN'">
+              {{ appointment.hostCompany }}
+            </p> -->
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="
+        appointment.type == appointmentStatus.scheduled &&
+        !(appointment.employeeId == loginUserId)
+      ">
+              <ng-container
+                *ngIf="appointment && appointment?.hostFirstName && appointment?.hostLastName else showCompany">
+                {{
+                appointment.hostFirstName + " " + appointment.hostLastName }}</ng-container>
+              <ng-template #showCompany>{{ appointment.hostCompany }}</ng-template>
+            </p> -->
+            <ng-container *ngIf="appointment?.isTimeIn">
+              <button *isPermissible="permissionKeyObj.TIMEINOUT" class="btn btn-mini btn-outline-primary"
+                (click)="timeInTimeOut(appointment, 'in', $event)">
+                {{'cardView.TimeIn' | translate}}
+              </button>
+            </ng-container>
+            <ng-container *ngIf="appointment?.isTimeOut">
+              <button *isPermissible="permissionKeyObj.TIMEINOUT" class="btn btn-mini btn-outline-primary"
+                (click)="timeInTimeOut(appointment, 'out', $event)">
+                {{'cardView.TimeOut' | translate}}
+              </button>
+            </ng-container>
+          </div>
+
+          <div class="d-flex align-items-center gap-2" *ngIf="
+      (isL1Admin || isL2Admin || isL3Admin) &&
+      appointment.employeeId != loginUserId &&
+      appointment.status == appointmentStatus.walkin
+    ">
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="appointment.type == 'WALKIN'">
+              {{ appointment.hostCompany }}
+            </p> -->
+            <!-- <p class="fs-xs fw-medium text-truncate mb-0" *ngIf="
+        appointment.type == appointmentStatus.scheduled &&
+        !(appointment.employeeId == loginUserId)
+      ">
+              <ng-container
+                *ngIf="appointment && appointment?.hostFirstName && appointment?.hostLastName else showCompany">
+                {{
+                appointment.hostFirstName + " " + appointment.hostLastName }}</ng-container>
+              <ng-template #showCompany>{{ appointment.hostCompany }}</ng-template>
+            </p> -->
+            <ng-container *ngIf="appointment?.isTimeIn">
+              <button *isPermissible="permissionKeyObj.TIMEINOUT" class="btn btn-mini btn-outline-primary"
+                (click)="timeInTimeOut(appointment, 'in', $event)">
+                {{'cardView.TimeIn' | translate}}
+              </button>
+            </ng-container>
+            <ng-container *ngIf="appointment?.isTimeOut">
+              <button *isPermissible="permissionKeyObj.TIMEINOUT" class="btn btn-mini btn-outline-primary"
+                (click)="timeInTimeOut(appointment, 'out', $event)">
+                {{'cardView.TimeOut' | translate}}
+              </button>
+            </ng-container>
+          </div>
+          <!-- -->
+
+          <!-- TODO: checkout button not visible for l1admin verity. -->
+          <!-- <ng-container *ngIf="
+      (isL1Admin || isL2Admin || isL3Admin) &&
+      appointment.employeeId == loginUserId &&
+      appointment.status == appointmentStatus.inprogress
+    ">
+            <button *isPermissible="permissionKeyObj.CHECKOUT" class="btn btn-mini btn-outline-primary"
+              (click)="checkOut(appointment)">
+            </button>
+          </ng-container> -->
+          <!-- This section is for L1,L2 and L3 admins -->
+          <ng-container *isPermissible="permissionKeyObj.SCHEDULE">
+            <div class="d-flex align-items-center gap-2" *ngIf="isEmployee && 
+                                      appointment.status != appointmentStatus.inprogress &&
+                                      appointment.status != appointmentStatus.approved &&
+                                      appointment.status != appointmentStatus.awaitingapproval &&
+                                      appointment.employeeId == loginUserId">
+              <button class="btn btn-mini btn-outline-primary" (click)="reschedule(appointment,$event)">
+                {{'cardView.Reschedule' | translate}}
+              </button>
+              <ng-container *isPermissible="permissionKeyObj.CHECKIN">
+                <ng-container *ngIf="getStatus(appointment)">
+                  <button *ngIf="productType == ProductType.Commercial && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                  class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                    <!-- {{'cardView.DLScan' |translate}}  -->
+                    <ng-container *ngIf="activateDLScanScheduledAppointment && appointment.isBypass == null && (appointment.isHSQForIdProof && !appointment.isIdProofExists) ;else scanQrCode">{{'cardView.DLScan' |translate}}</ng-container>
+                    <ng-template #scanQrCode><ng-container *ngIf="(!isAccessControlEnabled && appointment.status == this.appointmentStatus.scheduled) || !activateDLScanScheduledAppointment">{{'cardView.scan_qr_code' |translate}}</ng-container></ng-template>
+                  </button>
+                  <button *ngIf="productType == ProductType.Enterprise && stringToDate(appointment.date, visitorSettings.dateFormat, '-')" 
+                class="btn btn-mini btn-outline-primary" (click)="drivingLicenceDialog(appointment,$event)">
+                  {{'cardView.CheckIn' |translate}}
+                </button>
+                </ng-container>
+              </ng-container>
+              <button class="btn btn-mini btn-outline-primary " (click)="cancel(appointment,$event)">
+                {{'cardView.Cancel' | translate}}
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </td>
+      <ng-template #noSort>
+        <th mat-header-cell *matHeaderCellDef>{{ colName.value }}</th>
+      </ng-template>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns; let k = index" (click)="getRowData(row, originalData[k])">
+    </tr>
+  </table>
+</div>
+<mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalData"
+  (page)="getPaginationData($event)" aria-label="Select page of users">
+</mat-paginator>

@@ -1,0 +1,41 @@
+.main-content {
+    padding-left: 120px;
+}
+
+
+
+.active {
+    background: #E9EEF2;
+    color: #000;
+    text-decoration: none;
+}
+
+
+.filter-tabs{
+    display: flex;
+    flex-direction: row;
+}
+.filter-tabs div{margin-right: 40px;}
+
+
+.filter-tabs .mat-raised-button{
+    font-size: 14px;
+    color: #666666;
+    box-shadow: none;
+    background:none;
+    border-radius: 0px;
+    height: 28px;
+    line-height: 28px;
+}
+
+.filter-tabs .mat-raised-button.active{
+    font-size: 14px;
+    color: #666666;
+    box-shadow: none;
+    background: none;
+    border-bottom: solid 2px #F78958;
+}
+
+.filter-tabs .mat-focus-indicator{
+    background: nonne !important;
+}

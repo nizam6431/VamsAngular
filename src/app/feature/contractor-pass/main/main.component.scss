@@ -1,0 +1,10 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+    @extend .host;
+
+    .vams-page-body {
+        height: calc(100% - 178px);
+        @extend .scroll-y;
+    }
+}

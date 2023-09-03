@@ -1,0 +1,36 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.vams-sidebar {
+  flex: 1;
+  position: relative;
+  width: 4.75rem;
+  padding-top: 4rem;
+  padding-bottom: 0.5rem;
+  box-shadow: 0 0 0.75rem rgba($color: $gray-20, $alpha: 0.2);
+  z-index: 3;
+  
+  .nav-item {
+    .nav-link {
+      font-size: 0.6rem;
+      i {
+        font-size: 1.2rem;
+        background-color: #fbf8f3;
+      }
+      span {
+        color: #666666;
+      }
+    }
+    .active {
+      i {
+        background-color: $primary;
+        color: white;
+        padding: 0.375rem 0.625rem;
+      }
+    }
+  }
+}

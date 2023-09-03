@@ -1,0 +1,20 @@
+<!-- <h1 mat-dialog-title>
+  <span *ngIf="formData.mode == 'show'">{{formData.formType + ' Details' |uppercase}}</span>
+  <span *ngIf="formData.mode == 'edit'">{{'Edit ' +formData.formType + ' Details' |uppercase}}</span>
+  <span *ngIf="formData.mode == 'add'">{{'Add ' +formData.formType + ' Details' |uppercase}}</span>
+</h1> -->
+<div mat-dialog-content>
+    <ng-container [ngSwitch]="formData.formType">
+        <app-department-form [formData]="formData" *ngSwitchCase="'department'"></app-department-form>
+        <app-employee-form [formData]="formData" *ngSwitchCase="'employee'"></app-employee-form>
+        <app-contractor-form [formData]="formData" *ngSwitchCase="'contractors'"></app-contractor-form>
+        <app-company-form [formData]="formData" *ngSwitchCase="'company'"></app-company-form>
+        <app-building-form [formData]="formData" *ngSwitchCase="'building'"></app-building-form>
+        <app-location-form [formData]="formData" *ngSwitchCase="'location'"></app-location-form>
+        <app-sub-location [formData]="formData" *ngSwitchCase="'subLocation'" [subLocationDetailsLevel2Id]="subLocationDetailsLevel2Id" [subLocationDetailsLevel3Id]="subLocationDetailsLevel3Id"></app-sub-location>
+        <app-bulk-upload *ngSwitchCase="'bulkUpload'"></app-bulk-upload>
+        <app-contractor-company-form [formData]="formData" *ngSwitchCase="'contractor_company'">
+        </app-contractor-company-form>
+        <app-bio-security-device-form [formData]="formData" *ngSwitchCase="'bio'"></app-bio-security-device-form>
+    </ng-container>
+</div>

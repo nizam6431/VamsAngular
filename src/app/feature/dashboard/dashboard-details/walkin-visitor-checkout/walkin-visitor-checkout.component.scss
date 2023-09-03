@@ -1,0 +1,11 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.textwrap{
+    white-space: normal;
+    width: 10rem;
+    word-wrap: break-word;
+  }

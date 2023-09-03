@@ -1,0 +1,35 @@
+export class GetVisitorSettingObj {
+    "isAuth": boolean;
+    "isByPass": boolean;
+    "isPrintPass": boolean;
+    "isWalkin": boolean;
+    "isSoftPass": boolean;
+    "isHostRequired": boolean;
+    "isCamera": boolean;
+    "isLivePhoto": boolean;
+    "isVisitorHSQ": boolean;
+    "timeZone": string;
+    "dateFormat": string;
+    "languageCode": string;
+    "timeformat": string;
+    "isMultiDay": boolean;
+    "maxMultiDays": number;
+    "level1Id": number;
+    "level2Id": number;
+    "allowWalkinApproval": boolean;
+    "showRegisterVisitorPhotoOnVisitorPass": boolean;
+    "showLivePhotoOnVisitorPass": boolean;
+    "earlyCheckinMins": number;
+    "lateCheckinMins": number;
+    "autoCheckout": boolean;
+    "autoCheckoutTime": string;
+    "noCheckOutVisitorAlert": boolean;
+    "noCheckOutVisitorAlertTime": any;
+    "noCheckoutVisitorAlertEmail": any;
+    "sendNDA": boolean;
+    "hsqAlertSendBeforeHours": any;
+    "visitorCheckinAtComplex": boolean;
+    "visitorCheckinAtBuilding": boolean;
+    "printRegisterPhotoIfNotLivePhoto": boolean;
+    "visitorAuthenticationType": any;
+}

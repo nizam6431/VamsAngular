@@ -1,0 +1,141 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.card-visitor-pass {
+  max-width: 32rem;
+}
+
+.profile-box {
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 0.5rem;
+}
+
+.qr-code-wrapper {
+  width: 8rem;
+  height: 8rem;
+}
+
+.profile-box, .qr-code-wrapper {
+
+  img {
+    object-fit: contain;
+  }
+}
+
+.visitors-pass-details {
+  border-radius: 0.5rem;
+}
+
+.dropdown-menu {
+  position               : absolute;
+  top                    : 100%;
+  left                   : 0;
+  z-index                : 1000;
+  display                : none;
+  float                  : left;
+  min-width              : 160px;
+  padding                : 5px 0;
+  margin                 : 2px 0 0;
+  font-size              : 14px;
+  text-align             : left;
+  list-style             : none;
+  background-color       : #fff;
+  -webkit-background-clip: padding-box;
+  background-clip        : padding-box;
+  border                 : 1px solid #ccc;
+  border                 : 1px solid rgba(0, 0, 0, .15);
+  border-radius          : 4px;
+  -webkit-box-shadow     : 0 6px 12px rgba(0, 0, 0, .175);
+  box-shadow             : 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+/* .walkin-web {
+  z-index: 31;
+} */
+
+.walkin-web-inner-box .cancelappointment {
+  font-size     : 16px;
+  font-weight   : bold;
+  padding-bottom: 20px;
+  text-align    : center;
+}
+
+::ng-deep .select2-container {
+  top: -4px;
+}
+::ng-deep .select2-results__option
+{
+cursor: pointer;
+}
+
+::ng-deep .select2-container--default .select2-selection--single {
+  border       : none;
+  border-bottom: 1px solid #aaa;
+  border-radius: 0px;
+}
+.input-style.unicode-phone-number{
+  unicode-bidi: isolate-override;
+}
+.w50 {
+  width: 40px;
+}
+
+
+/*      visitor pass css code   */
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.btn-wrapper {
+
+  .btn {
+    min-width: 11rem;
+  }
+}
+
+.slide2Photo {
+  position: fixed;
+  top: 0;
+  right: 70px;
+}
+.nonEditCl {
+  pointer-events: none;
+}
+.sendOtp {
+  margin:8px 0 0
+}
+.sendOtp span {
+  font-size: 14px;
+  color: #bbbbbb;
+}
+.sendOtp span.resendOtp {
+  margin:0 0 0 5px;
+  color: #eb5527;
+  cursor: pointer;
+}
+.otpError {
+  color: red;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+.autoErrow {
+  position: relative;
+}
+.autoErrow .mat-select-arrow-wrapper {
+  position:absolute;top:15px;right:20px;pointer-events:none;
+}
+.hostNameInput {
+  padding: 0.375rem 1.5rem 0.375rem 0.75rem;
+}
+

@@ -1,0 +1,12 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.btn-wrapper {
+
+  .btn {
+    min-width: 11rem;
+  }
+}

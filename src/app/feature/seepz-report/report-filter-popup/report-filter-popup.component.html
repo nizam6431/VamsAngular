@@ -1,0 +1,233 @@
+<div class="report-filter-popup d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{"report_common.filter"
+                | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" novalidate [formGroup]="filterForm">
+        <div class="popup-content d-flex flex-column flex-1 p-0 scroll-y">
+            <div class="d-grid px-5 py-4 gap-4">
+                <div class="vams-grid-filters d-flex gap-3 p-0">
+                    <div class="d-flex flex-1 align-items-center">
+                        <!-- <div class="d-flex align-items-center gap-4 me-auto" *ngIf="checkWalkin()">
+                            <mat-checkbox [disabled]="isNoShow || this.data.filters.noShow" formControlName="walkIn">
+                                {{'report_common.walk_in' | translate}}
+                            </mat-checkbox>
+                            <mat-checkbox [disabled]="isNoShow || this.data.filters.noShow" formControlName="scheduled">
+                                {{'report_common.Scheduled' | translate}}
+                            </mat-checkbox>
+                            <mat-error
+                                *ngIf="!this.filterForm.get('walkIn').value && !this.filterForm.get('scheduled').value && !this.filterForm.get('noShow').value">
+                                {{'report_common.SelectAtLeastOne' | translate}}
+                            </mat-error>
+                        </div> -->
+                        <!-- <mat-button-toggle-group
+                            class="vams-button-toggle-group vams-button-toggle-group-secondary ms-auto" name="fontStyle"
+                            formControlName="timeRange">
+                            <mat-button-toggle value="today">{{ "reportFilterView.today" | translate }}
+                            </mat-button-toggle>
+                            <mat-button-toggle value="this_month">{{ "reportFilterView.this_month" | translate }}
+                            </mat-button-toggle>
+                            <mat-button-toggle value="last_month">{{ "reportFilterView.last_month" | translate }}
+                            </mat-button-toggle>
+                        </mat-button-toggle-group> -->
+                        <!-- <div *ngIf="!openDateFilter">
+                            <button type="button" class="btn btn-sm btn-link btn-clean text-decoration-none ms-1"
+                                (click)="openDateRangeDialog($event)">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="openDateFilter">
+                            <div class="date-rang-filter d-flex align-items-center bg-floral-white px-3 py-2 border border-primary ms-3"
+                                *ngIf="this.filterForm.get('timeRange').value === 'custom'">
+                                <p class="fs-xs fw-medium mb-0">{{startDate}} - {{endDate}}</p>
+                                <button
+                                    class="btn btn-link d-flex align-items-center justify-content-center text-decoration-none ms-3 p-0"
+                                    (click)="onDateFilterClose()">
+                                    <i class="icon-cros-icon fs-xs"></i>
+                                </button>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row col-md-6" >
+                        <label class="col-md-4 form-label fw-semi-bold mb-0">{{'report_common.selectCategory' |translate}}</label>
+                        <div class="col-md-8">
+                            <mat-select  class="form-control" [(ngModel)]="selectedCategoryType" formControlName="categoryType"
+                            placeholder="Select Category Type" (selectionChange)="selectionChange($event)">
+                            <mat-option *ngFor="let item of categoryType" [value]="item">
+                                <p class="d-flex align-items-center mb-0">
+                                    <span class="me-auto">{{item.name}}</span>
+                                    <i *ngIf="selectedCategoryType == item" class="icon-cros-icon fs-xs ms-auto"
+                                    (click)="clearStatus($event)"></i>
+                                </p>
+                            </mat-option>
+                           </mat-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row col-md-6" >
+                        <label class="col-md-4 form-label fw-semi-bold mb-0">{{'report_common.check_in_date' | translate}}</label>
+                        <div class="col-md-8">
+                            <div class="input-group input-datepicker">
+                                <!-- [min]="minDate" [max]="maxDate" -->
+                                <input [min]="minDate" [max]="maxDate"  type="text" #input
+                                    placeholder="{{'report_common.check_in_date' | translate}}"
+                                    class="form-control" theme="dp-material" [matDatepicker]="picker1"
+                                    name="checkInDate" formControlName="checkInDate" readonly (dateChange)="checkOutDateChange()">
+                                <div class="datepicker-toggle"  >
+                                <mat-datepicker-toggle [for]="picker1"></mat-datepicker-toggle>
+                                </div>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </div>
+                            <mat-error *ngIf="filterForm.controls.checkInDate.value == null && filterForm.controls.checkOutDate.value!=null">
+                                Check-in Date Is Mandatory.
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row col-md-6" >
+                        <label class="col-md-4 form-label fw-semi-bold mb-0">{{'report_common.check_out_date' | translate}}</label>
+                        <div class="col-md-8">
+                            <div class="input-group input-datepicker">
+                                <!-- [min]="minDate" [max]="maxDate" -->
+                                <input [min]="todayDate" [max]="checkOutDate" type="text" #input
+                                    placeholder="{{'report_common.check_out_date' | translate}}"
+                                    class="form-control" theme="dp-material" [matDatepicker]="picker"
+                                    name="checkOutDate" formControlName="checkOutDate" readonly (dateChange)="checkInDateChange()" >
+                                <div class="datepicker-toggle">
+                                <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                                </div>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                            <mat-error *ngIf="dateNotValid &&(filterForm.controls.checkOutDate.value!=null && filterForm.controls.checkInDate.value != null)">
+                                CheckOut Date Must Be Greater Than CheckIn Date.
+                            </mat-error>
+                            <mat-error *ngIf="filterForm.controls.checkOutDate.value==null && filterForm.controls.checkInDate.value != null">
+                                Check-out Date Is Mandatory.
+                            </mat-error>
+                        </div>
+                    
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="row col-md-6" >
+                            <label class="col-md-4 form-label fw-semi-bold mb-0">{{'card_view_Detail.firstName' |translate}}</label>
+                            <div class="col-md-8">
+                                <input placeholder="{{'card_view_Detail.firstName' | translate}}" #input1
+                                    class="form-control form-control-sm" formControlName="firstName" maxlength="50"/>
+                                <!-- <button class="btn btn-sm btn-outline-light d-flex align-items-center">
+                                </button> -->
+                            </div>
+                    </div>
+                    <div class="row col-md-6" >
+                            <label class="col-md-4 form-label fw-semi-bold mb-0">{{'card_view_Detail.lastName' |translate}}</label>
+                            <div class="col-md-8">
+                                <input placeholder="{{'card_view_Detail.lastName' | translate}}" #input1
+                                    class="form-control form-control-sm" formControlName="lastName" maxlength="50" />
+                                <!-- <button class="btn btn-sm btn-outline-light d-flex align-items-center">
+                                </button> -->
+                            </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="row col-md-6" >
+                        <label class="col-md-4 form-label fw-semi-bold mb-0">{{'card_view_Detail.mobileNO' |translate}}</label>
+                        <div class="col-md-8">
+                            <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false"
+                            [enablePlaceholder]="true" [searchCountryFlag]="true"
+                            [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                            [separateDialCode]="separateDialCode" [maxLength]="'19'"
+                            [selectedCountryISO]="selectedCountry" [phoneValidation]="true" name="phone"
+                            formControlName="cellNumber" (countryChange)="checkNumber($event)"
+                            appMobileNumberFormat>
+                        </ngx-intl-tel-input>
+                        <mat-error *ngIf="filterForm.get('cellNumber').hasError('validatePhoneNumber')">
+                            {{'EmployeeForm.ValidCellNumber' | translate}}
+                        </mat-error>
+                        </div>
+                    </div>
+                    <div class="row col-md-6" *ngIf="valueType != 'personalPermanentPass' && valueType != 'DailyPass'" >
+                            <label class="col-md-4 form-label fw-semi-bold mb-0">{{'card_view_Detail.vehicleNumber' |translate}}</label>
+                            <div class="col-md-8">
+                                <input placeholder="{{'card_view_Detail.vehicleNumber' | translate}}" #input1
+                                    class="form-control form-control-sm" formControlName="vehicleNumber"  maxlength="15"/>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-1 gap-3 px-5 py-4 bg-floral-white scroll-y" *ngIf="roleName != 'L3Admin'">
+            <ng-container>
+                <div class="row flex-nowrap flex-1 overflow-hidden">
+                    <div class="col-md-6 d-flex flex-column scroll-y">
+                        <div class="d-flex align-items-center gap-3 mb-1">
+                            <label class="form-label fw-semi-bold mb-0">{{'placeholders.select_Unit_Name' |
+                                translate}}
+                            </label>
+                            <!-- <mat-checkbox  class="ms-auto" (change)="selectAll($event)" [checked]="isSelecetAll"> </mat-checkbox> -->
+                            <mat-checkbox
+                                class="ms-auto" (change)="selectAll($event)" [checked]="isSelecetAll">
+                                {{'report_common.select_all' | translate}}
+                            </mat-checkbox>
+                        </div>
+                        <input (keyup)="searchTenant(input.value,$event)"
+                            placeholder="{{'placeholders.Search' | translate}}" #input
+                            class="form-control form-control-sm mb-2" formControlName="tenantName">
+                        <ng-container>
+                            <ng-container *ngIf="tenantList && tenantList.length>0 else noCompnies">
+                                <div class="card card-selection-list mh-100 scroll-y">
+                                    <div class="card-body p-0 scroll-y">
+                                        <mat-selection-list  *ngFor="let tenant of tenantList ;let  index = index"
+                                        (selectionChange)="selectionChanges($event,index)" 
+                                            class="vams-checklist pt-0" name="status"
+                                            formControlName="selectedTenant">
+                                            <ng-container >
+                                                <mat-list-option
+                                                    [value]="tenant" [selected]="tenant?.checked"
+                                                    class="vams-checklist-item">
+                                                    <ng-container
+                                                        *ngIf="tenant && tenant['name'] && tenant['shortName'] && tenant['shortName'] && tenant['buildingName'] && tenant['officeNumber']">
+                                                        {{tenant.displayTenantName}} 
+                                                    </ng-container>
+                                                </mat-list-option>
+                                            </ng-container>
+                                        </mat-selection-list>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #noCompnies>
+                                <p class="text-muted fs-xs p-2 mb-0">
+                                    {{'report_common.unitNotFound' | translate}}
+                                </p>
+                            </ng-template>
+                        </ng-container>
+                        <ng-template #noCompnies>
+                            <p class="text-muted fs-xs p-2 mb-0">
+                                {{'report_common.unitNotFound' | translate}}
+                            </p>
+                        </ng-template>
+                    </div>
+                </div>
+            </ng-container>
+            </div>
+          
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" [disabled]="this.tenantList.length <= 0" (click)="applyFilter()">
+            {{ "report_common.apply_filter" | translate }}</button>
+        <button class="btn btn-sm btn-white px-3" (click)="clearFilter()">
+            {{ "report_common.clear_filter" | translate }}</button>
+    </div>
+</div>

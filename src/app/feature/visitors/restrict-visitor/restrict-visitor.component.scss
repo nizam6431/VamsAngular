@@ -1,0 +1,14 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.theme-logo-wrapper {
+  width: 10rem;
+  height: 8rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e5e5;
+  -o-object-fit: scale-down;
+  object-fit: scale-down;
+}

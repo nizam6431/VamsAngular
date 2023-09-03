@@ -1,0 +1,60 @@
+.department-spacing{
+	padding: 20px 50px;
+	display: inline-block;
+	width: 100%;
+}
+.department{
+	width: 100%;
+	float: left;
+	padding-bottom: var(--input-label-common-space);
+}
+.department-set1{
+	width: 30%;
+	float:left;
+}
+.department-set1 label{
+	color: var(--label-color);
+	font-size: var(--label-font-size);
+	font-weight: var(--label-color);
+	padding-top:var(--input-padding-top);
+}
+
+.department-set2{
+	width: 70%;
+	float:left;
+	position: relative;	
+}
+.department-set2 input{
+	border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;    
+}
+.department-set2 select{
+	border-radius: 8px;
+    box-shadow: var(--input-box-style);
+    background-color: var(--input-box-style-bg-color);
+    border: 0px;
+    height: 32px;
+    width: 100%;
+    position: relative;
+}
+
+.department-label{
+    width: 20%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--label-font-size) !important;
+    color: var(--label-color) !important;    
+}
+.department-value{
+    width: 70%;
+    float: left;
+    margin-bottom: var(--input-view-and-label-margin-bottom);
+    font-size: var(--input-view-text-size) !important;
+    color: var(--input-view-color) !important;
+    font-weight:var(--input-font-weight);
+}

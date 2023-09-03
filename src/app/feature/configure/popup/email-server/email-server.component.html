@@ -1,0 +1,250 @@
+<!-- Add/Edit Employee -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+    <div class="popup-header">
+       <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+       <div class="popup-title-wrapper d-flex align-items-center">
+          <span *ngIf="formData.data"
+             class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+          "configure_email_server.editTitle" | translate }}</span>
+          <span *ngIf="!formData.data"
+             class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+          "configure_email_server.addTitle" | translate }}</span>
+       </div>
+    </div>
+    <form class="popup-form" [formGroup]="formEmailServer" novalidate>
+       <div class="popup-content">
+          <div class="row mb-3">
+            <label for="building_name" class="col-md-4 col-form-label">{{ "configure_email_server.building_name" | translate }}
+                <!-- <span class="mendatory">*</span> -->
+            </label>
+             <div class="col-md-8">
+                <!-- <mat-select disableOptionCentering class="form-control" placeholder="select builtding" [disabled]="formData.mode == 'edit'" formControlName="building_Id" placeholder="{{'configure_email_server.building_name_placeholder' | translate }}">                   
+                   <mat-option *ngFor="let building of buildingList" [value]="building.id">
+                    {{building.name}}
+                   </mat-option>
+                </mat-select> -->
+              
+               <mat-select disableOptionCentering   class="form-control" formControlName="building_Id" 
+                  [placeholder]="building_location" (selectionChange)="locationChange($event.value)" >
+                  <mat-option *ngFor="let building of buildingList" [value]="building">
+                     {{building.locationName}}
+                  </mat-option>
+               </mat-select>
+
+                  <!-- <input type="text" [ngClass]="formData.mode == 'edit' ? 'disabledClass' : ''" [placeholder]="buildngPlace" formControlName="building_Id"
+                  [disabled]="formData.mode == 'edit'" aria-label="Number" matInput [matAutocomplete]="auto" class="form-control">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                     <mat-option *ngFor="let building of buildingList" [value]="building" class="fs-sm"
+                        (onSelectionChange)="getValue($event)">
+                        {{ building.name }}
+                     </mat-option>
+                  </mat-autocomplete>
+                <mat-error *ngFor="let message of showValidationMessages('building_Id')">
+                   {{ message }}
+                </mat-error> -->
+             </div>
+          </div>
+          <div class="row mb-3">
+             <label for="server" class="col-md-4 col-form-label">{{ "configure_email_server.server" | translate
+             }}
+             <span class="mendatory">*</span></label>
+             <div class="col-md-8">
+                <input maxlength="50" type="text" class="form-control" id="server" formControlName="server"
+                   placeholder="{{ 'configure_email_server.server_placeholder' | translate }}" />
+                <mat-error *ngFor="let message of showValidationMessages('server')">
+                   {{ message }}
+                </mat-error>
+             </div>
+          </div>
+          <div class="row mb-3">
+             <label for="out_port" class="col-md-4 col-form-label">{{ "configure_email_server.out_port" | translate}}
+             <span class="mendatory">*</span></label>
+             <div class="col-md-8">
+                <input maxlength="10" type="number" class="form-control" id="out_port" formControlName="out_port"
+                   placeholder="{{'configure_email_server.out_port_placeholder' | translate}}" />
+                <mat-error *ngFor="let message of showValidationMessages('out_port')">
+                   {{ message }}
+                </mat-error>
+             </div>
+          </div>
+          <div class="row mb-3">
+             <label for="form_id" class="col-md-4 col-form-label">{{ "configure_email_server.form_id" | translate }}
+             <span class="mendatory">*</span></label>
+             <div class="col-md-8">
+                <input maxlength="50" type="text" class="form-control" id="fromId" formControlName="fromId"
+                   placeholder="{{ 'configure_email_server.form_id_placeholder' | translate }}" />
+                <mat-error *ngFor="let message of showValidationMessages('fromId')">
+                   {{ message }}
+                </mat-error>
+             </div>
+          </div>
+          <div class="row mb-3">
+             <label for="require_authentication" class="col-md-4 col-form-label">{{ "configure_email_server.require_authentication" | translate }}
+             <!-- <span class="mendatory">*</span> --></label>
+             <div class="col-md-8">
+                <mat-slide-toggle class="example-margin" [disabled]="disabled" formControlName="require_authentication" [color]="color" (change)="toggleReqAuth(true, true)"> </mat-slide-toggle>
+                <mat-error *ngFor="let message of showValidationMessages('require_authentication')">
+                   {{ message }}
+                </mat-error>
+             </div>
+          </div>
+          <div class="row mb-3">
+             <label for="enable_ssl" class="col-md-4 col-form-label">{{ "configure_email_server.enable_ssl" | translate}}
+             <!-- <span class="mendatory">*</span> -->
+            </label>
+             <div class="col-md-8">
+                <mat-slide-toggle class="example-margin" (change)="toggleReqAuth()" [color]="color" formControlName="enable_ssl"> </mat-slide-toggle>
+             </div>
+          </div>
+          <ng-container *ngIf="formEmailServer.value.require_authentication">
+             <div class="row mb-3">
+                <label for="auth_user_id" class="col-md-4 col-form-label">{{ "configure_email_server.auth_user_id" | translate }}
+                <span class="mendatory">*</span></label>
+                <div class="col-md-8">
+                   <input maxlength="50" type="text" class="form-control" formControlName="auth_user_id" placeholder="{{
+                      'configure_email_server.auth_user_id_placeholder' | translate
+                      }}" />
+                   <mat-error *ngFor="let message of showValidationMessages('auth_user_id')">
+                      {{ message }}
+                   </mat-error>
+                </div>
+             </div>
+             <div class="row mb-3">
+                <label for="password" class="col-md-4 col-form-label">{{ "configure_email_server.password" |translate }}
+                <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-8">
+                   <div class="input-group">
+                     <input #passwordField maxlength="50" type="password" class="form-control" id="password"
+                     formControlName="password" placeholder="{{
+                     'configure_email_server.password_placeholder' | translate
+                     }}" />
+                     <button class="btn btn-sm btn-outline-light" *ngIf="showPassword" (click)="togglePasswordShow()">
+                        <i class="fas fa-eye fs-sm"></i>
+                     </button>
+                     <button class="btn btn-sm btn-outline-light" *ngIf="!showPassword" (click)="togglePasswordShow()">
+                        <i class="fas fa-eye-slash fs-sm"></i>
+                     </button>
+                   </div>                   
+                  <mat-error *ngFor="let message of showValidationMessages('password')">
+                      {{ message }}
+                  </mat-error>
+                </div>
+             </div>
+          </ng-container>
+          <div class="row mb-3">
+             <label for="display_name" class="col-md-4 col-form-label">{{ "configure_email_server.display_name" | translate}}
+             <!-- <span class="mendatory">*</span> -->
+             </label>
+             <div class="col-md-8">
+                <input maxlength="50" type="text" class="form-control" id="display_name"
+                   formControlName="display_name" placeholder="{{
+                   'configure_email_server.display_name_placeholder' | translate
+                   }}" />
+                <mat-error *ngFor="let message of showValidationMessages('display_name')">
+                   {{ message }}
+                </mat-error>
+             </div>
+          </div>
+       </div>
+       <div class="popup-footer d-flex align-items-center gap-3">
+          <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'add'" (click)="onSubmit()">
+          {{ "CommonToken.Add" | translate }}
+          </button>
+          <button class="btn btn-sm btn-primary-dark px-3" *ngIf="formData?.mode == 'edit'" (click)="updateForm()">
+          {{ "CommonToken.Save" | translate }}
+          </button>
+          <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'edit'" (click)="cancel()">
+          {{ "CommonToken.Cancel" | translate }}
+          </button>
+          <button class="btn btn-sm btn-white px-3" *ngIf="formData?.mode == 'add'" (click)="resetForm()">
+          {{ "CommonToken.Clear" | translate }}
+          </button>
+       </div>
+    </form>
+ </div>
+ <!-- View Employee -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode =='show' ">
+    <div class="popup-header">
+       <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+       <div class="popup-title-wrapper d-flex align-items-center">
+          <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+          {{ "configure_email_server.title" | translate }}</span>
+       </div>
+    </div>
+    <div class="popup-content">
+       <div class="row mb-3">
+          <label for="employeeFirstName" class="col-md-4 col-form-label">{{
+          "configure_email_server.building_name" | translate
+          }}</label>
+          <div class="col-md-8">
+             <input type="text" readonly class="form-control-plaintext" id="employeeFirstName"
+                value="{{ formData.data.buildingName }}" />
+          </div>
+       </div>
+       <div class="row mb-3">
+          <label for="employeeLastName" class="col-md-4 col-form-label">{{
+          "configure_email_server.server" | translate
+          }}</label>
+          <div class="col-md-8">
+             <input type="text" readonly class="form-control-plaintext" id="employeeLastName"
+                value="{{ formData.data.server }}" />
+          </div>
+       </div>
+      <div class="row mb-3">
+         <label for="employeeStatus" class="col-md-4 col-form-label">{{
+         "configure_email_server.out_port" | translate
+         }}</label>
+         <div class="col-md-8">
+            <input type="text" readonly class="form-control-plaintext" id="employeeStatus"
+               value="{{formData.data.outPort }}" />
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="employeeEmail" class="col-md-4 col-form-label">{{
+         "configure_email_server.form_id" | translate
+         }}</label>
+         <div class="col-md-8">
+            <input type="text" readonly class="form-control-plaintext" id="employeeEmail"
+               value="{{ formData.data.fromId }}" />
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="employeeStatus" class="col-md-4 col-form-label">{{
+         "configure_email_server.require_authentication" | translate
+         }}</label>
+         <div class="col-md-8">
+            <!-- <input type="text" readonly class="form-control-plaintext" id="employeeStatus" value="{{formData.data.requireAuthentication}}" /> -->
+            <mat-slide-toggle readonly class="example-margin" [color]="color" [disabled]="true"
+            checked="{{formData.data.requireAuthentication }}"> </mat-slide-toggle>
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="employeeEmail" class="col-md-4 col-form-label">{{
+         "configure_email_server.enable_ssl" | translate
+         }}</label>
+         <div class="col-md-8">
+            <!-- <input type="text" readonly class="form-control-plaintext" id="employeeEmail" value="{{ formData.data.enableSSL }}" /> -->
+            <mat-slide-toggle readonly class="example-margin" [color]="color" [disabled]="true"
+            checked="{{formData.data.enableSSL }}"> </mat-slide-toggle>
+         </div>
+      </div>
+      <div class="row mb-3">
+         <label for="employeeStatus" class="col-md-4 col-form-label">{{
+         "configure_email_server.display_name" | translate
+         }}</label>
+         <div class="col-md-8">
+            <input type="text" readonly class="form-control-plaintext" id="employeeStatus"
+               value="{{formData.data.displayName }}" />
+         </div>
+      </div>
+   </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+       <button class="btn btn-sm btn-primary-dark px-3" (click)="formData.mode = 'edit'">
+       {{ "CommonToken.Edit" | translate }}
+       </button>
+       <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+       {{ "CommonToken.Cancel" | translate }}
+       </button>
+    </div>
+ </div>

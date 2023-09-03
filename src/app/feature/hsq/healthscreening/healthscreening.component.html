@@ -1,0 +1,114 @@
+<div>
+	<div class="row">
+		<div class="col-md-12 mt-20 mb-20" *ngIf="!isShowError">
+			<div class="text-center pb-20"><img height="18px;" width="60px;" src="{{getApiUrl()}}CompanyData/{{companyId}}/Logo.png"></div>
+			<h4 class="mb-20">{{'HSQ.HSQ_Title'| translate}}</h4>
+			<div class="content-shadow-box">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="inner-box-second mb-10">
+							<div class="appointment-detail-sqrcode-rtl">{{'HSQ.VisitorName'| translate}}</div>
+							<div class="appointment-detail-sqrcode-rtl">{{appointment.FirstName}}
+								{{appointment.LastName}}</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="inner-box-second mb-10">
+							<div class="appointment-detail-sqrcode-rtl">{{'HSQ.PurposeOfVisit'| translate}}</div>
+							<div class="appointment-detail-sqrcode-rtl">{{appointment.PurposeOfVisit}}</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="inner-box-second mb-10">
+							<div class="appointment-detail-sqrcode-rtl">{{'HSQ.Date'| translate}}</div>
+							<div class="appointment-detail-sqrcode-rtl">{{appointment.AppointmentDate}}</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="inner-box-second mb-10">
+							<div class="appointment-detail-sqrcode-rtl">{{'HSQ.From'| translate}}</div>
+							<div class="appointment-detail-sqrcode-rtl">{{appointment.StartTime}}</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="inner-box-second">
+							<div class="appointment-detail-sqrcode-rtl">{{'HSQ.To'| translate}}</div>
+							<div class="appointment-detail-sqrcode-rtl">{{appointment.EndTime}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+		<form (ngSubmit)="addHSQData(confirmSubmitAnswers)" #formHSQ="ngForm" [formGroup]="HSQForm" autocomplete="off" novalidate *ngIf="!isShowError">
+			<div class="col-md-12 mt-20 mb-20" formArrayName="HSQArray">
+				<div class="content-shadow-box">
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="hsq-dox">
+								<li *ngFor="let hsq of HSQArray.controls; let i=index" formGroupName="{{i}}">
+									<p>{{hsq.get('question')!.value}}</p>
+									<ul class="question-ans">
+										<li>
+											<input type="radio" value="Yes" formControlName="HSQValue" (change)="onHsQValueChange(hsq.get('vaccineDate'),hsq.get('HSQValue')!.value,hsq.get('isVaccineQuestion')!.value)">
+											<label for="html">{{'HSQ.Yes'| translate}}</label><br>
+										</li>
+										<li>
+											<input type="radio" value="No" formControlName="HSQValue" (change)="onHsQValueChange(hsq.get('vaccineDate'),hsq.get('HSQValue')!.value,hsq.get('isVaccineQuestion')!.value)">
+											<label for="html">{{'HSQ.No'| translate}}</label><br>
+										</li>
+									</ul>
+									<label class="error-color fontSize-10"
+										*ngIf="(hsq.get('HSQValue')?.invalid && formHSQ?.submitted && hsq.get('HSQValue')?.errors?.required)
+										||(hsq.get('HSQValue')?.invalid && hsq.get('HSQValue')?.touched && hsq.get('HSQValue')?.errors?.required)">
+										{{'HSQ.HSQ_Mandatory'| translate}}
+									</label>
+									<div>
+										<input type="text" placeholder="{{ 'HSQ.PleaseSelectVaccineDate' | translate}}"
+										class="input-style" theme="dp-material" [dpDayPicker]="datePickerConfig" name="appointmentDate"
+										 formControlName="vaccineDate" *ngIf="hsq.get('isVaccineQuestion')!.value == true && hsq.get('HSQValue')!.value == 'Yes'">
+										<label class="error-color fontSize-10"
+											*ngIf="(hsq.get('vaccineDate')?.invalid && formHSQ?.submitted && hsq.get('vaccineDate')?.errors?.required)||(hsq.get('vaccineDate')?.invalid && hsq.get('vaccineDate')?.touched && hsq.get('vaccineDate')?.errors?.required)">
+											{{'HSQ.PleaseSelectVaccineDate'| translate}}
+										</label>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="text-center mb-20">
+				<button type="submit" class="primary-button mt-20" style="font-size: 18px">&nbsp; &nbsp; &nbsp;
+					&nbsp;{{'HSQ.SubmitAnswers'| translate}}&nbsp;
+					&nbsp; &nbsp; &nbsp;</button>
+			</div>
+		</form>
+		<div style="clear: both;"></div>
+		<div class="col-md-8 col-md-offset-2 mt-20 " *ngIf="isShowError">
+			<div class="content-shadow-box">
+				<h5>{{'HSQ.HSQ_LinkExpired'| translate}}</h5>
+			</div>
+		</div>
+	</div>
+</div>
+<div style="clear: both;"></div>
+<ng-template #hsqsuccess>
+    <div class="popup-box">
+        <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+        <img src="assets/images/rechedule.png">
+        <div class="popup-box-text">{{ ServerMessage }}</div>
+        <a href="javascript:void(0)" (click)="closeModal()" class="primary-button mt-20">Ok</a>
+    </div>
+</ng-template>
+<ng-template #confirmSubmitAnswers>
+    <div class="popup-box">
+        <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+        <img src="assets/images/checkin.png">
+        <div class="popup-box-text">{{'HSQ.SubmitConfirmation'| translate}} </div>
+        <ul class="button-swap text-center">
+            <a href="javascript:void(0)" (click)="SaveHSQ()" class="primary-button mt-20">Yes</a>
+            <a href="javascript:void(0)" (click)="closeModal()" class="secondary-button mt-20">No</a>
+        </ul>
+    </div>
+</ng-template>

@@ -1,0 +1,143 @@
+<!-- <div class="vams-grid-filters d-flex">
+    <app-toggle-button *ngIf="showToggle"></app-toggle-button>
+    <div class="input-group search-group ms-auto">
+        <input (keyup)="applyFilter(input.value)"  placeholder="{{ 'CommonToken.Search' | translate}}"  #input class="form-control form-control-sm" />
+        <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+            (click)="cleanSearchBox(input)">
+            <i class="icon-cros-icon"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+            <i class="icon-search-icon"></i>
+        </button>
+    </div>
+</div> -->
+<div class="vams-table-wrapper vams-table-responsive">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="mat-table-hover">
+        <ng-container *ngFor="let colName of displayedColumns; let i = index" [matColumnDef]="displayedColumns[i].key"
+            [stickyEnd]="isSticky(colName.key)">
+            <ng-container *ngIf="displayedColumns[i].sortRequired else noSort">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ colName.value |translate}}</th>
+            </ng-container>
+            <td mat-cell *matCellDef="let element" class="cursor-pointer">
+                <p class="mb-0"
+                    [ngClass]="{'mat-cell-sm': displayedColumns[i].key == 'firstName' || displayedColumns[i].key == 'lastName' || displayedColumns[i].key == 'email' || displayedColumns[i].key == 'company' || displayedColumns[i].key == 'remark'}"
+                    *ngIf="displayedColumns[i].key !== 'action' && displayedColumns[i].key !== 'phone' 
+                && displayedColumns[i].key !== 'remark'">
+                    {{element[displayedColumns[i].key] ? element[displayedColumns[i].key] : '-'}}
+                </p>
+                <ng-container *isPermissible="permissionKeyObj.RESTRICTVISITORADD">
+                    <ng-container *ngIf="displayedColumns[i].key === 'action'">
+                        <ng-container *ngIf="visitorDataShowType == 'restrictVisitor'">
+                            <!-- when level1 -->
+                            <ng-container *ngIf="element?.entityType === 'Complex' && levelType === 'level1'">
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)"
+                                    *ngIf="element?.level3Id == null && element?.level2Id == null">
+                                    {{'Visitors.Unblock' | translate}}
+                                </button>
+                            </ng-container>
+                            <!-- when level2 -->
+                            <ng-container *ngIf="element?.entityType == 'Building' && levelType === 'level2'">
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)"
+                                    *ngIf="element?.level3Id == null && element?.level2Id != null">
+                                    {{'Visitors.Unblock' | translate}}
+                                </button>
+                            </ng-container>
+                            <!-- when level3 -->
+                            <ng-container *ngIf="element?.entityType === 'Company' && levelType === 'level3'">
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)"
+                                    *ngIf="element?.level3Id != null">
+                                    {{'Visitors.Unblock' | translate}}
+                                </button>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="visitorDataShowType == 'allVisitor'">
+                            <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)">
+                                {{'Visitors.block' | translate}}
+                            </button>
+                        </ng-container>
+                        <!--<button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)"
+                            *ngIf="visitorDataShowType == 'restrictVisitor' ; else elseSpan">
+                            {{'Visitors.Unblock' | translate}}
+                        </button>
+                        <ng-template #elseSpan>
+                            <ng-container>
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)"
+                                    *ngIf="element?.isRestricted == 'Yes' && visitorDataShowType == 'allVisitor' ; else elseBlockl1Btn">
+                                    {{'Visitors.Unblock' | translate}}
+                                </button>
+                                <ng-template #elseBlockl1Btn>
+                                    <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)">
+                                        {{'Visitors.block' | translate}}
+                                    </button>
+                                </ng-template>
+                            </ng-container> -->
+
+                        <!--  -->
+
+                        <!-- <ng-container *ngIf="element?.entityType === 'Complex' && levelType === 'level1'">
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)" 
+                                *ngIf="element?.isRestricted == 'Yes' && visitorDataShowType == 'allVisitor' ; else elseBlockl1Btn">
+                                {{'Visitors.Unblock' | translate}}
+                            </button>
+                            <ng-template #elseBlockl1Btn>
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)" >
+                                    {{'Visitors.block' | translate}}
+                                </button>
+                            </ng-template>
+                            </ng-container>
+                        
+                            <ng-container *ngIf="element?.entityType === 'Company' && levelType === 'level3'">
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)" 
+                                *ngIf="element?.isRestricted == 'Yes' && visitorDataShowType == 'allVisitor' ; else elseBlockl3Btn">
+                                {{'Visitors.Unblock' | translate}}
+                            </button>
+                            <ng-template #elseBlockl3Btn>
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)" >
+                                    {{'Visitors.block' | translate}}
+                                </button>
+                            </ng-template>
+                            </ng-container>
+                            
+                            <ng-container *ngIf="element?.entityType == 'Building' && levelType === 'level2'">
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)" 
+                                *ngIf="element?.isRestricted == 'Yes' && visitorDataShowType == 'allVisitor' ; else elseBlockl2Btn">
+                                {{'Visitors.Unblock' | translate}}
+                            </button>
+                            <ng-template #elseBlockl2Btn>
+                                <button class="btn btn-mini btn-white mnw-4" (click)="unblockUser(element, $event)" >
+                                    {{'Visitors.block' | translate}}
+                                </button>
+                            </ng-template>
+                            </ng-container> -->
+
+                        <!-- </ng-template> -->
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="displayedColumns[i].key == 'phone'">
+                    <span *ngIf="element[displayedColumns[i].key] else cellNotAvailable">
+                        +{{
+                        element?.isdCode +
+                        " " +
+                        formatCellNumber(element[displayedColumns[i].key])
+                        }}
+                    </span>
+                    <ng-template #cellNotAvailable>
+                        -
+                    </ng-template>
+                </ng-container>
+                <ng-container *ngIf="displayedColumns[i].key == 'remark'">
+                    <span>
+                        {{element?.remark |truncate }}
+                    </span>
+                </ng-container>
+            </td>
+            <ng-template #noSort>
+                <th mat-header-cell *matHeaderCellDef>{{ colName.value }}</th>
+            </ng-template>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row;columns: columns;" (click)="getRowData(row, type)"></tr>
+    </table>
+</div>
+<mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalData"
+    (page)="getPaginationData($event)" aria-label="Select page of users"></mat-paginator>

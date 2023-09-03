@@ -1,0 +1,172 @@
+<div class="report-filter-popup d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{"report_common.filter"
+                | translate }}</span>
+        </div>
+    </div>
+
+    <form class="popup-form" novalidate [formGroup]="filterForm">
+        <div class="popup-content d-flex flex-column flex-1 p-0 scroll-y">
+            <div class="d-grid px-5 py-4 gap-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="form-label fw-semi-bold mb-0">{{'report_common.status' |
+                                translate}}</label>
+                            <div class="col-md-10 status-select-control-wrap bg-linen d-inline-flex align-items-center">
+                                <div class="addon-wrap d-flex align-items-center justify-content-center">
+                                    <i class="icon-filter text-primary"></i>
+                                </div>
+                                <!-- <mat-select class="form-control" formControlName="status"
+                                    placeholder="Add Filter" (selectionChange)="selectionChange($event)">
+                                    <mat-option *ngFor="let status of statusFilter" [value]="status">
+                                        <p class="d-flex align-items-center mb-0">
+                                            <span class="me-auto">{{status.value}}</span>
+                                            <i *ngIf="selectedStatus === status" class="icon-cros-icon fs-xs ms-auto"
+                                                (click)="clearStatus($event)"></i>
+                                        </p>
+                                    </mat-option>
+                                </mat-select> -->
+                                <mat-select disableOptionCentering class="form-control" formControlName="status"
+                                placeholder="{{'report_common.selectVisitPurpose' | translate }}" (selectionChange)="selectionChange($event)">
+                                <mat-option *ngFor="let status of statusFilter" [value]="status"
+                                (click)="onselectedStatusSelectEvent()" >
+                                <p class="d-flex align-items-center mb-0">
+                                    <span class="me-auto">{{status.value}}</span>
+                                    <i *ngIf="selectedStatus === status"
+                                        class="icon-cros-icon fs-xs ms-auto"></i>
+                                </p>
+                            </mat-option>
+                            </mat-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="form-label fw-semi-bold mb-0">{{'report_common.Host' | translate}}</label>
+                            <div class="input-group search-group mw-100">
+                                <input placeholder="{{'placeholders.host_name' | translate}}" #input1
+                                    class="form-control form-control-sm" formControlName="searchQueryByHost" />
+                                <button class="btn btn-sm btn-outline-light d-flex align-items-center">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-text text-end fs-xs">
+                            {{'report_common.host_text'|translate}}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <label class="form-label fw-semi-bold mb-0">{{'report_common.Visitor' | translate}}</label>
+                            <div class="input-group search-group mw-100">
+                                <input placeholder="{{'placeholders.Search' | translate}}" #input2
+                                    class="form-control form-control-sm" formControlName="searchQueryByVisitor" />
+                                <button class="btn btn-sm btn-outline-light d-flex align-items-center">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-text text-end fs-xs">
+                            {{'report_common.visitor_text'|translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-6" >
+                        <div class="d-flex col-md-10">
+                        <label class="form-label fw-semi-bold mb-0">{{'report_common.fromDate' | translate}}</label>
+                        <div class="col-md-8">
+                            <div class="input-group input-datepicker" style="margin-left: 0.3rem">
+                                <!-- [min]="minDate" [max]="maxDate" -->
+                                <input [min]="minDate" [max]="maxDate"  type="text" #input
+                                    placeholder="{{'report_common.fromDate' | translate}}"
+                                    class="form-control" theme="dp-material" [matDatepicker]="picker1"
+                                    name="checkInDate" formControlName="checkInDate" readonly (dateChange)="checkOutDateChange()">
+                                <div class="datepicker-toggle"  >
+                                <mat-datepicker-toggle [for]="picker1"></mat-datepicker-toggle>
+                                </div>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </div>
+                            <mat-error *ngIf="filterForm.controls.checkInDate.value == null && filterForm.controls.checkOutDate.value!=null">
+                                From Date Is Mandatory.
+                            </mat-error>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-left: -7rem;">
+                        <div class="d-flex col-md-10">
+                        <label class="form-label fw-semi-bold mb-0">{{'report_common.toDate' | translate}}</label>
+                        <div class="col-md-8" style="margin-left: 7px;">
+                            <div class="input-group input-datepicker">
+                                <!-- [min]="minDate" [max]="maxDate" -->
+                                <input [min]="todayDate" [max]="checkOutDate" type="text" #input
+                                    placeholder="{{'report_common.toDate' | translate}}"
+                                    class="form-control" theme="dp-material" [matDatepicker]="picker"
+                                    name="checkOutDate" formControlName="checkOutDate" readonly (dateChange)="checkInDateChange()" >
+                                <div class="datepicker-toggle">
+                                <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                                </div>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                            <mat-error *ngIf="dateNotValid &&(filterForm.controls.checkOutDate.value!=null && filterForm.controls.checkInDate.value != null)">
+                                To Date Must Be Greater Than From Date.
+                            </mat-error>
+                            <mat-error *ngIf="filterForm.controls.checkOutDate.value==null && filterForm.controls.checkInDate.value != null">
+                                To Date Is Mandatory.
+                            </mat-error>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="visitorPurposeObject && visitorsTypeObject">
+                <div class="row col-md-12 d-flex flex-column flex-1 gap-3 px-5 py-4 bg-floral-white scroll-y">
+                    <div class="col-md-6 d-flex flex-column gap-3 pt-2 scroll-y">
+                        <!-- <div class="d-grid"> -->
+                            <label class="form-label fw-semi-bold mb-1">{{'report_common.visitPurpose' | translate}}
+                            </label>
+                            <mat-select disableOptionCentering class="form-control" formControlName="visitorPurposeId"
+                                placeholder="{{'report_common.selectVisitPurpose' | translate }}">
+                                <mat-option *ngFor="let visitorPurpose of this.visitorPurposeObject.data"
+                                    (click)="onVisitorPurposeSelectEvent()" [value]="visitorPurpose.id">
+                                    <p class="d-flex align-items-center mb-0">
+                                        <span class="me-auto">{{visitorPurpose.purpose}}</span>
+                                        <i *ngIf="showVisitorPurposeStatus === visitorPurpose.id"
+                                            class="icon-cros-icon fs-xs ms-auto"></i>
+                                    </p>
+                                </mat-option>
+                            </mat-select>
+                        <!-- </div> -->
+                    </div>  
+                    <div class="col-md-6 d-flex flex-column gap-3 pt-2 scroll-y"> 
+                        <!-- <div class="d-grid"> -->
+                            <label class="form-label fw-semi-bold mb-1"> {{'report_common.visitorType' | translate}}
+                            </label>
+                            <mat-select disableOptionCentering class="form-control" formControlName="VisitorTypeId"
+                                placeholder="{{'report_common.selectVisitorType' | translate }}">
+                                <mat-option *ngFor="let visitorsType of this.visitorsTypeObject.data"
+                                    (click)="onVisitorTypeSelectEvent()" [value]="visitorsType.id">
+                                    <p class="d-flex align-items-center mb-0">
+                                        <span class="me-auto">{{visitorsType.name}}</span>
+                                        <i *ngIf="showVisitorTypeStatus === visitorsType.id"
+                                            class="icon-cros-icon fs-xs ms-auto"></i>
+                                    </p>
+                                </mat-option>
+                            </mat-select>
+                        <!-- </div> -->
+                   </div> 
+                </div>
+            </ng-container>
+            
+           
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="applyFilter()">
+            {{ "report_common.apply_filter" | translate }}</button>
+        <button class="btn btn-sm btn-white px-3" (click)="clearFilter()">
+            {{ "report_common.clear_filter" | translate }}</button>
+    </div>
+</div>

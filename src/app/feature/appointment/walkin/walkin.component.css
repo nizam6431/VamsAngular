@@ -1,0 +1,61 @@
+.dropdown-menu {
+        position               : absolute;
+        top                    : 100%;
+        left                   : 0;
+        z-index                : 1000;
+        display                : none;
+        float                  : left;
+        min-width              : 160px;
+        padding                : 5px 0;
+        margin                 : 2px 0 0;
+        font-size              : 14px;
+        text-align             : left;
+        list-style             : none;
+        background-color       : #fff;
+        -webkit-background-clip: padding-box;
+        background-clip        : padding-box;
+        border                 : 1px solid #ccc;
+        border                 : 1px solid rgba(0, 0, 0, .15);
+        border-radius          : 4px;
+        -webkit-box-shadow     : 0 6px 12px rgba(0, 0, 0, .175);
+        box-shadow             : 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+/* .walkin-web {
+        z-index: 31;
+} */
+
+.walkin-web-inner-box .cancelappointment {
+        font-size     : 16px;
+        font-weight   : bold;
+        padding-bottom: 20px;
+        text-align    : center;
+}
+
+::ng-deep .select2-container {
+        top: -4px;
+}
+::ng-deep .select2-results__option
+{
+    cursor: pointer;
+}
+
+::ng-deep .select2-container--default .select2-selection--single {
+        border       : none;
+        border-bottom: 1px solid #aaa;
+        border-radius: 0px;
+}
+.input-style.unicode-phone-number{
+        unicode-bidi: isolate-override;
+    }
+.w50 {
+        width: 40px;
+}
+
+
+/*      visitor pass css code   */
+
+body {
+        font-family: 'Open Sans', sans-serif;
+}
+

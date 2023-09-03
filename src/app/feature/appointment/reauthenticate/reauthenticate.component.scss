@@ -1,0 +1,9 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+
+.form-authenticate-key {
+  padding: 0.375rem 0.25rem;
+}

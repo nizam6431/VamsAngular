@@ -1,0 +1,18 @@
+<div class="light-box-style">
+    <a class="popup-close-button" (click)="closeModal()"><i class="fas fa-times"></i></a>
+    <h2>{{'ChangeLanguage.ChangeLanguage' | translate}}</h2>
+    <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{'ChangeLanguage.Language' | translate}}</div>
+    <div class="input-area pb-20">
+        <ng-select2 *ngIf="languages.length>0" [options]="options" 
+            [(ngModel)]="selectedLanguage" name="language" [data]="languages" width="100%">
+        </ng-select2> 
+    </div>
+    <div class="text-center">
+        <div style="display: inline-block;">
+            <button type="submit" (click)="setLanguage()"
+                class="walk-in-button fontSize-14 Weight-regular mt-10 left-pull">{{'ChangeLanguage.Submit' | translate}}</button>
+            <a href="javascript:void(0)" (click)="closeModal()"
+                class="secondary-button fontSize-14 Weight-regular mt-10 right-pull">{{'ChangeLanguage.Cancel' | translate}}</a>
+        </div>
+    </div>
+</div>

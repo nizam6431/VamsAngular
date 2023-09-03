@@ -1,0 +1,40 @@
+<div class="popup-box">
+    <a class="popup-close-button" (click)="dismissAll()"><i class="fas fa-times"></i></a>
+    <img src="assets/images/cancel.png">
+    <div class="popup-box-text">{{ 'CancelAppointment.Confirmation_Message' | translate : fullnameTranslate}}</div>
+    <form (ngSubmit)="confirmCancel(cancelConfirmation)" #secondform="ngForm" [formGroup]="cancelAppointmentForm"
+        autocomplete="off" novalidate>
+        <textarea class="error-msg" rows="3" name="rejectReason" formControlName="rejectReason"
+            placeholder="{{ 'CancelAppointment.CancelReasonPlaceholder' | translate}}"></textarea>
+        <label class="error-color fontSize-10"
+            *ngIf="(rejectReason?.invalid && secondform?.submitted && rejectReason?.errors?.maxlength)||(rejectReason?.invalid && rejectReason?.touched && rejectReason?.errors?.maxlength)">
+            {{ 'CancelAppointment.ReasonErrorMessage' | translate}}
+        </label>
+        <label class="error-color fontSize-10"
+            *ngIf="(rejectReason?.invalid && secondform?.submitted && rejectReason?.errors?.required)||(rejectReason?.invalid && rejectReason?.touched && rejectReason?.errors?.required)">
+            {{ 'CancelAppointment.RejectReasonRequiredMessage' | translate}}
+        </label>
+        <div class="text-center mt-10">
+            <div style="display: inline-block;">
+                <a href="javascript:void(0)" (click)="dismissAll()"
+                    class="secondary-button fontSize-14 Weight-regular mt-10 left-pull">{{ 'CancelAppointment.No' |
+                    translate}}</a>
+                <button type="submit" class="primary-button fontSize-14 Weight-regular mt-10 right-pull">{{
+                    'CancelAppointment.Yes' | translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #cancelConfirmation let-ref="dialogRef2">
+    <div class="popup-box">
+        <a class="popup-close-button" (click)="dismissAllConfirmed()"><i class="fas fa-times"></i></a>
+        <img src="assets/images/cancel.png">
+        <div class="popup-box-text">{{ 'CancelAppointment.CancelConfirmedMessage' | translate : fullnameTranslate}}
+        </div>
+        
+        <a href="javascript:void(0)" (click)="dismissAllConfirmed()" 
+                class="secondary-button mt-20">{{
+                    'CancelAppointment.Ok' | translate}}</a>
+    </div>
+</ng-template>

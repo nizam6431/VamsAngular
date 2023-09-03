@@ -1,0 +1,188 @@
+<!-- Add/Edit Bio Security Device Details Form -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+    <p class="icon-cros-icon popup-close-button" (click)="cancel()"></p>
+    <h1 *ngIf="!formData.data">
+        {{ "Bio_Security_Device.BioSecurityDetails" | translate | titlecase }}
+    </h1>
+    <h1 *ngIf="formData.data">
+        {{ "Bio_Security_Device.BioSecurityDetails" | translate | titlecase }}
+    </h1>
+    <div class="row up">CRUD operation under process</div>
+    <div class="button-bg-popup">
+        <button class="common-popup-button mr-20" [disabled]="true" *ngIf="formData?.mode == 'add'" (click)="add()" mat-raised-button>
+    {{ "CommonToken.Add" | translate }}
+  </button>
+        <button class="common-popup-button mr-20" [disabled]="true" *ngIf="formData?.mode == 'edit'" (click)="update()" mat-raised-button>
+    {{ "CommonToken.Save" | translate }}
+  </button>
+        <button class="secondry-button" [disabled]="true" mat-raised-button *ngIf="formData?.mode == 'edit'" (click)="cancel()">
+    {{ "CommonToken.Cancel" | translate }}
+  </button>
+        <button class="secondry-button" [disabled]="true" mat-raised-button *ngIf="formData?.mode == 'add'" (click)="resetForm()" mat-raised-button>
+    {{ "CommonToken.Clear" | translate }}
+  </button>
+    </div>
+</div>
+
+<!-- Bio Security Device Details Form -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'show'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold text-uppercase position-relative" *ngIf="!formData.data">{{
+        "Bio_Security_Device.BioSecurityDetails" | translate | titlecase
+      }}</span
+    >
+    <span
+      class="popup-title d-inline-flex align-items-center fs-sm fw-bold text-uppercase position-relative"
+      *ngIf="formData.data"
+      >{{
+        "Bio_Security_Device.BioSecurityDetails" | translate | titlecase
+      }}</span
+    >
+  </div>
+</div>
+<div class="popup-content">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <label for="bioSecurityDeviceName" class="col-sm-3 col-form-label">{{
+          "Bio_Security_Device.DeviceName" | translate
+        }}</label>
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            class="form-control-plaintext"
+            id="bioSecurityDeviceName"
+            value="{{ allBioSecurityDeviceData?.name }}"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <label for="bioSecurityDeviceModel" class="col-sm-3 col-form-label">{{
+          "Bio_Security_Device.Model" | translate
+        }}</label>
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            class="form-control-plaintext"
+            id="bioSecurityDeviceModel"
+            value="{{ allBioSecurityDeviceData?.model }}"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <label
+          for="bioSecurityDeviceStatus"
+          class="col-sm-3 col-form-label"
+          >{{ "Bio_Security_Device.Status" | translate }}</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            class="form-control-plaintext"
+            id="bioSecurityDeviceStatus"
+            value="{{ allBioSecurityDeviceData?.status }}"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <label for="bioSecurityDeviceType" class="col-sm-3 col-form-label">{{
+          "Bio_Security_Device.Type" | translate
+        }}</label>
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            class="form-control-plaintext"
+            id="bioSecurityDeviceType"
+            value="{{ allBioSecurityDeviceData?.type }}"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <label
+          for="bioSecurityDeviceLevel1"
+          class="col-sm-3 col-form-label"
+          >{{ "Bio_Security_Device.BuildingName" | translate }}</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            class="form-control-plaintext"
+            id="bioSecurityDeviceLevel1"
+            value="{{ allBioSecurityDeviceData?.buildingName }}"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <label
+          for="bioSecurityDeviceLevel2"
+          class="col-sm-3 col-form-label"
+          >{{ "Bio_Security_Device.Url" | translate }}</label
+        >
+        <div class="col-sm-9">
+          <input
+            type="text"
+            readonly
+            class="form-control-plaintext"
+            id="bioSecurityDeviceLevel2"
+            value="{{ allBioSecurityDeviceData?.url }}"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <label for="bioSecurityDeviceToken" class="col-sm-3 col-form-label">{{
+          "Bio_Security_Device.AccessLevel" | translate
+        }}</label>
+        <div class="col-sm-9">
+          <p class="form-control-plaintext text-break mb-0">
+            {{ allBioSecurityDeviceData?.accessLevels }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="popup-footer d-flex align-items-center gap-3">
+  <button
+    class="btn btn-sm btn-white text-uppercase px-3"
+    [disabled]=""
+    (click)="dialogRef.close()"
+  >
+    {{ "CommonToken.Back" | translate }}
+  </button>
+  <!-- <button
+    class="btn btn-sm btn-primary-dark text-uppercase px-3"
+    [disabled]="true"
+    (click)="formData.mode = 'edit'"
+  >
+    {{ "CommonToken.Edit" | translate }}
+  </button>
+  <button class="btn btn-sm btn-white text-uppercase px-3" (click)="cancel()">
+    {{ "CommonToken.Cancel" | translate }}
+  </button> -->
+</div>
+</div>

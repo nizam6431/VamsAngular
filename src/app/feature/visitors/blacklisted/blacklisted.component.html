@@ -1,0 +1,4 @@
+<app-grid [dataSource]="dataSource" [displayedColumns]="displayedColumns" [cssClass]="'table-height-vary'"
+    [type]="'blacklisted'" (onDataChange)="visitorDataChange($event)" [totalData]="totalData"
+    (unblockUserclick)="unblockUser($event)" (rowClick)="gridRowClick($event)">
+</app-grid>

@@ -1,0 +1,35 @@
+<!-- 
+<mat-tab-group [selectedIndex]="0">
+  <app-grid></app-grid>
+  <mat-tab label="Complex Details">Complex Details</mat-tab>
+  <mat-tab label="Departments">
+    <button
+      class="btn btn-primary"
+      data-toggle="modal"
+      data-target="#samplemodal"
+    >
+      Create Department
+    </button>
+  </mat-tab>
+  <mat-tab label="Employees">
+    <div>
+      <button
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#samplemodal"
+      >
+        Add New Employee
+      </button>
+      <button
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#samplemodal"
+      >
+        Bulk Upload
+      </button>
+    </div>
+  </mat-tab>
+  <mat-tab label="Contractors"></mat-tab>
+</mat-tab-group>
+-->
+<app-common-tab [type]="type"></app-common-tab>

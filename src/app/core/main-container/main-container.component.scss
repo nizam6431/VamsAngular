@@ -1,0 +1,7 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  display: flex;
+  flex: 1;
+  @extend .scroll-y;
+}

@@ -1,0 +1,84 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="id-card center-block">
+
+            <div class="login-space">
+                <div class="switch-button-area">
+                    <!-- TODO: Theme change
+                        <div class="switch-button">
+                        <label class="switch">
+                            <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="themeChange($event)">
+                            <span class="slider round" checked></span>
+                        </label>
+                    </div> -->
+                </div>
+                <form (ngSubmit)="login()" #form="ngForm" [formGroup]="loginForm" autocomplete="off" novalidate>
+                    <div class="text-center pb-20 image-rtl"><img height="31" width="117" [src]="logoUrl"></div>
+                    <div class="primary-color text-center fontSize-18 Weight-semobold pb-20">{{'Login.Welcome_Back' | translate}}
+                    </div>
+                    <div class="subject-color fontSize-12 Weight-regular pb-10 input-field">{{'Login.Username' |
+                        translate}}
+                    </div>
+
+                    <div class="input-area pb-10">
+                        <input type="text"  class="form-control" formControlName="email" name="email" placeholder="{{'Login.Email_Placeholder' | translate}}"
+                            >
+                        <label class="error-color fontSize-10"
+                            *ngIf="(!isExcel && email?.invalid && form?.submitted && email?.errors?.required) || (!isExcel && email?.invalid && email?.touched && email?.errors?.required)">
+                            {{'Login.Email_Is_Required' | translate}}
+                        </label>
+                        <!-- <label class="error-color fontSize-10"
+                            *ngIf="(!isExcel && email?.invalid && form?.submitted && email?.errors?.email)||(!isExcel && email?.invalid && email?.touched && email?.errors?.email)">
+                            {{'Login.Email_Should_Be_The_Real_One' | translate}}
+                        </label> -->
+                        <label class="error-color fontSize-10"
+                            *ngIf="(isExcel && email?.invalid && form?.submitted && email?.errors?.required) || (isExcel && email?.invalid && email?.touched && email?.errors?.required)">
+                            {{'Login.Username_Is_Required' | translate}}
+                        </label>
+                    </div>
+
+                    <div class="subject-color fontSize-12 Weight-regular mt-5 input-field">{{'Login.Password' |
+                        translate}}</div>
+                    <div class="input-area mt-3 pb-10">
+                        <input class="form-control" #passwordField type="password" formControlName="password" name="password" placeholder="********"
+                             oncopy = "return false" onpaste = "return false"  >
+                        <div class="pass-hide-show">
+                            <a (click)="toggleShow()"><i *ngIf="showPassword" class="far fa-eye eye"></i></a>
+                            <a (click)="toggleShow()"><i *ngIf="!showPassword" class="fas fa-eye-slash eye-slash"></i></a></div>
+                        <label class="error-color fontSize-10"
+                            *ngIf="(password?.invalid && form?.submitted && password?.errors?.required) || (password?.invalid && password?.touched && password?.errors?.required)">
+                            {{'Login.Password_Is_Required' | translate}}
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <div class="rememberme-checkbox">
+                                <!-- <input id="checkbox1" type="checkbox" formControlName="rememberme" name="rememberme">
+                                <label for="checkbox1" class="fontSize-12 subject-color">{{'Login.Remember_Me' |
+                                    translate}}</label> -->
+                            </div>
+                            <div *ngIf="isForgotPassword">
+                                <a [routerLink]="['../forgot-password']" class="switcher-text fontSize-12 subject-color">{{'Login.Forgot_Password' |
+                                    translate}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center" *ngIf="errors.length">
+                            <label class="error-color fontSize-12 mb-2" *ngFor="let error of errors">
+                                {{ error }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="section-button text-center">
+                        <button type="submit" 
+                            class="primary-button fontSize-14 Weight-regular">
+                            {{'Login.Sign_In' | translate}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

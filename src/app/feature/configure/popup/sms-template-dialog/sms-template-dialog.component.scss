@@ -1,0 +1,9 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+    @extend .host;
+}
+.alignCntr {
+    display: flex;
+    align-items: center;
+}

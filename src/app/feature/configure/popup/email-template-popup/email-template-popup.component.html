@@ -1,0 +1,124 @@
+<!-- Show Provider -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'show'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'show' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "email_template.showTitle" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" novalidate>
+        <div class="popup-content">
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'EmailTemplate.name' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(emailTemplateRow?.name)}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'EmailTemplate.languageCode' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(emailTemplateRow?.languageCode)}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'EmailTemplate.subject' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(emailTemplateRow?.subject)}}</p>
+                </div>
+            </div>
+            <!-- <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'EmailTemplate.email_content' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(emailTemplateRow?.emailContent)}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label">{{'EmailTemplate.tag' | translate}}</label>
+                <div class="col-md-8">
+                    <p class="form-control-plaintext mb-0">{{(emailTemplateRow?.tag)}}</p>
+                </div>
+            </div> -->
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="formData.mode ='edit'" [disabled]="false">
+            {{ "CommonToken.Edit" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>
+
+<!-- Add/Edit email -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="formData.mode == 'edit' || formData.mode == 'add'">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span *ngIf="formData.mode == 'edit' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "email_template.editTitle" | translate }}</span>
+            <span *ngIf="formData.mode == 'add' "
+                class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "email_template.addTitle" | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="emailTemplateForm" novalidate>
+        <div class="popup-content d-flex flex-column">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="row">
+                        <label class="col-4 col-form-label">{{'EmailTemplate.name' | translate}}</label>
+                        <div class="col-8">
+                            <p class="form-control-plaintext mb-0">{{(emailTemplateRow?.name)}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <label class="col-4 col-form-label">{{'EmailTemplate.languageCode' | translate}}</label>
+                        <div class="col-8">
+                            <p class="form-control-plaintext mb-0">{{(emailTemplateRow?.languageCode)}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-0 flex-1 flex-nowrap scroll-y">
+                <div class="col d-flex flex-column scroll-y">
+                    <label for="out_port" class="form-label">{{ "EmailTemplate.email_content" | translate}}
+                        <span class="mendatory">*</span></label>
+                    <div class="d-flex flex-column flex-1 scroll-y">
+                        <angular-editor #textarea formControlName="content" [config]="config"
+                            class="vams-editor-wrapper d-flex flex-column flex-1 scroll-y">
+                        </angular-editor>
+                        <mat-error *ngFor="let message of showValidationMessages('question')">
+                            {{ message }}
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="col-tag d-flex flex-column scroll-y">
+                    <label for="out_port" class="form-label px-3">{{ "EmailTemplate.tag" | translate}}</label>
+                    <div class="flex-1 ps-3 pe-1 scroll-y">
+                        <mat-selection-list [multiple]="false" (selectionChange)="getSelectedListValue($event.option);"
+                            class="vams-selection-list d-flex flex-column gap-2 pt-0 mb-2">
+                            <mat-list-option *ngFor="let tag of tagList" [value]="tag" class="vams-selection-list-item">
+                                <button (click)="textarea['editorService'].insertHtml(' [['+tag+']] ')"
+                                    class="btn btn-link border-0 text-start text-decoration-none text-dark fw-semi-bold">{{tag}}</button>
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="updateForm()" [disabled]="false">
+            {{ "CommonToken.Update" | translate }}
+        </button>
+        <button class="btn btn-sm btn-white px-3" (click)="cancel()">
+            {{ "CommonToken.Cancel" | translate }}
+        </button>
+    </div>
+</div>

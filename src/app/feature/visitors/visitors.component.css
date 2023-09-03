@@ -1,0 +1,58 @@
+.main-content{
+    margin-left: 76px;   
+}
+:host::ng-deep .mat-tab-header {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  border-bottom: 0px solid rgba(0,0,0,.12);
+
+}
+
+:host::ng-deep  .tab-header {
+  border-bottom: 0px solid rgba(0,0,0,.12);
+}
+
+/*Chetan 24 November 2021*/
+
+.company-level{}
+
+::ng-deep .master-tabs{
+height: 29px;
+/*background:#FBF8F3 url("../../../../images/shadow.png");*/
+background:var(--header-bg);     
+}
+::ng-deep .master-tabs .mat-tab-label:hover{
+/* border-bottom: solid 3px #F78958;  */
+font-weight: 400;
+color: #F78958;
+}
+
+::ng-deep .master-tabs .mat-tab-label{
+height: 28px;
+min-width: auto;
+margin-right: 20px;
+padding: 0 20px;
+font-weight: 400;
+font-size: 12px;
+border-bottom: solid 3px transparent;
+color: var(--tab-text-color);
+opacity: 1; 
+}
+
+
+::ng-deep .master-tabs .mat-ink-bar{
+display: none;
+}
+
+
+
+::ng-deep .master-tabs .mat-tab-label-active{
+border-bottom: solid 3px #F78958; 
+font-weight: 600;
+color: #F78958;
+pointer-events:none; 
+}
+
+::ng-deep .mat-ripple-element{display: none;}

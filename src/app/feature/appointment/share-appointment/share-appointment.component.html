@@ -1,0 +1,117 @@
+<div class="popup-header">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+    <div class="popup-title-wrapper d-flex align-items-center">
+        <span
+            class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{'ShareAppointmentForm.ShareAppointment'|translate
+            |titlecase}}</span>
+    </div>
+</div>
+<div class="d-flex flex-column flex-1 scroll-y">
+    <form class="popup-form" novalidate [formGroup]="shareAppointmentForm">
+        <div class="popup-content">
+
+    <div class="row mb-3">
+      <div class="row mb-4" *ngIf="this.data.visitorSettings.visitorCheckinAtBuilding && isL1Roles">
+        <label for="feBuildingList" class="col-md-4 col-form-label">
+          {{"configure_email_server.building_name_placeholder" | translate }}
+        </label>
+        <div class="col-md-8">
+          <mat-select disableOptionCentering class="form-control" formControlName="level2Id"
+            placeholder="{{'configure_email_server.building_name_placeholder' | translate }}">
+            <mat-option *ngFor="let building of this.data.buildingList"  (click)="onSelectEvent()" [value]="building.id">
+              <p class="d-flex align-items-center mb-0">
+                <span class="me-auto">{{building.name}}</span>
+                <i *ngIf="showStatus === building.id" class="icon-cros-icon fs-xs ms-auto"></i> 
+            </p>
+            </mat-option>
+          </mat-select>
+          <!-- <mat-error *ngFor="let message of showValidationMessages('level2Id')">
+            {{ message }}
+          </mat-error> -->
+        </div>
+      </div>
+    </div>
+            <div class="row mb-3">
+                <label class="col-md-4 col-form-label" for="feFirstName">
+                    {{ 'ShareAppointmentForm.CellNumber' | translate}}
+                    <!-- <span class="mendatory">*</span> -->
+                </label>
+                <div class="col-md-8">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="d-grid flex-1">
+                            <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'"
+                            [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true"
+                            [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]" [selectFirstCountry]="false"
+                            [selectedCountryISO]="selectedCountry" [phoneValidation]="true" [separateDialCode]="separateDialCode"
+                            [maxLength]="maxLength" (countryChange)="checkNumber($event)" name="phone"
+                            formControlName="cell"  appMobileNumberFormat>
+                            </ngx-intl-tel-input>
+                            <mat-error *ngIf="shareAppointmentForm.get('cell').hasError('validatePhoneNumber') && (shareAppointmentForm.get('cell').pristine || shareAppointmentForm.get('cell').touched)">
+                                {{ "Schedule.CellNumberValid" | translate }}
+                            </mat-error>
+                        </div>
+                        <button [disabled]="shareAppointmentForm.get('cell').invalid || postContactDetails.length>10"
+                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center px-2"
+                            type="button" (click)="add('cell')" >
+                            <i class="icon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center mb-3">{{ 'ShareAppointmentForm.OR' | translate}}</p>
+            <div class="row">
+                <label class="col-md-4 col-form-label" for="feEmail">
+                    {{ 'ShareAppointmentForm.EmailId' | translate}}
+                    <!-- <span class="mendatory">*</span> -->
+                </label>
+                <div class="col-md-8">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="d-grid flex-1">
+      
+      <input type="text" maxlength="150" placeholder="{{ 'ShareAppointmentForm.PleaseEnterEmail' | translate }}" class="form-control" formControlName="email"
+                                id="name">
+                            <mat-error *ngFor="let message of showValidationMessages('email')">
+                                {{message}}
+                            </mat-error>
+                        </div>
+                        <button [disabled]="shareAppointmentForm.get('email').invalid ||  postContactDetails.length>10"
+                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center px-2"
+                            type="button" (click)="add('email')">
+                            <i class="icon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4" />
+            <p class="fs-sm mb-3">
+                <span class="me-2">{{ 'ShareAppointmentForm.ContactsAdded' | translate}}</span>
+                <strong>{{postContactDetails.length}}/10</strong>
+            </p>
+            <div class="d-flex align-items-center border px-2 py-1 rounded-3 mb-3"
+                *ngFor="let contact of postContactDetails">
+                <p class="fs-sm me-auto mb-0 text-break">
+                   {{contact | formatCell}}
+                </p>
+                <!-- <p *ngIf="content.type == 'email'" class="fs-sm text-break me-auto mb-0">
+                    {{content?.value}}
+                </p> -->
+                <button class="btn btn-sm btn-link text-dark text-decoration-none p-0 ms-3"
+                    (click)="deleteContent(contact)">
+                    <i class="icon-cros-icon fs-xs"></i>
+                </button>
+            </div>
+            <p class="fs-sm fw-semi-bold mb-0">{{ 'ShareAppointmentForm.Maximum10allowed' | translate}}</p>
+        </div>
+        <footer class="popup-footer d-flex align-items-center gap-3">
+            <button (click)="onSubmit()" class="btn btn-sm btn-primary-dark px-3"
+                [disabled]="postContactDetails.length<=0">{{
+                'ShareAppointmentForm.SendInvite' |
+                translate}}</button>
+        </footer>
+    </form>
+</div>
+<div class="d-flex flex-column align-items-center justify-content-center flex-1 gap-3 scroll-y" *ngIf="currentSlide==2">
+    <i class="material-icons display-6 fw-medium text-success">done_all</i>
+    <p class="fs-sm fw-bold mb-0">{{'ShareAppointmentForm.YourAppointmentInvitationHasBeenSentSuccessfully'|translate}}
+    </p>
+</div>

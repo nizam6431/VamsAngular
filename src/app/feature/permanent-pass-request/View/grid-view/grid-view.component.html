@@ -1,0 +1,88 @@
+<!-- uncomment when we need -->
+<div class="row">
+  <div class="col-md-3 vams-grid-filters">
+    <!-- <mat-select  class="form-control" formControlName="categoryType"
+      placeholder="Select Category Type" (selectionChange)="changeCategory($event.value)">
+      <mat-option *ngFor="let item of categoryType" [value]="item">
+        <p class="d-flex align-items-center mb-0">
+          <span class="me-auto">{{item.name}}</span>
+        </p>
+      </mat-option>
+    </mat-select> -->
+  </div>
+  <div class="col-md-6" style="margin-top: 2rem;"> 
+    <button
+    class="btn btn-link p-0 fw-medium text-success ms-auto text-decoration-none border-0 d-flex align-items-center timebtn"
+    (click)="onChange()" >
+    <i class="icon-refresh fs-sm me-1"></i>
+    <span class="fs-xs">{{"AppointmentDetails.Refresh" | translate}}</span>
+  </button>
+    </div>
+  <div class="col-md-3 vams-grid-filters d-flex">
+    <!-- <app-toggle-button (onToggle)="onToggle($event)"></app-toggle-button> -->
+    <div class="input-group search-group">
+      <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+        class="form-control form-control-sm" />
+      <button class="btn btn-sm btn-link btn-clean text-decoration-none" *ngIf="hasSearchValue"
+        (click)="cleanSearchBox(input)">
+        <i class="icon-cros-icon"></i>
+      </button>
+      <button class="btn btn-sm btn-outline-light d-flex align-items-center" (click)="applyFilter(input.value)">
+        <i class="icon-search-icon"></i>
+      </button>
+    </div>
+  </div>
+ 
+</div>
+
+<div class="vams-table-wrapper vams-table-responsive">
+    <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="dataSource" class="mat-table-hover">
+      <ng-container *ngFor="let colName of columns; let i = index" [matColumnDef]="columns[i].key">
+        <ng-container *ngIf="columns[i].sortRequired else noSort">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{colName.value | translate}} </th>
+      </ng-container>
+        <td mat-cell class="textwrap" *matCellDef="let element">
+          <ng-container class="mat-cell-sm " *ngIf="columns[i].key == 'photoUrl'">
+            <div *ngIf="element?.photoUrl;else elsePart" class="picture image flex align-items-center justify-content-center  overflow-hidden">
+              <img (error)="handleIamge(element.photoUrl,'self')" [src]="selfPhotoUrl">
+            </div>
+            <ng-template #elsePart >
+              -
+            </ng-template>
+          </ng-container>
+          <ng-container class="mat-cell-sm" *ngIf="columns[i].key == 'name' ">
+            {{element["firstName"]}} {{element["lastName"]}}
+          </ng-container>
+          <ng-container class="mat-cell-sm"  *ngIf="columns[i].key != 'mobileNo' && columns[i].key != 'photoUrl' && columns[i].key != 'name'  && columns[i].key != 'action' ">
+            {{element[colName.key]?element[colName.key]:"-"}} 
+          </ng-container>
+          <ng-container *ngIf="columns[i].key == 'mobileNo'">
+            <span>+{{ element?.isdCode + " " + formatCellNumber(element['mobileNo']) }}</span>
+            <!-- <span *ngIf="element.mobileNo else cellNotAvailable">
+              
+                {{ + element?.isdCode  " " + formatCellNumber(element['mobileNo'])}}
+            </span> -->
+            <ng-template #cellNotAvailable>-</ng-template>
+          </ng-container>
+          <div class="d-inline-flex align-items-center gap-2" *ngIf="columns[i].key == 'action'">
+            <!-- <ng-container >
+              <button class="btn btn-link btn-icon" >
+                <i class="icon-edit"></i>
+              </button>
+              <button class="btn btn-link btn-icon" >
+                <i class="icon-delete"></i>
+              </button>
+            </ng-container> -->
+          </div>
+        </td>
+
+        <ng-template #noSort>
+          <th mat-header-cell *matHeaderCellDef > {{colName.value | translate}} </th>
+        </ng-template>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnKeys;" (click)="diplayRow(row)"></tr>
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [length]="totalCount"
+    (page)="getPaginationData($event)" aria-label="Select page of users"></mat-paginator>

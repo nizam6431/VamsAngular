@@ -1,0 +1,16 @@
+<div class="dialog-content d-grid dialg-popup-content" *ngIf="docType!='pdf' ">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100 view-popup-close" style="position: fixed;"></button>
+    <div class="email-banner p-1 border rounded-4" >
+    <img (error)="handleIamge(documentsPhoto)" [src]="documentsPhoto">
+    </div>
+</div>
+<div *ngIf="docUrls">
+    <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100 view-popup-close"
+        style="position: fixed;"></button>
+    <div class="email-banner p-1 border rounded-4">
+        <pdf-viewer  [src]="docUrls" [render-text]="true" [original-size]="false"
+            style="width: 400px; height: 500px">
+        </pdf-viewer>
+    </div>
+
+</div> 

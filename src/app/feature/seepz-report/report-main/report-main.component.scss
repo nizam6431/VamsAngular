@@ -1,0 +1,17 @@
+@import "src/assets/stylesheets/core";
+:host {
+    @extend .host;
+    background-color: $white;
+}
+
+.visitor-stats-item {
+    &:first-child {
+        border-left-width: 0 !important;
+    }
+}
+.mw-10{
+    max-width: 10rem;
+  }
+.status-select-controls{
+    width: 17rem !important;
+}  

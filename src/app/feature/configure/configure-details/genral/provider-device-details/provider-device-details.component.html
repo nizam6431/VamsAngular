@@ -1,0 +1,81 @@
+<!-- <a routerLink="/providerSetup">Back</a> -->
+<div class="vams-page-sub-header d-flex align-items-start gap-5 px-3 pb-3">
+    <div class="py-1">
+        <button (click)="gotoProviderSetup()"
+            class="btn btn-link d-flex align-items-center text-dark text-decoration-none fs-sm fw-medium border-0 p-0">
+            <i class="icon-angle-left fw-bold fs-5"></i>
+            <span>{{ "Masters.Back" | translate }}</span>
+        </button>
+    </div>
+    <div class="flex-1">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <label  *ngIf="productType ==ProductType.Commercial" class="col-sm-4 col-form-label">{{
+                        "provider_setup.buildingName" | translate
+                        }} :</label>
+                    <label  *ngIf="productType ==ProductType.Enterprise" class="col-sm-4 col-form-label">{{
+                        "provider_setup.locationName" | translate
+                        }} :</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-plaintext mb-0">{{providerData?.buildingName}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-4 col-form-label">{{
+                        "provider_setup.provider_name" | translate
+                        }} :</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-plaintext mb-0">{{providerData?.name}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-4 col-form-label">{{
+                        "provider_setup.url" | translate
+                        }} :</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-plaintext mb-0">{{providerData?.url}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <label class="col-sm-4 col-form-label">{{
+                        "provider_setup.token" | translate
+                        }} :</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-plaintext mb-0 text-break">{{providerData?.token}}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-sm-6" *ngIf="providerData?.apiVersion">
+                <div class="row">
+                    <label class="col-sm-4 col-form-label">{{
+                        "provider_setup.version" | translate
+                        }} :</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-plaintext mb-0">{{providerData?.apiVersion}}</p>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="col-sm-6" *ngIf="providerData?.cardTypeAccess">
+                <div class="row">
+                    <label class="col-sm-4 col-form-label">{{
+                        "provider_setup.cardType" | translate
+                        }} :</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-plaintext mb-0">{{providerData?.cardTypeAccess}}</p>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+<app-configure-grid [dataSource]="dataSource" [columns]="columns" [type]="type" (rowData)="rowData($event)"
+    (modeEmmiter)="changeMode($event)"[totalCount]="totalCount" (searchEmittor)="getSearchtext($event)"></app-configure-grid>

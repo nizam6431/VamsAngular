@@ -1,0 +1,929 @@
+<div class="walkin-web-inner-box" *ngIf="!isExcel" [ngStyle]="IsPopup ? { border: 'none' } : { border: 'solid 2px #EDEDED' }">
+    <a class="popup-close-button" *ngIf="IsPopup" (click)="dismissAll()"><i class="fas fa-times"></i></a>
+    <div class="walkin-web-inner-box-profile-photo" *ngIf="visitorThumbnail != ''">
+        <img src="{{ visitorThumbnail }}" />
+    </div>
+    <h3>{{ "Walkin.WalkIn" | translate }}</h3>
+    <div *ngIf="currentSlide == 1">
+        <form (ngSubmit)="firstSlideNextClick()" #firstform="ngForm" [formGroup]="walkinFirstForm" autocomplete="off" novalidate>
+            <label class="error-color fontSize-10" *ngIf="
+          firstform?.submitted &&
+          phonenumber?.errors?.atLeastOne &&
+          firstform?.submitted &&
+          email?.errors?.atLeastOne
+        ">
+                {{ "Walkin.EnterEitherCellNumberOrEmail" | translate }}
+            </label>
+            <!-- First Slide Start -->
+
+            <div class="contact-detail-small">
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        {{ "Walkin.ISD" | translate }}
+                    </div>
+                    <div class="input-area pb-20">
+                        <!-- <select class="" (change)="isdCodeChange()" formControlName="isdCode" name="isdCode">
+                            <option *ngFor="let code of isdCodes" value="{{code.IsdCode}}">+{{code.IsdCode}}
+                            </option>
+                        </select> -->
+                        <ng-select2 *ngIf="isdCodes.length > 0" [options]="options" formControlName="isdCode" name="isdCode" (valueChanged)="isdCodeChange($event)" [data]="isdCodes">
+                        </ng-select2>
+                        <div class="error-color fontSize-10" *ngIf="
+                (isdCode?.invalid &&
+                  firstform?.submitted &&
+                  isdCode?.errors?.required) ||
+                (isdCode?.invalid &&
+                  isdCode?.touched &&
+                  isdCode?.errors?.required)
+              ">
+                            {{ "Walkin.ISDRequired" | translate }}
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        {{ "Walkin.CellNumber" | translate }}
+                    </div>
+                    <div class="input-area pb-20">
+                        <input type="text" class="unicode-phone-number" (blur)="clearEmail()" mask="(000) 099-999999" placeholder="{{ 'Walkin.CellNumberPlaceholder' | translate }}" pattern="[0-9]*" inputmode="numeric" formControlName="phonenumber" name="phonenumber" />
+                        <label class="error-color fontSize-10" *ngIf="
+                (phonenumber?.invalid &&
+                  firstform?.submitted &&
+                  phonenumber?.errors?.pattern) ||
+                (phonenumber?.invalid &&
+                  phonenumber?.touched &&
+                  phonenumber?.errors?.pattern)
+              ">
+                            {{ "Walkin.CellNumberValid" | translate }}
+                        </label>
+                    </div>
+                </li>
+            </div>
+            <div style="clear: both"></div>
+            <div class="text-center">
+                <div class="or-style">{{ "Walkin.Or" | translate }}</div>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular input-field">
+                {{ "Walkin.EmailId" | translate }}
+            </div>
+            <div class="input-area pb-20">
+                <input type="text" placeholder="{{ 'Walkin.EmailPlaceholder' | translate }}" formControlName="email" (blur)="clearCellNumber()" name="email" class="" />
+                <label class="error-color fontSize-10" *ngIf="
+            (email?.invalid && firstform?.submitted && email?.errors?.email) ||
+            (email?.invalid && email?.touched && email?.errors?.email)
+          ">
+                    {{ "Walkin.EmailValid" | translate }}
+                </label>
+            </div>
+            <div class="col-md-12" *ngIf="isHSQAlreadyFilled">
+                <div class="text-center">
+                    <label class="text-center error-color fontSize-10">
+                        {{ HSQAlreadyFilledErrorMessage }}
+                    </label>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="walk-in-button fontSize-14 Weight-regular mt-10">
+                    {{ "Walkin.Next" | translate }}
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- First Slide End -->
+    <form [formGroup]="walkinSecondForm" novalidate>
+        <div *ngIf="currentSlide == 2">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Host Company Name
+                    </div>
+                    <div class="input-area pb-20">
+                        <!-- <mat-label>Host Company</mat-label> -->
+                        <input type="text" placeholder="Please select company" aria-label="Number" matInput [matAutocomplete]="auto" class="form-control">
+                        <mat-autocomplete #auto="matAutocomplete" formControlName="hostCompanyName">
+                            <mat-option *ngFor="let company of listOfComapny" [value]="company.value" class="fs-sm">
+                                {{ company.viewValue }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <!-- <mat-select formControlName="hostCompanyName">
+                            <mat-option *ngFor="let company of listOfComapny" [value]="company.value">
+                                {{ company.viewValue }}
+                            </mat-option>
+                        </mat-select> -->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Host Name
+                    </div>
+                    <div class="input-area pb-20">
+                        <input type="text" style="text-transform: capitalize" formControlName="hostName" name="hostName" maxlength="50" placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" class="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        First Name
+                    </div>
+                    <div class="input-area pb-20">
+                        <input type="text" style="text-transform: capitalize" formControlName="firstName" name="firstname" maxlength="50" placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" class="" />
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Last Name
+                    </div>
+                    <div class="input-area pb-20">
+                        <input type="text" style="text-transform: capitalize" formControlName="lastName" name="lastName" maxlength="50" placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" class="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Cell Number
+                    </div>
+                    <div class="input-area pb-20">
+                        <span *ngIf="phonenumber.value">{{ phonenumber.value }}</span>
+                        <input *ngIf="!phonenumber.value" type="text" style="text-transform: capitalize" formControlName="phonenumber" name="cellNumber" maxlength="50" placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" class="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Email
+                    </div>
+                    <div class="input-area pb-20">
+                        <span *ngIf="email.value">{{ email.value }}</span>
+                        <input *ngIf="!email.value" type="text" style="text-transform: capitalize" formControlName="email" name="emailId" maxlength="50" placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" class="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Visitor Company
+                    </div>
+                    <div class="input-area pb-20">
+                        <input type="text" style="text-transform: capitalize" formControlName="visitorCompany" name="visitorCompany" maxlength="50" placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" class="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div>
+                        <div class="form-row">
+                            <button mat-raised-button (click)="showOtherDetails()">
+                                Add other details
+                            </button>
+                            <div *ngIf="hideOtherDetails">
+                                <ng-container *ngFor="let item of questionsFields; let i = index">
+                                    <div class="form-group col-md-12">
+                                        <div class="subject-color fontSize-12 Weight-regular" [ngClass]="{ 'input-field': item.mandatory }">
+                                            {{ item.question }}
+                                        </div>
+                                        <input type="text" class="form-control" id="fequestion1" [formControlName]="'question' + i" />
+                                        <mat-error *ngFor="
+                        let message of showValidationMessageForDynamicContent(
+                          'question' + i,
+                          walkinSecondForm
+                        )
+                      ">
+                                            {{ message }}<br />
+                                        </mat-error>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="button" class="walk-in-button fontSize-14 Weight-regular mt-10" (click)="goToNextSlide(currentSlide)">
+                    {{ "Walkin.Next" | translate }}
+                </button>
+            </div>
+        </div>
+        <div *ngIf="currentSlide == 3">
+            <!-- <div class="col-md-6"> -->
+            <!-- <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="feStartDateandTime">Start Date<span class="mendatory">*</span></label>
+          <input type="text" placeholder="{{ 'ShareAppointmentSchedule.PleaseSelectAppointmentDate' | translate}}"
+            class="input-style" theme="dp-material" [dpDayPicker]="datePickerConfig" name="appointmentStartDate"
+            (onSelect)="selectedDateChanged($event)" formControlName="appointmentStartDate">
+          <mat-error *ngFor="let message of showValidationMessages('appointmentStartDate')">
+            {{message}}<br>
+          </mat-error>
+        </div>
+        <div class="form-group col-md-12">
+          <label for="feEndDateandTime">End Date<span class="mendatory">*</span></label>
+          <input type="text" placeholder="{{ 'ShareAppointmentSchedule.PleaseSelectAppointmentDate' | translate}}"
+            class="input-style" theme="dp-material" [dpDayPicker]="datePickerConfig" name="appointmentEndDate"
+            (onSelect)="selectedDateChanged($event)" formControlName="appointmentEndDate">
+          <mat-error *ngFor="let message of showValidationMessages('appointmentEndDate')">
+            {{message}}<br>
+          </mat-error>
+        </div>
+      </div> -->
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Duration (In Minutes)<span class="mendatory">*</span>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="duration" class="form-check-input" type="radio" name="duration" id="inlineRadio1" value="option1" />
+                        <div class="subject-color fontSize-12 Weight-regular">10 Mins</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="duration" class="form-check-input" type="radio" name="duration" id="inlineRadio2" value="option2" />
+                        <div class="subject-color fontSize-12 Weight-regular">15 Mins</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="duration" class="form-check-input" type="radio" name="duration" id="inlineRadio3" value="option3" />
+                        <div class="subject-color fontSize-12 Weight-regular">30 Mins</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="duration" class="form-check-input" type="radio" name="duration" id="inlineRadio4" value="option4" />
+                        <div class="subject-color fontSize-12 Weight-regular">45 Mins</div>
+                    </div>
+                    |
+                    <div class="form-check form-check-inline">
+                        <input type="text" class="w50" id="hours" formControlName="hours" /> :
+                        <input type="text" class="w50" id="mins" formControlName="mins" />
+                    </div>
+                    <mat-error *ngFor="
+              let message of showValidationMessages(
+                walkinSecondForm,
+                'typeOfVisitor'
+              )
+            ">
+                        {{ message }}
+                    </mat-error>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Type of visitor<span class="mendatory">*</span>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="typeOfVisitor" class="form-check-input" type="radio" name="typeOfVisitor" id="inlineRadio1" value="option1" />
+                        <div class="subject-color fontSize-12 Weight-regular">General</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="typeOfVisitor" class="form-check-input" type="radio" name="typeOfVisitor" id="inlineRadio2" value="option2" />
+                        <div class="subject-color fontSize-12 Weight-regular">VIP</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="typeOfVisitor" class="form-check-input" type="radio" name="typeOfVisitor" id="inlineRadio3" value="option3" />
+                        <div class="subject-color fontSize-12 Weight-regular">On Call</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="typeOfVisitor" class="form-check-input" type="radio" name="typeOfVisitor" id="inlineRadio4" value="option4" />
+                        <div class="subject-color fontSize-12 Weight-regular">Guest</div>
+                    </div>
+                    <mat-error *ngFor="
+              let message of showValidationMessages(
+                walkinSecondForm,
+                'typeOfVisitor'
+              )
+            ">
+                        {{ message }}<br />
+                    </mat-error>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="subject-color fontSize-12 Weight-regular input-field">
+                        Purpose of visit <span class="mendatory">*</span>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="purposeOfVisit" class="form-check-input" type="radio" name="purposeOfVisit" id="inlineRadio1" value="option1" />
+                        <div class="subject-color fontSize-12 Weight-regular">Meeting</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="purposeOfVisit" class="form-check-input" type="radio" name="purposeOfVisit" id="inlineRadio2" value="option2" />
+                        <div class="subject-color fontSize-12 Weight-regular">Demo</div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input formControlName="purposeOfVisit" class="form-check-input" type="radio" name="purposeOfVisit" id="inlineRadio3" value="option3" />
+                        <div class="subject-color fontSize-12 Weight-regular">
+                            conference
+                        </div>
+                    </div>
+                    <mat-error *ngFor="
+              let message of showValidationMessages(
+                walkinSecondForm,
+                'purposeOfVisit'
+              )
+            ">
+                        {{ message }}<br />
+                    </mat-error>
+                </div>
+                <!-- <div class="row">
+                        <div class="col-md-6">
+                            <button (click)="onSubmit()" mat-raised-button>Save</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button mat-raised-button (click)="formReset()">Reset</button>
+                        </div>
+                    </div> -->
+                <!-- </div> -->
+            </div>
+            <div class="text-center">
+                <button type="button" class="walk-in-button fontSize-14 Weight-regular mt-10" (click)="goToNextSlide(currentSlide)">
+                    {{ "Walkin.Next" | translate }}
+                </button>
+            </div>
+        </div>
+    </form>
+    <!-- <form (ngSubmit)="secondSlideNextClick()" #secondform="ngForm" [formGroup]="walkinSecondForm" autocomplete="off"
+    novalidate>Second Slide Start
+    <div *ngIf="currentSlide == 2">
+      <label class="error-color fontSize-10"
+        *ngIf="(secondform?.submitted && cellnumber?.errors?.atLeastOne) && (secondform?.submitted && emailSecond?.errors?.atLeastOne)">
+        {{'Walkin.EnterEitherCellNumberOrEmail' | translate}}
+      </label>
+      <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{'Walkin.FirstName' | translate}}
+      </div>
+      <div class="input-area pb-20">
+        <input type="text" style="text-transform: capitalize;" formControlName="firstname" name="firstname"
+          maxlength="50" placeholder="{{'Walkin.FirstNamePlaceholder' | translate}}" class="">
+        <label class="error-color fontSize-10"
+          *ngIf="(firstname?.invalid && secondform?.submitted && firstname?.errors?.required)||(firstname?.invalid && firstname?.touched && firstname?.errors?.required)">
+          {{'Walkin.FirstNameRequired' | translate}}
+        </label>
+
+        <label class="error-color fontSize-10"
+          *ngIf="(firstname?.invalid && secondform?.submitted && firstname?.errors?.maxlength)||(firstname?.invalid && firstname?.touched && firstname?.errors?.maxlength)">
+          {{'Walkin.FirstNameMaxlength' | translate}}
+        </label>
+      </div>
+      <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{'Walkin.LastName' | translate}}
+      </div>
+      <div class="input-area pb-20">
+        <input type="text" style="text-transform: capitalize;" formControlName="lastname" name="lastname" maxlength="50"
+          placeholder="{{'Walkin.LastNamePlaceholder' | translate}}" class="">
+        <label class="error-color fontSize-10"
+          *ngIf="(lastname?.invalid && secondform?.submitted && lastname?.errors?.required)||(lastname?.invalid && lastname?.touched && lastname?.errors?.required)">
+          {{'Walkin.LastNameRequired' | translate}}
+        </label>
+
+        <label class="error-color fontSize-10"
+          *ngIf="(lastname?.invalid && secondform?.submitted && lastname?.errors?.maxlength)||(lastname?.invalid && lastname?.touched && lastname?.errors?.maxlength)">
+          {{'Walkin.LastNameMaxlength' | translate}}
+        </label>
+      </div>
+      <div class="subject-color fontSize-12 Weight-regular pb-5">{{'Walkin.EmailId' | translate}}
+      </div>
+      <div class="input-area pb-20">
+        <input type="text" formControlName="emailSecond" name="emailSecond" maxlength="250"
+          placeholder="{{'Walkin.EmailPlaceholder' | translate}}" class="">
+        <label class="error-color fontSize-10"
+          *ngIf="(emailSecond?.invalid && secondform?.submitted && emailSecond?.errors?.email)||(emailSecond?.invalid && emailSecond?.touched && emailSecond?.errors?.email)">
+          {{'Walkin.EmailValid' | translate}}
+        </label>
+      </div>
+      <div class="contact-detail-small">
+        <li>
+          <div class="subject-color fontSize-12 Weight-regular pb-5">{{'Walkin.ISD' |
+            translate}}</div>
+          <div class="input-area pb-20">
+           <select class="" (change)="isdCodeChangeSecond()" formControlName="isdCodeSecond"
+                            name="isdCodeSecond">
+                            <option *ngFor="let code of isdCodes" value="{{code.IsdCode}}">+{{code.IsdCode}}
+                            </option>
+                        </select> -->
+    <!-- <ng-select2 *ngIf="isdCodes.length>0" [options]="options" formControlName="isdCodeSecond"
+                            name="isdCodeSecond" (valueChanged)="isdCodeChangeSecond($event)" [data]="isdCodes">
+                        </ng-select2>
+                        <label class="error-color fontSize-10"
+                            *ngIf="(isdCodeSecond?.invalid && secondform?.submitted && isdCodeSecond?.errors?.required) 
+                                || (isdCodeSecond?.invalid && isdCodeSecond?.touched && isdCodeSecond?.errors?.required)">
+                            {{'Walkin.ISDRequired' | translate}}
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="subject-color fontSize-12 Weight-regular pb-5">{{'Walkin.CellNumber' |
+                        translate}}</div>
+                    <div class="input-area pb-20">
+                        <input type="text" pattern="[0-9]*" inputmode="numeric" formControlName="cellnumber" name="cellnumber" mask='(000) 099-999999'
+                            placeholder="{{'Walkin.CellNumberPlaceholder' | translate}}" class=" unicode-phone-number">
+                        <label class="error-color fontSize-10" *ngIf="(cellnumber?.invalid && secondform?.submitted && cellnumber?.errors?.pattern) 
+                                || (cellnumber?.invalid && cellnumber?.touched && cellnumber?.errors?.pattern)">
+                            {{'Walkin.CellNumberValid' | translate}}
+                        </label>
+                    </div>
+                </li>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'Walkin.VisitorsCompany' | translate}}</div>
+            <div class="input-area pb-20">
+                <input type="text" style="text-transform: capitalize;" formControlName="company" name="company" maxlength="100"
+                    placeholder="{{'Walkin.VisitorsCompany' | translate}}" class="">
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'Walkin.SelectUser' | translate}} </div>
+            <div class="input-area pb-20 walkin-search">
+                <input type="text" (selectItem)="assignselectedUser($event)" [(ngModel)]="searchUser"
+                    [resultFormatter]="formatMatches" [inputFormatter]="formatMatches" [ngbTypeahead]="search"
+                    formControlName="host" name="host" placeholder="{{'Walkin.SearchUserPlaceholder' | translate}}"
+                    class="">
+                <a href="javascript:void(0)"><i class="fas fa-search" aria-hidden="true"></i></a>
+                <label class="error-color fontSize-10" *ngIf="((host?.invalid && secondform?.submitted && host?.errors?.required)
+                            ||(host?.invalid && host?.touched && host?.errors?.maxlength)) || 
+                            (secondform?.submitted && hostId == 0) || (host?.touched && hostId == 0)">
+                    {{'Walkin.SearchUserRequired' | translate}}
+                </label>
+            </div>
+
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'Walkin.PurposeofVisit' | translate}} </div>
+            <div class="input-area pb-20">
+                <select class="" formControlName="selectedPurpose" name="selectedPurpose">
+                    <option value="" disabled selected>{{'Walkin.PurposeOfVisitPlaceholder' | translate}}
+                    </option>
+                    <option *ngFor="let purpose of purposeOfVisits" value="{{purpose.Value}}">{{purpose.Value}}
+                    </option>
+                </select>
+                <label class="error-color fontSize-10"
+                    *ngIf="(selectedPurpose?.invalid && secondform?.submitted && selectedPurpose?.errors?.required) 
+                                || (selectedPurpose?.invalid && selectedPurpose?.touched && selectedPurpose?.errors?.required)">
+                    {{'Walkin.PurposeOfVisitRequired' | translate}}
+                </label>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5">{{'Walkin.Duration' | translate}} </div>
+            <div class="input-area pb-20">
+                <select class="" formControlName="duration" name="duration">
+                    <option value="" disabled selected>{{'Walkin.DurationPlaceholder' | translate}}</option>
+                    <option *ngFor="let d of durationOptions" value="{{d.id}}">{{d.value}}
+                </select>
+                <label class="error-color fontSize-10" *ngIf="(duration?.invalid && secondform?.submitted && duration?.errors?.required) 
+                        || (duration?.invalid && duration?.touched && duration?.errors?.required)">
+                    {{'Walkin.DurationRequired' | translate}}
+                </label>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="walk-in-button fontSize-14 Weight-regular mt-10">{{'Walkin.Next' |
+                    translate}}</button>
+            </div> -->
+    <!-- Second Slide End -->
+    <!-- </div>
+    </form> -->
+
+    <form (ngSubmit)="validateOTP()" #thirdform="ngForm" [formGroup]="checkinForm" autocomplete="off" novalidate>
+        <div *ngIf="currentSlide == 4">
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">
+                {{ "Walkin.OTP" | translate }}
+            </div>
+            <input id="codeBox1" #otpVal class="w50" type="text" maxlength="1" (keyup)="onKeyUpEvent(0, $event, 4)" />
+            <input id="codeBox2" #otpVal class="w50" type="text" maxlength="1" (keyup)="onKeyUpEvent(1, $event, 4)" />
+            <input id="codeBox3" #otpVal class="w50" type="text" maxlength="1" (keyup)="onKeyUpEvent(2, $event, 4)" />
+            <input id="codeBox4" #otpVal class="w50" type="text" maxlength="1" (keyup)="onKeyUpEvent(3, $event, 4)" />
+            <!-- Third Slide Start -->
+            <div class="input-area pb-20">
+                <label *ngIf="
+            (otp?.invalid && otp?.touched && otp?.errors?.required) ||
+            (otp?.invalid && otp?.touched && otp?.errors?.required)
+          " class="error-color fontSize-10">{{ "Walkin.OTPRequired" | translate }}</label>
+
+                <label *ngIf="
+            (otp?.invalid && thirdform?.submitted && otp?.errors?.pattern) ||
+            (otp?.invalid && otp?.touched && otp?.errors?.pattern)
+          " class="error-color fontSize-10">{{ "Walkin.OTPMaxlength" | translate }}</label>
+
+                <div class="otp-time-limit" *ngIf="timeLeft == 30">
+                    {{ "Walkin.NotReceivedOTP" | translate }}
+                    <span><a href="javascript:void(0)" (click)="resendOTP()">{{
+                            "Walkin.ResendOTP" | translate
+                            }}</a></span><br />
+                </div>
+
+                <div class="otp-time-limit" *ngIf="timeLeft < 30">
+                    {{ "Walkin.NotReceivedOTP" | translate }} {{ "Walkin.ResendOTP" | translate }}
+                    <span>(00:{{ timeLeft }})</span>
+                </div>
+
+                <label *ngIf="isOTPError" class="error-color fontSize-10">{{
+                    "Walkin.ValidOTP" | translate
+                    }}</label>
+            </div>
+
+            <div class="text-center">
+                <div class="or-style">{{ "Walkin.Or" | translate }}</div>
+            </div>
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">
+                {{ "CheckIn.BypassPin" | translate }}
+            </div>
+            <input id="codeBox1" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(0, $event, 6)" />
+            <input id="codeBox2" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(1, $event, 6)" />
+            <input id="codeBox3" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(2, $event, 6)" />
+            <input id="codeBox4" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(3, $event, 6)" />
+            <input id="codeBox4" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(4, $event, 6)" />
+            <input id="codeBox5" #bypassPin class="w50" type="text" maxlength="1" (keyup)="onKeyUpEventBypass(5, $event, 6)" />
+            <div class="text-center">
+                <label *ngIf="isResent" class="success-color fontSize-10">{{
+                    "Walkin.OTPSent" | translate
+                    }}</label>
+                <label *ngIf="
+            (pin?.invalid && pin?.errors?.required) ||
+            (pin?.invalid && pin?.touched && pin?.errors?.required)
+          " class="error-color fontSize-10">{{ "Walkin.OTPRequired" | translate }}</label>
+
+                <label *ngIf="
+            (pin?.invalid && thirdform?.submitted && pin?.errors?.pattern) ||
+            (pin?.invalid && pin?.touched && pin?.errors?.pattern)
+          " class="error-color fontSize-10">{{ "Walkin.OTPMaxlength" | translate }}</label>
+                <div style="display: inline-block">
+                    <button type="button" class="walk-in-button fontSize-14 Weight-regular mt-10 left-pull" (click)="goToNextSlide(currentSlide)">
+                        {{ "Walkin.Next" | translate }}
+                    </button>
+                    <!-- <a href="javascript:void(0)" (click)="openBypassPin()"
+                        class="walk-in-button fontSize-14 Weight-regular mt-10 right-pull">{{'Walkin.BypassPin' |
+                        translate}}</a>
+                        <br/> -->
+                    <button (click)="showCancelAppointmentModal(cancelAppointment)" type="button" class="walk-in-button fontSize-14 Weight-regular mt-10">
+                        {{ "Walkin.CancelAppointment" | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Third Slide End -->
+    </form>
+    <!-- <form (ngSubmit)="validatePIN()" #fourthform="ngForm" [formGroup]="bypassPinForm" autocomplete="off" novalidate>
+        <div *ngIf="currentSlide == 4">
+            <div class="subject-color fontSize-12 Weight-regular pb-5 input-field">{{'Walkin.BypassPin' | translate}}
+            </div>
+
+            <div class="input-area pb-20">
+                <input type="password" pattern="[0-9]*" (focus)="isPINError = false" inputmode="numeric"
+                    placeholder="{{'Walkin.PINPlaceholder' | translate}}" formControlName="pin" name="pin"
+                    class="">
+                <label *ngIf="(pin?.invalid && fourthform?.submitted && pin?.errors?.required)
+                ||(pin?.invalid && pin?.touched && pin?.errors?.required)"
+                    class="error-color fontSize-10">{{'Walkin.PINRequired' | translate}}</label>
+
+                <label *ngIf="(pin?.invalid && fourthform?.submitted && pin?.errors?.pattern)
+                 ||(pin?.invalid && pin?.touched && pin?.errors?.pattern)"
+                    class="error-color fontSize-10">{{'Walkin.PINMaxlength' | translate}}</label>
+
+                <label *ngIf="isPINError" class="error-color fontSize-10">{{'Walkin.WrongPIN' | translate}}</label>
+            </div>
+            <div class="text-center">
+                <div style="display: inline-block;">
+                    <button type="submit"
+                        class="walk-in-button fontSize-14 Weight-regular mt-10 left-pull">{{'Walkin.Next' |
+                        translate}}</button>
+                    <a href="javascript:void(0)" (click)="showOTPScreen()"
+                        class="walk-in-button fontSize-14 Weight-regular mt-10 right-pull">{{'Walkin.ValidateByOTP' |
+                        translate}}</a>
+                    <button (click)="showCancelAppointmentModal(cancelAppointment)" type="button"
+                        class="walk-in-button fontSize-14 Weight-regular mt-10">{{'Walkin.CancelAppointment' |
+                        translate}}</button>
+                </div>
+            </div>
+
+            
+        </div>
+    </form> -->
+    <div *ngIf="currentSlide == 5">
+        <!-- Fifth Slide Start -->
+        <div class="pb-20" *ngIf="!showWebcam">
+            <img height="260" width="270" [src]="webcamImage?.imageAsDataUrl" src="assets/images/capture-photo.png" />
+        </div>
+        <webcam [height]="260" [width]="270" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam" [switchCamera]="nextWebcamObservable"></webcam>
+        <div *ngIf="errors.length > 0">
+            <h4>{{ "Walkin.ErrorMessages" | translate }}:</h4>
+            <ul *ngFor="let error of errors">
+                <li>{{ error | json }}</li>
+            </ul>
+        </div>
+        <label *ngIf="isPhotoCaptured == false" class="error-color fontSize-10">
+            Please capture photo first</label>
+        <div class="text-center">
+            <a href="javascript:void(0)" class="walk-in-button fontSize-14 Weight-regular mt-10" (click)="takeSnapshot()">
+                <span *ngIf="capturePhoto">{{
+                    "Walkin.CapturePhoto" | translate
+                    }}</span>
+                <span *ngIf="!capturePhoto">{{
+                    "Walkin.CaptureAgain" | translate
+                    }}</span>
+            </a>
+            <!-- <a href="javascript:void(0)" class="walk-in-button fontSize-14 Weight-regular mt-10"
+                (click)="showWebcam = true;webcamImage=undefined; isPhotoCaptured = undefined">{{'Walkin.CaptureAgain' | translate}}</a> -->
+            <a href="javascript:void(0)" class="walk-in-button fontSize-14 Weight-regular mt-10" (click)="upload()">{{
+                "Walkin.Upload" | translate }}</a>
+            <button (click)="showCancelAppointmentModal(cancelAppointment)" type="button" class="walk-in-button fontSize-14 Weight-regular mt-10">
+                {{ "Walkin.CancelAppointment" | translate }}
+            </button>
+        </div>
+        <!-- Fifth Slide End -->
+    </div>
+    <!-- Seven Slide Start -->
+    <div *ngIf="currentSlide == 6">
+        <div class="walkin-checkedin">
+            <i class="fas fa-check-circle"></i><br /> {{ fullname }}
+            <span>{{ "Walkin.HasBeenCheckedIn" | translate }}</span>
+        </div>
+    </div>
+    <div *ngIf="currentSlide == 7">
+        <!-- Sixth Slide Start -->
+        <div class="walkin-scan">
+            <img src="assets/images/print-icon.png" /><br /> {{ "Walkin.PrintingBadge" | translate }}...
+        </div>
+        <!-- Sixth Slide End -->
+    </div>
+</div>
+
+
+<!-- Walkin Popup only for desktop end-->
+<ng-template #cancelAppointment let-dismissModal="dismiss">
+    <app-cancel-modal [dismissModal]="dismissModal" [visitorId]="visitorId" [notificationType]="notificationType" (modalServiceReference)="(modalServiceReference)" (actionCompleted)="actionCompleted($event)" [fullname]="fullname">
+    </app-cancel-modal>
+</ng-template>
+
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="isExcel && showPage == 'walkin_form'">
+    <div class="popup-header">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Walkin.WalkIn" |
+                translate }} ({{buildingName}})</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="excelWalkinForm" autocomplete="off" novalidate>
+        <div class="popup-content" *ngIf="1 === currentSlide">
+            <!-- <div *ngIf="buildingList">
+        <div class="dilogbox">
+          <div *ngIf="buildingList.length > 1">
+            <select class="input-style" (change)="(buildingSelect($event.target['value']))"
+              formControlName="level2DisplayId">
+              <option [ngValue]="null" [disabled]="true">{{'Company.building_placeholder' | translate}}
+              </option>
+              <option *ngFor="let bldg of buildingList" [ngValue]="bldg.displayId">{{bldg.name}}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="buildingList.length == 1">
+            <select class="input-style" formControlName="level2DisplayId">
+              <option *ngFor="let bldg of buildingList" [disabled]="true" [ngValue]="bldg.displayId">
+                {{bldg.name}}</option>
+            </select>
+          </div>
+        </div>
+      </div> -->
+
+
+            <div class="row mb-4">
+                <label for="hostCompany" class="col-md-4 col-form-label">{{ "Walkin.complex_in_host" | translate }}
+                </label>
+                <div class="col-md-8">
+                    <!-- <input type="checkbox" id="switch" class="checkbox" (click)="toggleShow()" />
+                    <label for="switch" class="toggle">
+                        <p>OFF &nbsp;&nbsp;ON</p>
+                    </label> -->
+                    <mat-slide-toggle class="align-self-start" (click)="toggleShow()">
+
+                    </mat-slide-toggle>
+                </div>
+            </div>
+
+
+            <div class="row mb-4" *ngIf="isShown">
+                <label for="hostCompany" class="col-md-4 col-form-label">{{ "Walkin.host_company" | translate }}
+                    <span class="mendatory">*</span>
+                </label>
+                <div class="col-md-8">
+                    <ng-container *ngIf="originalHostCompanyList">
+                        <ng-container *ngIf="originalHostCompanyList.length > 0">
+                            <input type="text" placeholder="{{ 'Walkin.host_company_placeholder' | translate }}" formControlName="hostCompany" aria-label="Number" matInput [matAutocomplete]="auto" class="form-control">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith">
+                                <mat-option *ngFor="let company of hostCompanyList" [value]="company" class="fs-sm" (onSelectionChange)="getHostCompanyValue(company)">
+                                    {{ company.name }} | {{ company.shortName }} | {{ company.officeNumber }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <!-- <mat-select formControlName="hostCompany" placeholder="{{ 'Walkin.host_company_placeholder' | translate }}" class="form-control" disableOptionCentering>
+                                <mat-option *ngFor="let company of hostCompanyList" [value]="company.companyId">
+                                    {{ company.name }} | {{ company.shortName }} | {{ company.officeNumber }}
+                                </mat-option>
+                            </mat-select> -->
+                            <mat-error *ngFor="
+                  let message of showValidationMessageForDynamicContent(
+                    'hostCompany',
+                    excelWalkinForm
+                  )
+                ">
+                                {{ message }}
+                            </mat-error>
+                        </ng-container>
+                        <ng-container *ngIf="originalHostCompanyList.length == 0">
+                            <select class="form-control">
+                                <option value="" disabled selected hidden>
+                                    {{ "Walkin.no_company" | translate }}.
+                                </option>
+                            </select>
+                            <mat-error *ngFor="
+                  let message of showValidationMessageForDynamicContent(
+                    'hostCompany',
+                    excelWalkinForm
+                  )
+                ">
+                                {{ message }}
+                            </mat-error>
+                        </ng-container>
+                        <!-- <ng-template #multi>
+              <select class="form-control" formControlName="hostCompany">
+                <option value="{{hostCompanyList[0].companyId}}" selected disabled>
+                  {{hostCompanyList[0].name}} | {{hostCompanyList[0].shortName}} |
+                  {{hostCompanyList[0].buildingName}} | {{hostCompanyList[0].officeNumber}}
+                </option>
+              </select>
+              <mat-error *ngFor="let message of showValidationMessageForDynamicContent('hostCompany',excelWalkinForm)">
+                {{message}}
+              </mat-error>
+            </ng-template> -->
+                    </ng-container>
+                </div>
+            </div>
+            <div class="d-flex align-items-start mb-4">
+                <button type="submit" (click)="scanDrivingLicense()" class="btn btn-sm btn-white px-3 me-3">{{'Walkin.scan_licsence' | translate}}</button>
+                <div class="dl-photo-wrapper bg-floral-white ms-auto" *ngIf="showdlpic == true">
+                    <img [src]="dlvisitorphotosrc" class="img-fluid" />
+                </div>
+            </div>
+            <div class="card bg-floral-white">
+                <div class="card-body pb-0">
+                    <h6 class="card-title fs-sm fw-semi-bold mb-3">
+                        {{ "Walkin.visitor_detais" | translate }}
+                    </h6>
+                    <div class="row mb-3">
+                        <label for="firstName" class="col-md-4 col-form-label">{{ "Walkin.FirstName" | translate }}
+                            <span class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control text-capitalize" id="firstName" formControlName="firstName" placeholder="{{ 'Walkin.FirstNamePlaceholder' | translate }}" maxlength="50" />
+                            <mat-error *ngFor="let message of showValidationMessageForDynamicContent('firstName',excelWalkinForm)">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="lastName" class="col-md-4 col-form-label">{{ "Walkin.LastName" | translate }}
+                            <span class="mendatory">*</span>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control text-capitalize" id="lastName" formControlName="lastName" placeholder="{{ 'Walkin.LastNamePlaceholder' | translate }}" maxlength="50" />
+                            <mat-error *ngFor="
+                  let message of showValidationMessageForDynamicContent(
+                    'lastName',
+                    excelWalkinForm
+                  )
+                ">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feCompany" class="col-md-4 col-form-label">{{ "Walkin.visitor_company" | translate
+                            }}
+                            <!-- <span class="mendatory">*</span> -->
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text" id="visitorCompany" class="form-control text-capitalize" formControlName="visitorCompany" placeholder="{{
+                  'Walkin.VisitorsCompanyPlaceholder' | translate
+                }}" />
+                            <mat-error *ngFor="
+                  let message of showValidationMessageForDynamicContent(
+                    'visitorCompany',
+                    excelWalkinForm
+                  )
+                ">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feTimeZone" class="col-md-4 col-form-label">{{ "Walkin.CellNumber" | translate }}
+                            <!-- <span class="mendatory">*</span> -->
+                        </label>
+                        <div class="col-md-8">
+                            <ngx-intl-tel-input class="telephone-control-group" [cssClass]="'form-control'" [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="false" [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[SearchCountryField.All]"
+                                [selectFirstCountry]="false" [selectedCountryISO]="selectedCountry" [separateDialCode]="separateDialCode" [preferredCountries]="['us']" name="phone" formControlName="contactNumber" (countryChange)="checkNumber($event)">
+                            </ngx-intl-tel-input>
+                            <mat-error *ngIf="
+                  excelWalkinForm.get('contactNumber').touched &&
+                  excelWalkinForm.get('contactNumber').invalid
+                ">
+                                {{ "Please enter valid cell number" }}<br />
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feCompany" class="col-md-4 col-form-label">{{ "Walkin.EmailId" | translate }}
+                            <!-- <span class="mendatory">*</span> -->
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text" id="email" class="form-control" formControlName="email" placeholder="{{ 'Walkin.EmailPlaceholder' | translate }}" />
+                            <mat-error *ngFor="
+                  let message of showValidationMessageForDynamicContent(
+                    'email',
+                    excelWalkinForm
+                  )
+                ">
+                                {{ message }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 1">
+            <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToNextSlide(currentSlide)">
+                {{ "Schedule.Next" | translate }}
+            </button>
+            <button class="btn btn-sm btn-white px-3" (click)="formReset();showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                {{ "Walkin.reset" | translate }}
+            </button>
+        </div>
+
+        <div class="popup-content" *ngIf="currentSlide == 2">
+            <div class="pb-20" *ngIf="!showWebcam">
+                <img height="315" width="420" [src]="webcamImage?.imageAsDataUrl" src="assets/images/capture-photo.png" />
+            </div>
+            <webcam [height]="340" [width]="420" [trigger]="triggerObservable" [mirrorImage]="'never'" (imageCapture)="handleImage($event)" *ngIf="showWebcam" [switchCamera]="nextWebcamObservable"></webcam>
+            <div *ngIf="errors.length > 0">
+                <h4>{{ "Walkin.ErrorMessages" | translate }}:</h4>
+                <ul *ngFor="let error of errors">
+                    <li>{{ error | json }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="popup-footer d-flex align-items-center gap-3" *ngIf="currentSlide == 2">
+            <button type="button" class="btn btn-sm btn-primary-dark px-3" (click)="goToPreviousSlide(currentSlide)">
+                {{ "Schedule.Back" | translate }}
+            </button>
+            <button *ngIf="capturePhoto" class="btn btn-sm btn-primary-dark px-3" (click)="takeSnapshot()">
+                {{ "Walkin.CapturePhoto" | translate}}
+            </button>
+
+            <button *ngIf="!capturePhoto" class="btn btn-sm btn-primary-dark px-3" (click)="showWebcam = true;webcamImage=undefined;capturePhoto = true; isPhotoCaptured = undefined">
+                {{'Walkin.CaptureAgain' | translate}}
+            </button>
+            <button class="btn btn-sm btn-primary-dark px-3" (click)="confirmVisitorRestrictionStatus()" [disabled]="!walkinProcess || capturePhoto">
+                {{ "Walkin.check_in" | translate }}
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- next page of pass -->
+<div class="d-flex flex-column flex-1 scroll-y" *ngIf="isExcel && showPage == 'pass_screen'">
+    <div class="popup-header">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">{{
+                "Walkin.visitor_pass" |
+                translate }}</span>
+        </div>
+    </div>
+    <div class="popup-content">
+        <div class="card card-visitor-pass bg-linen mx-auto">
+            <div class="card-body">
+                <div class="visitor-profile-details d-flex mb-2">
+                    <div class="profile-wrap flex-1">
+                        <div class="profile-box bg-white p-1 mb-2">
+                            <img [src]="
+              showPassData.visitorPhotoUrl
+                ? showPassData.visitorPhotoUrl
+                : visitorAvatar
+            " alt="Visitor Avatar" class="w-100" />
+                        </div>
+                        <p class="fs-sm fw-bold mb-1">{{ showPassData.visitor_name }}</p>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="fs-xs text-muted">{{ showPassData.date }}</span>
+                            <span class="fs-xs text-muted">{{ showPassData.time }}</span>
+                        </div>
+                    </div>
+                    <div class="qr-code-wrapper bg-white p-1 ms-3">
+                        <img [src]="showPassData.qr_link" alt="QR Code" class="w-100" />
+                    </div>
+                </div>
+                <div class="visitors-pass-details bg-white d-flex justify-content-center align-items-center p-2 mb-2">
+                    <div class="details-box d-flex flex-column flex-1 justify-content-center align-items-center p-1">
+                        <p class="fs-xs opacity-50 mb-0">Host Company</p>
+                        <p class="fs-sm fw-bold mb-0">{{ showPassData.host_company }}</p>
+                    </div>
+                    <div class="details-box d-flex flex-column flex-1 justify-content-center align-items-center border-start p-1">
+                        <p class="fs-xs opacity-50 mb-0">Badge Number</p>
+                        <p class="fs-sm fw-bold mb-0">{{ showPassData.badge_number }}</p>
+                    </div>
+                </div>
+                <p class="fs-xs text-center text-muted mb-0">{{ showPassData.complex_name }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="closeDialog()">
+            {{ "Walkin.ok" | translate }}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="d-flex flex-column flex-1 scroll-y" [@.disabled]="true" >
+    <mat-tab-group class="vams-tab-group vams-tab-group-primary flex-1 scroll-y" animationDuration="0ms"
+        (selectedTabChange)="tabClick($event)" *ngIf="!showTabs" #MatTabGroup commercial
+        [selectedIndex]="selectedIndex">
+        <mat-tab label="{{ 'Masters.Complex' | translate }}" *ngIf="productType == ProductType.Commercial && showL1Tabs">
+            <ng-template matTabContent>
+                <app-complex></app-complex>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="{{ 'Masters.enterprise_details' | translate }}" *ngIf="productType == ProductType.Enterprise && showL1Tabs">
+            <ng-template matTabContent>
+                <app-complex-details-form></app-complex-details-form>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="{{'Masters.Hospital' | translate }}" *ngIf="(productType == ProductType.Hospital && showL1Tabs)">
+            <ng-template matTabContent>
+                <app-hospital></app-hospital>
+            </ng-template>
+        </mat-tab>
+        <!-- <mat-tab label="{{ 'Masters.Building' | translate }}" *ngIf="(productType == ProductType.Commercial || productType == ProductType.Hospital  && showL1Tabs || showL2Tabs) && productType != ProductType.Enterprise">
+            <ng-template matTabContent>
+                <app-building (companyValueChange)="toggleTabs($event)"></app-building>
+            </ng-template>
+        </mat-tab> -->
+        <mat-tab label="{{ 'Masters.Building' | translate }}" *ngIf="(productType == ProductType.Commercial && showL1Tabs || showL2Tabs) && productType != ProductType.Enterprise">
+            <ng-template matTabContent>
+                <app-building (companyValueChange)="toggleTabs($event)"></app-building>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="{{'Masters.Location' | translate }}" *ngIf="(productType == ProductType.Enterprise && showL1Tabs || showL2Tabs) && productType != ProductType.Commercial && productType != ProductType.Hospital">
+            <ng-template matTabContent>
+                <app-location (companyValueChange)="toggleTabs($event)"></app-location> 
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="{{'Masters.Contractor' | translate }}" *ngIf="(productType == ProductType.Enterprise && showL1Tabs || showL2Tabs) && productType != ProductType.Commercial">
+            <app-contractor-company (companyValueChange)="toggleTabs($event)"></app-contractor-company>
+        </mat-tab>
+        <mat-tab label="{{ companyName ? companyName : ('Masters.Company' | translate) }}"
+            *ngIf="(productType == ProductType.Commercial && showL1Tabs || showL2Tabs || showL3Tabs) && productType != ProductType.Enterprise && productType != ProductType.Hospital">
+            <ng-template matTabContent>
+                <app-company (valueChange)="toggleTabs($event)"></app-company>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="{{ companyName ? companyName : ('Masters.Room' | translate) }}"
+            *ngIf="(productType == ProductType.Hospital && showL1Tabs || showL2Tabs || showL3Tabs) && productType != ProductType.Enterprise && productType != ProductType.Commercial">
+            <ng-template matTabContent>
+                <app-company (valueChange)="toggleTabs($event)"></app-company>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+    <div class="d-flex flex-column flex-1 scroll-y" *ngIf="showTabs">
+        <div class="vams-page-sub-header d-flex align-items-center">
+            <button
+                class="btn btn-link d-flex align-items-center text-dark text-decoration-none fs-sm fw-medium border-0 ps-0 pe-3 py-0"
+                (click)="Back()">
+                <i class="icon-angle-left fw-bold fs-5"></i>
+                <span>{{ "Masters.Back" | translate }}</span>
+            </button>
+            <h6 class="vams-page-sub-title fw-bold border-start border-2 border-primary mb-0" *ngIf="companyName">
+                {{ companyName }}
+            </h6>
+        </div>
+        <app-common-tab [selectedIndexFromSubTab]="selectedIndexFromSubTab" [selectedTab]="selectedTab"
+            [companyRowData]="companyRowData" [locationId]="locationId" [subLocationlevel2Id]="subLocationlevel2Id" (getCompanyName)="getCompanyName($event)"></app-common-tab>
+    </div>
+</div>
+
+<!-- 
+<div class="d-flex flex-column flex-1 scroll-y" [@.disabled]="true" *ngIf="productType == ProductType.Enterprise">
+    <mat-tab-group class="vams-tab-group vams-tab-group-primary flex-1 scroll-y" animationDuration="0ms"
+        (selectedTabChange)="tabClick($event)" *ngIf="!showTabs" #MatTabGroup commercial
+        [selectedIndex]="selectedIndex">
+        <mat-tab label="{{ 'Masters.enterprise_details' | translate }}" *ngIf="showL1Tabs">
+            <ng-template matTabContent>
+                <app-complex-details-form></app-complex-details-form>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="{{'Masters.Location' | translate }}" *ngIf="showL1Tabs || showL2Tabs">
+            <ng-template matTabContent>
+                <app-location (companyValueChange)="toggleTabs($event)"></app-location>
+            </ng-template>
+        </mat-tab>
+
+        <mat-tab label="Contractors">
+            <app-contractor-company (companyValueChange)="toggleTabs($event)" (valueChange)="toggleTabs($event)"></app-contractor-company>
+        </mat-tab>
+     
+    </mat-tab-group>
+
+    <div class="d-flex flex-column flex-1 scroll-y" *ngIf="showTabs">
+        <div class="vams-page-sub-header d-flex align-items-center">
+            <button
+                class="btn btn-link d-flex align-items-center text-dark text-decoration-none fs-sm fw-medium border-0 ps-0 pe-3 py-0"
+                (click)="Back()">
+                <i class="icon-angle-left fw-bold fs-5"></i>
+                <span>{{ "Masters.Back" | translate }}</span>
+            </button>
+            <h6 class="vams-page-sub-title fw-bold border-start border-2 border-primary mb-0" *ngIf="companyName">
+                {{ companyName }}
+            </h6>
+        </div>
+        <app-common-tab [selectedIndexFromSubTab]="selectedIndexFromSubTab" [selectedTab]="selectedTab"
+            [companyRowData]="companyRowData"></app-common-tab>
+    </div>
+</div> -->

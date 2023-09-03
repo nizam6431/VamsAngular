@@ -1,0 +1,12 @@
+@import "src/assets/stylesheets/core";
+
+:host {
+  @extend .host;
+}
+.timebtn{
+  height: 31px;
+  margin-right: 24px;
+}
+.btntime{
+  margin-top: -7px;
+}

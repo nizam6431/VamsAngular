@@ -1,0 +1,28 @@
+<div class="vams-table-wrapper vams-table-responsive" [formGroup]="emailTemplate" novalidate>
+    <div class="vams-grid-filters d-flex gap-3">
+        <div class="d-flex align-items-center gap-3 me-auto">
+            <label class="form-label mb-0">
+                {{"labels.location_name" | translate }}
+            </label>
+            <div class="vams-dropdown">
+                <mat-select class="form-control" formControlName="level2Id"
+                    placeholder="{{'placeholders.select_level' | translate}}"
+                    (selectionChange)="onLevelChange($event.value)">
+                    <mat-option selected *ngFor="let level of buildingList;let i = index" [value]="level.id">
+                        {{ level.name }}
+                    </mat-option>
+                </mat-select>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <div class="input-group search-group">
+                <input (keyup)="applyFilter(input.value)" placeholder="{{ 'CommonToken.Search' | translate}}" #input
+                    class="form-control form-control-sm" />
+            </div>
+        </div>
+    </div>
+    <app-configure-grid [dataSource]="dataSource" [type]="'email_template'"  [columns]="columns" (onDataChange)="emailChange($event)"
+        (rowData)="rowData($event)" (modeEmmiter)="changeMode($event)" [totalCount]="totalCount"
+        [pageSizeCount]="pageSize">
+    </app-configure-grid>
+</div>

@@ -1,0 +1,45 @@
+<h1>Reject Appointment</h1>
+<div class="main" [formGroup]="formCancel">
+    <div class="row">
+        {{'AppointmentDetails.confirm_cancel_appointment'|translate}}{{name}}
+    </div>
+    <br>
+    <div class="row up" *ngIf="reasonData.length<10">
+        <!-- <mat-selection-list #shoes>
+            <mat-list-option *ngFor="let reason of reasonData">
+                {{reason}}
+            </mat-list-option>
+        </mat-selection-list> -->
+        <mat-selection-list #shoes [multiple]="false" formControlName="reason">
+            <mat-list-option *ngFor="let reason of reasonData" [value]="reason">
+                {{reason}}
+            </mat-list-option>
+        </mat-selection-list>
+    </div>
+    <div class="row up" *ngIf="reasonData.length>=10">
+        <div class="col-md-12 col-sm-12">
+            <div class="dilogbox-label">{{'AppointmentDetails.SelectReason' | translate}} </div>
+            <div class="dilogbox-value">
+                <mat-select formControlName="reason" placeholder="{{'AppointmentDetails.PleaseSelectReason' | translate}}">
+                    <mat-option *ngFor="let item of reasonData" [value]="item">{{item}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngFor="let message of showValidationMessages('reason')">
+                    {{message}}<br>
+                </mat-error>
+            </div>
+        </div>
+    </div>
+    <!--<div class="row up">
+        <div class="col-md-12 col-sm-12">
+            <div class="dilogbox-label">{{'AppointmentDetails.CancelNote' | translate}} </div>
+            <div class="dilogbox-value">
+                <textarea matInput formControlName="note" placeholder="{{'AppointmentDetails.PleaseEnterNote' | translate}}"></textarea>
+            </div>
+        </div>
+    </div> -->
+    <div class="button-bg-popup">
+        <button class="common-popup-button mr-20" (click)="Yes()" mat-raised-button>{{'CommonToken.Yes' | translate}}</button>
+        <button class="secondry-button" mat-raised-button (click)="dialogRef.close()">{{'CommonToken.No' | translate}}</button>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="vams-table-wrapper vams-table-responsive">
+    <table mat-table [dataSource]="dataSource" class="mat-table-hover">
+      <ng-container *ngFor="let colName of columns; let i = index" [matColumnDef]="columns[i].key">
+        <th mat-header-cell *matHeaderCellDef> {{colName.value | translate}} </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container class="mat-cell-sm" *ngIf="columns[i].key == 'documentType'">
+            {{element.documentType}}
+          </ng-container>
+          <div class="d-inline-block" *ngIf="columns[i].key == 'View'">
+            <button class="btn btn-mini btn-white" (click)="
+            showDocument({
+                rowData: element,
+                event: $event, 
+                columnName: columns[i].key})">
+                View
+            </button>
+         </div>
+        <div class="d-inline-flex align-items-center gap-2" *ngIf="columns[i].key == 'action'">
+          <ng-container *isPermissible="permissionKeyObj.MASTERVIEWEDIT">
+              <button class="btn btn-link btn-icon" (click)="showAction('delete', $event, element)">
+                  <i class="icon-delete"></i>
+              </button>
+          </ng-container>
+      </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="columnKeys; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnKeys;" (click)="diplayRow(row)"></tr>
+    </table>
+  </div>

@@ -1,0 +1,58 @@
+<div class="card mw-tile w-100 flex-1 border-0 mx-auto shadow-sm rounded-4 scroll-y">
+  <div class="card-header bg-transparent border-bottom-0 p-3">
+    <div class="text-center">
+      <img [src]="logoUrl" alt="VAMS" height="64px" />
+    </div>
+  </div>
+  <div class="card-body d-flex flex-column flex-1 p-0 scroll-y">
+    <div class="d-flex flex-column flex-1 align-items-center border-top flex-1 p-3 scroll-y">
+      <img class="img-fluid w-100" [src]="bannerImage" alt="team" />
+      <div class="d-flex flex-column justify-content-center align-items-center w-100 flex-1 gap-4 pt-4 pb-2 px-2">
+        <div class="qr-code mx-auto text-center p-1 border rounded-4">
+          <img [src]="apntDetails.qrCodeUrl" alt="Qr code" width="160px" />
+        </div>
+        <div class="d-flex align-center justify-content-center">
+          <label>OTP</label>
+        </div>
+        <div class="d-flex align-center justify-content-center">
+          <p class="fs-5 fw-bold border rounded-4 px-5 py-2 mb-0">{{apntDetails.otp}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-between gap-3 border-top p-3">
+      <img [src]="partnerImage" height="40px" alt="partenr-logo" />
+      <img [src]="poweredByImage" height="40px" alt="powerd by vams" />
+    </div>
+  </div>
+</div>
+
+<!-- <div class="app-details d-flex flex-column position-relative mx-auto">
+  <header class="page-header bg-white p-4 text-center w-100">
+    <img [src]="logoUrl" alt="Vams-Logo" height="56px" />
+  </header>
+  <section class="page-main-content w-100 flex-1">
+    <div class="page-banner">
+      <img class="w-100" [src]="bannerImage" alt="team" />
+    </div>
+    <div *ngIf="apntDetails" class="page-content w-100">
+      <div class="qr-code mx-auto text-center p-3 position-relative">
+        <img [src]="apntDetails.qrCodeUrl" width="50%" alt="Qr code" />
+      </div>
+
+      <div>
+        <p class="otp">{{apntDetails.otp}}</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer w-100 p-3">
+    <div class="row">
+      <div class="col">
+        <img [src]="partnerImage" height="18" alt="partenr-logo" />
+      </div>
+      <div class="col text-end">
+        <img [src]="poweredByImage" height="18" alt="powerd by vams" />
+      </div>
+    </div>
+  </footer>
+</div> -->

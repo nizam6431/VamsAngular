@@ -1,0 +1,9 @@
+
+<ng-template #cancelAppointment let-dismissModal="dismiss">
+    <app-cancel-modal [dismissModal]="dismissModal" [visitorId]="selectedVisitorId"
+        [notificationType]="selectedNotificationType" (actionCompleted)="actionCompleted($event)"
+        [fullname]="selectedVisitorName"></app-cancel-modal>
+</ng-template>
+<div class="d-flex justify-content-center align-items-center flex-1 bg-white">
+    <img src="assets/images/Dashboard.png" class="img-fluid w-50">
+</div>

@@ -1,0 +1,69 @@
+<ng-container *ngIf="ForLoginPage">
+    <div class="dialog-content px-5 pt-5 pb-3">
+        <div class="dialog-body p-0">
+            <div class="img-box mx-auto mb-5">
+                <img src="assets/images/building.png" alt="Building" class="img-fluid" />
+            </div>
+            <div class="d-grid">
+                <label for="feLastName" class="form-label">{{
+                    "login_select_building.select_building" | translate
+                    }}</label>
+                <mat-select disableOptionCentering [(ngModel)]="selectedBuilding" class="form-control" placeholder=" {{
+            'login_select_building.select_building_placeholder' | translate }}">
+                    <mat-option *ngFor="let building of buildingList" [value]="building.id">
+                        {{ building.name }}
+                    </mat-option>
+                </mat-select>
+            </div>
+        </div>
+    </div>
+    <div class="dialog-actions px-5 pb-5 pt-3">
+        <button class="btn btn-sm btn-primary-dark px-3" (click)="onClose()">
+            {{ "login_select_building.next_btn" | translate }}
+        </button>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="!ForLoginPage">
+    <div class="dialog-header d-flex align-items-center gap-3 pb-2" *ngIf="productType != ProductType.Enterprise">
+        <mat-checkbox class="example-margin" [checked]="OnlyComplexApnts" (change)="onlyCompexAppointments($event)">
+            {{'report_common.show_only_complex_visitor' | translate}}
+        </mat-checkbox>
+    </div>
+    <div class="dialog-content d-flex flex-column flex-1 scroll-y">
+        <div class="d-flex align-items-center gap-3  pt-2 pb-3 px-3 border-bottom">
+            <p class="fs-sm fw-semi-bold mb-0">{{'placeholders.select_building' | translate}}
+            </p>
+            <mat-checkbox class="ms-auto" [disabled]="OnlyComplexApnts" [checked]="isSelecetAll && !OnlyComplexApnts"
+                (change)="selectAll($event)">
+                {{'report_common.select_all' | translate}}
+            </mat-checkbox>
+        </div>
+        <input [disabled]="OnlyComplexApnts" (keyup)="searchBuildingAndCompanies(input3.value)"
+            placeholder="{{'placeholders.Search' | translate}}" #input3
+            class="form-control px-3 py-2 border-bottom shadow-none rounded-0">
+        <div class="dialog-body d-flex flex-column flex-1 p-0 scroll-y">
+            <mat-selection-list [disabled]="OnlyComplexApnts" (selectionChange)="selectionChange($event.option)"
+                class="vams-checklist pt-0" name="status">
+                <mat-list-option *ngFor="let building of buildingList;let  index = index" [value]="building"
+                    [selected]="building?.checked" class="vams-checklist-item">
+                    <ng-container *ngIf="building && building['name']">{{building['name']}}</ng-container>
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+    </div>
+    <div class="d-flex align-items-center gap-3 p-3 border-top" *ngIf="productType != ProductType.Enterprise">
+        <mat-slide-toggle class="align-self-start" [disabled]="OnlyComplexApnts" [checked]="includeComplexVisitor"
+            (change)="includeVisitor($event)">
+            {{'report_common.include_visitor_complex_level' | translate}}
+        </mat-slide-toggle>
+    </div>
+    <div class="popup-footer d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-white px-3" (click)="onClose(false)">
+            {{ "buttons.no" | translate }}
+        </button>
+        <button (click)="onClose(true)" class="btn btn-sm btn-primary-dark px-3 ms-auto">
+            {{ "buttons.yes" | translate }}
+        </button>
+    </div>
+</ng-container>

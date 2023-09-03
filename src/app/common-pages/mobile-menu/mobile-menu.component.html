@@ -1,0 +1,169 @@
+<div id="cssmenu" #mobilemenu class="mobile-menu">
+    <ul>
+        <li>
+            <a href="javascript:void(0)" [routerLink]="['../user/updateprofile']">
+                <div class="menu-profile">
+                    <img src="assets/images/no-image-basic.png" class="menu-profile-img">
+                    <div class="menu-profile-text">{{userName}}</div>
+                </div>
+            </a>
+        </li>
+        <!-- <li>
+            <a href="javascript:void(0)">
+                <div class="menu-profile">
+                    <img src="assets/images/star.png" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Manage Favourites</div>
+                </div>
+            </a>
+        </li> -->
+
+        <li>
+            <a href="javascript:void(0)" [routerLink]="['../dashboard']">
+                <div class="menu-profile">
+                    <img src="{{!isDarkTheme ? 'assets/images/home.png' : 'assets/images/white-images/home-white.png'}}" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Dashboard</div>
+                </div>
+            </a>
+        </li>
+        <!-- <li>
+            <a href="#">
+                <div class="menu-profile">
+                    <img src="assets/images/analyst.png" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Reports & Analytics</div>
+                </div>
+            </a>
+        </li> -->
+        <!-- <li>
+            <a href="javascript:void(0)">
+                <div class="menu-profile">
+                    <img src="assets/images/settings.png" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Settings</div>
+                </div>
+            </a>
+        </li> -->
+        <!-- <li>
+            <div class="menu-profile">
+                <div class="menu-profile-imgicon">
+                    <input type="checkbox" id="_checkbox">
+                    <label for="_checkbox" class="labels">
+                        <div class="tick_mark "></div>
+                    </label>
+                </div>
+                <div class="menu-profile-text-com">Viraat Authentication System </div>
+                <a href="javascript:void(0)"><i class="far fa-trash-alt"></i></a>
+            </div>
+        </li> -->
+        <!-- <li>
+            <div class="menu-profile">
+                <div class="menu-profile-imgicon">
+                    <input type="checkbox" id="_checkbox1">
+                    <label for="_checkbox1" class="labels">
+                        <div class="tick_mark"></div>
+                    </label>
+                </div>
+                <div class="menu-profile-text-com">Singh Estate</div>
+                <a href="javascript:void(0)"><i class="far fa-trash-alt"></i></a>
+            </div>
+        </li> -->
+        <!-- <li>
+            <a href="javascript:void(0)">
+                <div class="menu-profile">
+                    <img src="assets/images/location-menu.png" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Add Premises<br>
+                        <span>Scan another QR code & setup a new premise.</span>
+                    </div>
+                </div>
+            </a>
+        </li> -->
+        <!-- <li>
+            <a href="javascript:void(0)">
+                <div class="menu-profile">
+                    <img src="assets/images/help.png" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Help</div>
+                </div>
+            </a>
+        </li> -->
+        <li>
+            <div class="menu-profile">
+                <img src="{{!isDarkTheme ? 'assets/images/dark.png' : 'assets/images/white-images/theme-default-white.png'}}" class="menu-profile-imgicon">
+                <div class="menu-profile-text-com">Dark Theme</div>
+                <label class="switch-date">
+                    <input type="checkbox" [(ngModel)]="isDarkTheme" (change)="themeChange($event)">
+                    <span class="slider-date round-date"></span>
+                </label>
+            </div>
+        </li>
+        <!-- <li>
+            <div class="menu-profile">
+                <img src="assets/images/menu-noti.png" class="menu-profile-imgicon">
+                <div class="menu-profile-text-com">Notification Alert</div>
+                <label class="switch-date">
+                    <input type="checkbox">
+                    <span class="slider-date round-date"></span>
+                </label>
+            </div>
+        </li> -->
+        <li>
+            <a href="javascript:void(0)" (click)="openChangeLanguage(changelanguage)">
+                <div class="menu-profile">
+                    <img src="{{!isDarkTheme ? 'assets/images/language.png' : 'assets/images/white-images/change-language-default-white.png'}}" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Change Language</div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a [routerLink]="['../user/change-password']">
+                <div class="menu-profile">
+                    <img src="{{!isDarkTheme ? 'assets/images/change-pass.png' : 'assets/images/white-images/change-pass-white.png'}}" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Change Password</div>
+                </div>
+            </a>
+        </li>
+
+
+        <!-- <li>
+            <a href="javascript:void(0)">
+                <div class="menu-profile">
+                    <img src="assets/images/regenerate-bypass-pin.png" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Regenerate Bypass Pin</div>
+                </div>
+            </a>
+        </li> -->
+        <li *ngIf="hasPermission('ReAuthenticateVisitor')" [routerLink]="['../appointment/re-authenticate']">
+            <a href="javascript:void(0)">
+                <div class="menu-profile">
+                    <img src="{{!isDarkTheme ? 'assets/images/re-authenticate.png' : 'assets/images/white-images/re-authenticate-white.png'}}" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Re Authenticate</div>
+                </div>
+            </a>
+        </li>
+        <li *ngIf="hasPermission('locationhsqqr')" [routerLink]="['../wizard/hsq-qrcode']">
+            <a href="javascript:void(0)">
+                <div class="menu-profile">
+                    <img src="{{!isDarkTheme ? 'assets/images/hsq-icon.png' : 'assets/images/white-images/hsq-icon-white.png'}}" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Generate HSQ QR</div>
+                </div>
+            </a>
+        </li>
+        <li *ngIf="hasPermission('share')">
+            <a href="javascript:void(0)" [routerLink]="['../appointment/shareappointment']">
+                <div class="menu-profile">
+                    <img src="{{!isDarkTheme ? 'assets/images/share.png' : 'assets/images/white-images/share-white.png'}}" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Share Appointment Form</div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <!-- <a href="javascript:void(0)" (click)="logout()">
+                <div class="menu-profile">
+                    <img src="{{!isDarkTheme ? 'assets/images/logout.png' : 'assets/images/white-images/logout-white-white.png'}}" class="menu-profile-imgicon">
+                    <div class="menu-profile-text-com">Sign Out</div>
+                </div>
+            </a> -->
+        </li>
+    </ul>
+</div>
+
+<ng-template #changelanguage>
+    <app-change-language></app-change-language>
+</ng-template>

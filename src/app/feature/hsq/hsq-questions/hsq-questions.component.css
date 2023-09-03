@@ -1,0 +1,140 @@
+
+.main-area-wrapper{
+	width: 50%;
+	background: #fff;
+	margin: 0 auto;
+	height: 100vh;
+}
+.header{
+	height: 15%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.logo{
+	width: 40%;
+	text-align: center;
+}
+.content-area{
+	height: 60%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.hsq-submit{
+	text-align: center;
+}
+.hsq-submit p{
+	text-align: center;
+	color: #707070;
+	font-size: 2.0rem;
+	font-weight: 500;
+	margin: 0.825rem 0 0 0;
+}
+.green-circle{
+	background: #46BC3C;
+	font-size: 3.5rem;
+	color: #fff;
+	border-radius: 50px;
+	height: 6rem;
+	width: 6rem;
+	line-height: 6rem;
+	text-align: center;
+	font-weight: 700;
+	margin: 0 auto;
+}
+
+
+.spacing{
+	/* padding: 0 2rem; */
+}
+.title{
+	/* text-align: center; */
+	font-size: 2rem;
+	color: #707070;
+	padding: 0;
+	margin: 0 0 6.500rem 0;
+	font-weight: 700;
+	width: 100%;
+}
+.title span{
+	font-size: 1.00rem;
+	display: block;
+	font-weight: 500;
+}
+.listing{
+	width: 100%;
+}
+.listing ul{
+	padding: 0;
+	margin: 0;
+}
+.listing ul li{
+	list-style: none;
+	margin-bottom: 1.5rem;
+	display: inline-block;
+  width: 100%;
+}
+.listing ul li .question{
+	color: #707070;
+	font-size: 1.700rem;
+	margin-bottom: 1.5rem;
+	/* font-weight: 700; */
+}
+.listing ul li .functional{
+}
+.listing ul li .functional .form-control{
+	width: 100%;
+	padding: 0.3125rem;
+	background: #fff;
+	border: solid 1px #ced4da;
+}
+.listing ul li .functional p{
+	font-size: 0.75rem;
+	color: red;
+	margin: 0.3125rem 0 0 0;
+	font-weight: 500;
+}
+
+.fields{
+	float: left;
+    margin-right: 1.875rem;
+}
+.fields input{
+	margin: 5;
+    font-size: 0.75rem;
+    
+}
+.fields label{
+	color: #707070;
+	font-size: 1.2rem;
+	width: auto;
+	font-weight: 500;
+    margin-left: 1rem;
+}
+.btn{
+	padding:0.5rem 1.25rem;
+	font-size: 0.875rem;
+	color: #fff;
+	background: #ff4500;
+	border: 0;
+	margin-right: 0.625rem;
+	cursor: pointer;
+	font-weight: 700;
+	border-radius: 0.5rem;
+}
+.btn-back{
+	padding:0.5rem 1.25rem;
+	font-size: 0.875rem;
+	color: #707070;
+	background: #fff;
+	border: solid 1px #ff4500;
+	margin-right: 0.625rem;
+	cursor: pointer;
+	font-weight: 700;
+	border-radius: 0.5rem;
+}
+
+.logo-img {
+	width: 50%;
+}

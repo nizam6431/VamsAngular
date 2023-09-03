@@ -1,0 +1,9 @@
+a:focus{
+    text-decoration: none;
+    color: white;
+}
+
+.slideInUp .modal-dialog{
+    width: 320px;
+}
+

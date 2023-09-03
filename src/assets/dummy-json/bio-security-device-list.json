@@ -1,0 +1,45 @@
+{
+    "data": [{
+            "building": "ABC",
+            "url": "http://0.0.0.1",
+            "version": "V5.0.0",
+            "access_level": "General",
+            "department_id": 1
+        },
+        {
+            "building": "ABC",
+            "url": "http://0.0.0.1",
+            "version": "V5.0.0",
+            "access_level": "General",
+            "department_id": 1
+        },
+        {
+            "building": "ABC",
+            "url": "http://0.0.0.1",
+            "version": "V5.0.0",
+            "access_level": "General",
+            "department_id": 1
+        },
+        {
+            "building": "ABC",
+            "url": "http://0.0.0.1",
+            "version": "V5.0.0",
+            "access_level": "General",
+            "department_id": 1
+        },
+        {
+            "building": "ABC",
+            "url": "http://0.0.0.1",
+            "version": "V5.0.0",
+            "access_level": "General",
+            "department_id": 1
+        },
+        {
+            "building": "ABC",
+            "url": "http://0.0.0.1",
+            "version": "V5.0.0",
+            "access_level": "General",
+            "department_id": 1
+        }
+    ]
+}

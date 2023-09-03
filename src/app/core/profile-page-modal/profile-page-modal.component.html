@@ -1,0 +1,29 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="close()" class="btn-close popup-close position-absolute opacity-100"></button>
+    </div>
+    <div class="popup-content px-4">
+        <div class="d-grid gap-1">
+            <button *ngIf="userService.isPermissible('updateProfile')"
+                [disabled]="userDetails.level1Id == 0 ? true : false"
+                class="btn btn-link fs-xs fw-semi-bold text-dark text-end text-decoration-none border-0"
+                (click)="myProfile()">
+                {{ 'Profile' }}
+            </button>
+            <ng-container *ngIf="productType == ProductType.Enterprise">
+            <mat-divider></mat-divider>
+                <button *ngIf="userService.isPermissible('updateProfile')"
+                    [disabled]="userDetails.level1Id == 0 ? true : false"
+                    class="btn btn-link fs-xs fw-semi-bold text-dark text-end text-decoration-none border-0"
+                    (click)="Reauthenticate()">
+                    {{ 'Re-Authenticate a Visitor' }}
+                </button>
+            </ng-container>
+            <mat-divider></mat-divider>
+            <button class="btn btn-link fs-xs fw-semi-bold text-dark text-end text-decoration-none border-0"
+                (click)="logout()">
+                {{"Menus.Sign_Out" | translate }}
+            </button>
+        </div>
+    </div>
+</div>

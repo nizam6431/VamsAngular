@@ -1,0 +1,116 @@
+<div class="d-flex flex-column flex-1 scroll-y">
+    <div class="popup-header">
+        <button (click)="cancel()" class="btn-close popup-close position-absolute opacity-100"></button>
+        <div class="popup-title-wrapper d-flex align-items-center">
+            <span class="popup-title d-inline-flex align-items-center fs-sm fw-bold position-relative">
+                {{"FileUpload."+data?.title | translate }}</span>
+        </div>
+    </div>
+    <form class="popup-form" [formGroup]="uploadFileForm" novalidate>
+        <div class="popup-content d-flex flex-column">
+            <div class="mb-3">
+                <label for="file" class="form-label">{{ "BulkUpload.Bulk_Upload" | translate }}</label>
+                <input id="file" name="file" [accept]="data?.fileAccept" onclick="this.value = null"
+                    formControlName="bulkDataFile" class="form-control" type="file" (change)="onFileChange($event)" />
+                <p id="fileUploadHelpBlock" class="form-text fs-xs mb-0">{{'BulkUpload.FileCriteria'|translate}}</p>
+                <mat-error *ngFor="let message of showValidationMessages('bulkDataFile')">
+                    {{message}}
+                </mat-error>
+            </div>
+            <div class="fs-sm mt-auto" *ngIf="this.data?.screen == 'comapny'">
+                <h6 class="popup-subtitle fs-sm fw-bold mb-4">{{'BulkUpload.heading_guidline'|translate}}</h6>
+                <p id="fileUploadText1" class="form-text mb-0">{{'Bulk_Upload_Company.String1'|translate}} </p>
+                <p id="fileUploadText2" class="form-text mb-0">{{'Bulk_Upload_Company.String2'|translate}} </p>
+                <p id="fileUploadText4" class="form-text mb-0">{{'Bulk_Upload_Company.String3'|translate :
+                    dateFormatTranslate1 }}
+                </p>
+                <p id="fileUploadText3" class="form-text mb-0">{{'Bulk_Upload_Company.String4'|translate :
+                    dateFormatTranslate2 }}
+                </p>
+                <p id="fileUploadText5" class="form-text mb-0">{{'Bulk_Upload_Company.String5'|translate}}</p>
+                <p id="fileUploadText6" class="form-text mb-0">{{'Bulk_Upload_Company.String6'|translate}}</p>
+            </div>
+            <div class="fs-sm mt-auto" *ngIf="this.data?.screen == 'appointment'">
+                <h6 class="popup-subtitle fs-sm fw-bold mb-4">{{'BulkUpload.heading_guidline'|translate}}</h6>
+                <ng-container *ngIf="productType == ProductTypeEnum.Commercial else enterprise">
+                    <p id="fileUploadText1" class="form-text mb-0">{{'BulkUploadForEntAppointment.String1'|translate}}
+                    </p>
+                    <p id="fileUploadText2" class="form-text mb-0">{{'BulkUploadForEntAppointment.String2'|translate}}
+                    </p>
+                    <p id="fileUploadText2" class="form-text mb-0">{{'BulkUploadForEntAppointment.String3'|translate}}
+                    </p>
+                    <p id="fileUploadText4" class="form-text mb-0">{{'BulkUploadForEntAppointment.String4'|translate :
+                        dateFormatTranslate1 }}
+                    </p>
+                    <p id="fileUploadText3" class="form-text mb-0">{{'BulkUploadForEntAppointment.String5'|translate :
+                        dateFormatTranslate2 }}
+                    </p>
+                    <p id="fileUploadText5" class="form-text mb-0">{{'BulkUploadForEntAppointment.String6'|translate}}
+                    </p>
+                    <p id="fileUploadText6" class="form-text mb-0">{{'BulkUploadForEntAppointment.String7'|translate}}
+                    </p>
+                    <p id="fileUploadText7" class="form-text mb-0">{{'BulkUploadForEntAppointment.String8'|translate}}
+                    </p>
+                    <p id="fileUploadText7" class="form-text mb-0">{{'BulkUploadForEntAppointment.String9'|translate}}
+                    </p>
+                    <p id="fileUploadText7" class="form-text mb-0">{{'BulkUploadForEntAppointment.String10'|translate}}
+                    </p>
+                </ng-container>
+                <ng-template #enterprise>
+                    <p id="fileUploadText1" class="form-text mb-0">{{'BulkUpload.String1'|translate}} </p>
+                    <p id="fileUploadText2" class="form-text mb-0">{{'BulkUpload.String2'|translate}} </p>
+                    <p id="fileUploadText4" class="form-text mb-0">{{'BulkUpload.String3'|translate :
+                        dateFormatTranslate1 }}
+                    </p>
+                    <p id="fileUploadText3" class="form-text mb-0">{{'BulkUpload.String4'|translate :
+                        dateFormatTranslate2 }}
+                    </p>
+                    <p id="fileUploadText5" class="form-text mb-0">{{'BulkUpload.String5'|translate}}</p>
+                    <p id="fileUploadText6" class="form-text mb-0">{{'BulkUpload.String6'|translate}}</p>
+                    <p id="fileUploadText7" class="form-text mb-0">{{'BulkUpload.String7'|translate}}</p>
+                </ng-template>
+            </div>
+            <div class="fs-sm mt-auto" *ngIf="this.data?.screen == 'Employee'&& level3Id">
+                <h6 class="popup-subtitle fs-sm fw-bold mb-4">{{'BulkUpload.heading_guidline'|translate}}</h6>
+                <p id="fileUploadText1" class="form-text mb-0">{{'Bulk_Upload_L3.string1'|translate}} </p>
+                <p id="fileUploadText2" class="form-text mb-0">{{'Bulk_Upload_L3.string2'|translate}} </p>
+                <p id="fileUploadText4" class="form-text mb-0">{{'Bulk_Upload_L3.string3'|translate }}
+                </p>
+                <p id="fileUploadText3" class="form-text mb-0">{{'Bulk_Upload_L3.string4'|translate }}
+                </p>
+                <p id="fileUploadText5" class="form-text mb-0">{{'Bulk_Upload_L3.string5'|translate}} <span
+                        *ngFor="let item of roleData let i=index">{{item.displayName}}<span
+                            *ngIf="roleData.length-1>i">, </span></span></p>
+                <p id="fileUploadText6" class="form-text mb-0">{{'Bulk_Upload_L3.string6'|translate}}</p>
+                <p id="fileUploadText7" class="form-text mb-0">{{'Bulk_Upload_L3.string7'|translate}}</p>
+            </div>
+            <div class="fs-sm mt-auto" *ngIf="this.data?.screen == 'Employee'&& !level3Id">
+                <h6 class="popup-subtitle fs-sm fw-bold mb-4">{{'BulkUpload.heading_guidline'|translate}}</h6>
+                <p id="fileUploadText1" class="form-text mb-0">{{'Bulk_Upload_L1.string1'|translate}} </p>
+                <p id="fileUploadText2" class="form-text mb-0">{{'Bulk_Upload_L1.string2'|translate}} </p>
+                <p id="fileUploadText4" class="form-text mb-0">{{'Bulk_Upload_L1.string3'|translate }}
+                </p>
+                <p id="fileUploadText3" class="form-text mb-0">{{'Bulk_Upload_L1.string4'|translate }}
+                </p>
+                <p id="fileUploadText5" class="form-text mb-0" *ngIf="!level2Id">{{'Bulk_Upload_L1.string5'|translate}}
+                    <span *ngFor="let item of roleData let i= index">{{item.displayName}}<span
+                            *ngIf="roleData.length-1>i">, </span></span></p>
+                <p id="fileUploadText5" class="form-text mb-0" *ngIf="level2Id">
+                    {{'Bulk_Upload_L1.string5L2'|translate}}<span
+                        *ngFor="let item of roleData let i= index">{{item.displayName}}<span
+                            *ngIf="roleData.length-1>i">, </span></span></p>
+                <p id="fileUploadText6" class="form-text mb-0">{{'Bulk_Upload_L1.string6'|translate}}</p>
+                <p id="fileUploadText7" class="form-text mb-0">{{'Bulk_Upload_L1.string7'|translate}}</p>
+            </div>
+        </div>
+
+        <footer class="popup-footer d-flex align-items-center gap-3">
+            <button (click)="submit()" *ngIf="this.data?.screen != 'Employee'"
+                class="btn btn-sm btn-primary-dark px-3">{{'BulkUpload.Upload'|translate}}</button>
+            <button (click)="submitEmployee()" *ngIf="this.data?.screen == 'Employee' && this.isUploadEmployee"
+                class="btn btn-sm btn-primary-dark px-3">{{'BulkUpload.Upload'|translate}}</button>
+            <button class="btn btn-sm btn-white px-3"
+                (click)="downloadTemplate()">{{'BulkUpload.DownloadTemplate'|translate}}</button>
+        </footer>
+    </form>
+</div>

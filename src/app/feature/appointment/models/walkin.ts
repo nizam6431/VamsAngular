@@ -1,0 +1,18 @@
+export interface DriverData {
+    "lastName": string,
+    "firstName": string,
+    "middleName": string,
+    "dateOfBirth": string,
+    "eye": string,
+    "hair":string,
+    "sex": string,
+    "height": string,
+    "street": string,
+    "city": string,
+    "state": string,
+    "postal": string,
+    "country": string,
+    "id": string,
+    "issued":string,
+    "expires": string,
+}
